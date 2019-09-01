@@ -1,0 +1,6 @@
+framework module Pods_Hoot_HootUITests {
+  umbrella header "Pods-Hoot-HootUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
