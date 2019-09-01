@@ -8,15 +8,49 @@
 
 import UIKit
 import CoreData
+import Firebase
+import Network
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
+    var monitor = NWPathMonitor()
+    
+    let queue = DispatchQueue(label: "networkConnectionMonitor")
+    
+    var connected: Bool?
+    
+    lazy var auth = Auth.auth()
+    
+    lazy var db = Firestore.firestore()
+    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        FirebaseApp.configure()
+        
+        
+        
+        monitor.pathUpdateHandler = { [unowned self] pathUpdateHandler in
+            if pathUpdateHandler.status == .satisfied {
+                self.connected = true
+            } else {
+                self.connected = false
+            }
+        }
+        monitor.start(queue: queue)
+        
+        
+        if Auth.auth().currentUser != nil {
+            
+            self.window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "mainNavigationController")
+            
+        }
+        
+        
+       
         return true
     }
 

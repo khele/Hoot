@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VKU-Du-xWW">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="AeX-tU-fKB">
+            <objects>
+                <viewController storyboardIdentifier="loginViewController" id="VKU-Du-xWW" customClass="LoginViewController" customModule="Hoot" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cUQ-n4-xEG">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hoot240" translatesAutoresizingMaskIntoConstraints="NO" id="DXR-fc-bGv">
+                                <rect key="frame" x="67.5" y="20" width="240" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="DXR-fc-bGv" secondAttribute="height" multiplier="1:1" id="WIu-6s-pNp"/>
+                                </constraints>
+                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gFD-om-T4O">
+                                <rect key="frame" x="54.5" y="293" width="266" height="324"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HootText" translatesAutoresizingMaskIntoConstraints="NO" id="z4T-pc-Rbo">
+                                        <rect key="frame" x="73" y="0.0" width="120" height="274"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q0b-KI-EUr">
+                                        <rect key="frame" x="0.0" y="274" width="266" height="50"/>
+                                        <color key="backgroundColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <inset key="contentEdgeInsets" minX="30" minY="10" maxX="30" maxY="10"/>
+                                        <state key="normal" title="LOGIN / REGISTER">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="loginButtonPressed:" destination="VKU-Du-xWW" eventType="touchUpInside" id="Kxa-0q-yT2"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="DXR-fc-bGv" firstAttribute="top" secondItem="gkj-O2-zsV" secondAttribute="top" id="5hm-dk-EsC"/>
+                            <constraint firstItem="DXR-fc-bGv" firstAttribute="centerX" secondItem="gkj-O2-zsV" secondAttribute="centerX" id="94B-Db-zE4"/>
+                            <constraint firstItem="gkj-O2-zsV" firstAttribute="trailing" secondItem="gFD-om-T4O" secondAttribute="trailing" constant="54.5" id="WHg-r5-1Hf"/>
+                            <constraint firstItem="gkj-O2-zsV" firstAttribute="bottom" secondItem="gFD-om-T4O" secondAttribute="bottom" constant="50" id="Z3T-pP-BVd"/>
+                            <constraint firstItem="gFD-om-T4O" firstAttribute="leading" secondItem="gkj-O2-zsV" secondAttribute="leading" constant="54.5" id="nuE-wh-TsZ"/>
+                            <constraint firstItem="gFD-om-T4O" firstAttribute="top" secondItem="DXR-fc-bGv" secondAttribute="bottom" constant="33" id="phY-U8-xUE"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="gkj-O2-zsV"/>
+                    </view>
+                    <connections>
+                        <outlet property="loginButton" destination="q0b-KI-EUr" id="Jcy-rb-0Id"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OqG-uk-PaN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="143" y="-106"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="HootText" width="120" height="50"/>
+        <image name="hoot240" width="240" height="240"/>
+    </resources>
+</document>
