@@ -9,12 +9,6 @@
 /* Begin PBXBuildFile section */
 		241DCC8FC467345259D95C5F /* Pods_Hoot_HootTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEB865F715D84EADC8300F4 /* Pods_Hoot_HootTests.framework */; };
 		39AA38E91F495C37043AF27C /* Pods_Hoot_HootUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 040C446301DC9047A6F9D31C /* Pods_Hoot_HootUITests.framework */; };
-		48012037231BE8DA00E24790 /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48012035231BE8DA00E24790 /* OwnObservation+CoreDataClass.swift */; };
-		48012038231BE8DA00E24790 /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48012036231BE8DA00E24790 /* OwnObservation+CoreDataProperties.swift */; };
-		48012039231BE8EB00E24790 /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48012036231BE8DA00E24790 /* OwnObservation+CoreDataProperties.swift */; };
-		4801203A231BE8EB00E24790 /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48012036231BE8DA00E24790 /* OwnObservation+CoreDataProperties.swift */; };
-		4801203B231BE8EB00E24790 /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48012035231BE8DA00E24790 /* OwnObservation+CoreDataClass.swift */; };
-		4801203C231BE8EB00E24790 /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48012035231BE8DA00E24790 /* OwnObservation+CoreDataClass.swift */; };
 		486C94FE231AC3BA0071B94F /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C94FD231AC3BA0071B94F /* Notice.swift */; };
 		486C94FF231AC5C30071B94F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BC8526231AAD91002F6543 /* AppDelegate.swift */; };
 		486C9500231AC5C30071B94F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BC8526231AAD91002F6543 /* AppDelegate.swift */; };
@@ -23,6 +17,21 @@
 		486C9509231AC79E0071B94F /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C9508231AC79E0071B94F /* Observation.swift */; };
 		486C950A231AC79E0071B94F /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C9508231AC79E0071B94F /* Observation.swift */; };
 		486C950B231AC79E0071B94F /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C9508231AC79E0071B94F /* Observation.swift */; };
+		48B37E8C231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8A231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift */; };
+		48B37E8D231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8A231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift */; };
+		48B37E8E231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8A231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift */; };
+		48B37E8F231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8B231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift */; };
+		48B37E90231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8B231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift */; };
+		48B37E91231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8B231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift */; };
+		48B37E94231D4DDB00BA5387 /* Detail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48B37E93231D4DDB00BA5387 /* Detail.storyboard */; };
+		48B37E95231D4DDB00BA5387 /* Detail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48B37E93231D4DDB00BA5387 /* Detail.storyboard */; };
+		48B37E96231D4DDB00BA5387 /* Detail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48B37E93231D4DDB00BA5387 /* Detail.storyboard */; };
+		48B37E98231D4DFE00BA5387 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E97231D4DFE00BA5387 /* DetailViewController.swift */; };
+		48B37E99231D4DFE00BA5387 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E97231D4DFE00BA5387 /* DetailViewController.swift */; };
+		48B37E9A231D4DFE00BA5387 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E97231D4DFE00BA5387 /* DetailViewController.swift */; };
+		48B37E9C231D89ED00BA5387 /* SyncObservations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E9B231D89ED00BA5387 /* SyncObservations.swift */; };
+		48B37E9D231D89ED00BA5387 /* SyncObservations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E9B231D89ED00BA5387 /* SyncObservations.swift */; };
+		48B37E9E231D89ED00BA5387 /* SyncObservations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E9B231D89ED00BA5387 /* SyncObservations.swift */; };
 		48BC8527231AAD91002F6543 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BC8526231AAD91002F6543 /* AppDelegate.swift */; };
 		48BC852C231AAD91002F6543 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48BC852A231AAD91002F6543 /* Main.storyboard */; };
 		48BC852F231AAD91002F6543 /* Hoot.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 48BC852D231AAD91002F6543 /* Hoot.xcdatamodeld */; };
@@ -83,10 +92,13 @@
 /* Begin PBXFileReference section */
 		040C446301DC9047A6F9D31C /* Pods_Hoot_HootUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hoot_HootUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E9E02D0D015E00209DCBA5 /* Pods-Hoot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoot.release.xcconfig"; path = "Target Support Files/Pods-Hoot/Pods-Hoot.release.xcconfig"; sourceTree = "<group>"; };
-		48012035231BE8DA00E24790 /* OwnObservation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataClass.swift"; sourceTree = "<group>"; };
-		48012036231BE8DA00E24790 /* OwnObservation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		486C94FD231AC3BA0071B94F /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		486C9508231AC79E0071B94F /* Observation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observation.swift; sourceTree = "<group>"; };
+		48B37E8A231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataClass.swift"; sourceTree = "<group>"; };
+		48B37E8B231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		48B37E93231D4DDB00BA5387 /* Detail.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Detail.storyboard; sourceTree = "<group>"; };
+		48B37E97231D4DFE00BA5387 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		48B37E9B231D89ED00BA5387 /* SyncObservations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncObservations.swift; sourceTree = "<group>"; };
 		48BC8523231AAD91002F6543 /* Hoot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hoot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48BC8526231AAD91002F6543 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		48BC852B231AAD91002F6543 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -153,6 +165,7 @@
 			children = (
 				486C94FD231AC3BA0071B94F /* Notice.swift */,
 				48BEBC76231ADBF500ABF780 /* MainItem.swift */,
+				48B37E9B231D89ED00BA5387 /* SyncObservations.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -161,10 +174,19 @@
 			isa = PBXGroup;
 			children = (
 				486C9508231AC79E0071B94F /* Observation.swift */,
-				48012035231BE8DA00E24790 /* OwnObservation+CoreDataClass.swift */,
-				48012036231BE8DA00E24790 /* OwnObservation+CoreDataProperties.swift */,
+				48B37E8A231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift */,
+				48B37E8B231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		48B37E92231D4DC300BA5387 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				48B37E93231D4DDB00BA5387 /* Detail.storyboard */,
+				48B37E97231D4DFE00BA5387 /* DetailViewController.swift */,
+			);
+			path = Detail;
 			sourceTree = "<group>";
 		};
 		48BC851A231AAD91002F6543 = {
@@ -193,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				48E21565231AB55E00A36A6B /* Add */,
+				48B37E92231D4DC300BA5387 /* Detail */,
 				48E21564231AB55500A36A6B /* Login */,
 				48E2155D231AB3A400A36A6B /* Main */,
 				486C9503231AC7650071B94F /* Models */,
@@ -399,6 +422,7 @@
 				48BC8534231AAD93002F6543 /* LaunchScreen.storyboard in Resources */,
 				48E2155A231AB1F300A36A6B /* GoogleService-Info.plist in Resources */,
 				48E2156F231AB5B200A36A6B /* Login.storyboard in Resources */,
+				48B37E94231D4DDB00BA5387 /* Detail.storyboard in Resources */,
 				48E2157A231AB84D00A36A6B /* Localizable.strings in Resources */,
 				48E21567231AB58C00A36A6B /* Add.storyboard in Resources */,
 				48BC8531231AAD93002F6543 /* Assets.xcassets in Resources */,
@@ -413,6 +437,7 @@
 				48E21568231AB58C00A36A6B /* Add.storyboard in Resources */,
 				48E2157B231AB84D00A36A6B /* Localizable.strings in Resources */,
 				48E2155B231AB1F300A36A6B /* GoogleService-Info.plist in Resources */,
+				48B37E95231D4DDB00BA5387 /* Detail.storyboard in Resources */,
 				48E21570231AB5B200A36A6B /* Login.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,6 +449,7 @@
 				48E21569231AB58C00A36A6B /* Add.storyboard in Resources */,
 				48E2157C231AB84D00A36A6B /* Localizable.strings in Resources */,
 				48E2155C231AB1F300A36A6B /* GoogleService-Info.plist in Resources */,
+				48B37E96231D4DDB00BA5387 /* Detail.storyboard in Resources */,
 				48E21571231AB5B200A36A6B /* Login.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -607,13 +633,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				486C9509231AC79E0071B94F /* Observation.swift in Sources */,
-				48012037231BE8DA00E24790 /* OwnObservation+CoreDataClass.swift in Sources */,
+				48B37E9C231D89ED00BA5387 /* SyncObservations.swift in Sources */,
+				48B37E8C231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */,
 				48E21561231AB45D00A36A6B /* MainViewController.swift in Sources */,
+				48B37E98231D4DFE00BA5387 /* DetailViewController.swift in Sources */,
 				48BC852F231AAD91002F6543 /* Hoot.xcdatamodeld in Sources */,
 				48E2156B231AB5A200A36A6B /* AddViewController.swift in Sources */,
 				486C94FE231AC3BA0071B94F /* Notice.swift in Sources */,
 				48BEBC77231ADBF500ABF780 /* MainItem.swift in Sources */,
-				48012038231BE8DA00E24790 /* OwnObservation+CoreDataProperties.swift in Sources */,
+				48B37E8F231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */,
 				48E21573231AB5C200A36A6B /* LoginViewController.swift in Sources */,
 				48BC8527231AAD91002F6543 /* AppDelegate.swift in Sources */,
 				48BEBC6D231ACEF000ABF780 /* MainCell.swift in Sources */,
@@ -624,15 +652,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48B37E99231D4DFE00BA5387 /* DetailViewController.swift in Sources */,
+				48B37E9D231D89ED00BA5387 /* SyncObservations.swift in Sources */,
 				48BEBC70231AD17900ABF780 /* Hoot.xcdatamodeld in Sources */,
-				4801203B231BE8EB00E24790 /* OwnObservation+CoreDataClass.swift in Sources */,
 				48BEBC78231ADBF500ABF780 /* MainItem.swift in Sources */,
 				486C950A231AC79E0071B94F /* Observation.swift in Sources */,
 				48ED136D231AE44100F7373A /* MainViewController.swift in Sources */,
 				48E21574231AB5C200A36A6B /* LoginViewController.swift in Sources */,
+				48B37E90231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */,
+				48B37E8D231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */,
 				48BC853F231AAD93002F6543 /* HootTests.swift in Sources */,
 				486C9501231AC5F30071B94F /* Notice.swift in Sources */,
-				48012039231BE8EB00E24790 /* OwnObservation+CoreDataProperties.swift in Sources */,
 				486C94FF231AC5C30071B94F /* AppDelegate.swift in Sources */,
 				48E2156C231AB5A200A36A6B /* AddViewController.swift in Sources */,
 				48BEBC6E231ACEF000ABF780 /* MainCell.swift in Sources */,
@@ -643,15 +673,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48B37E9A231D4DFE00BA5387 /* DetailViewController.swift in Sources */,
+				48B37E9E231D89ED00BA5387 /* SyncObservations.swift in Sources */,
 				48BEBC71231AD17900ABF780 /* Hoot.xcdatamodeld in Sources */,
-				4801203C231BE8EB00E24790 /* OwnObservation+CoreDataClass.swift in Sources */,
 				48BEBC79231ADBF500ABF780 /* MainItem.swift in Sources */,
 				486C950B231AC79E0071B94F /* Observation.swift in Sources */,
 				48ED136E231AE44200F7373A /* MainViewController.swift in Sources */,
 				48E21575231AB5C200A36A6B /* LoginViewController.swift in Sources */,
+				48B37E91231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */,
+				48B37E8E231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */,
 				48BC854A231AAD93002F6543 /* HootUITests.swift in Sources */,
 				486C9502231AC5F40071B94F /* Notice.swift in Sources */,
-				4801203A231BE8EB00E24790 /* OwnObservation+CoreDataProperties.swift in Sources */,
 				486C9500231AC5C30071B94F /* AppDelegate.swift in Sources */,
 				48E2156D231AB5A200A36A6B /* AddViewController.swift in Sources */,
 				48BEBC6F231ACEF000ABF780 /* MainCell.swift in Sources */,

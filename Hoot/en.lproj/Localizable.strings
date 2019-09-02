@@ -22,4 +22,8 @@
 "Recording" = "Recording";
 "Video length limit is 15 seconds!" = "Video length limit is 15 seconds!";
 "Video length limit of 15 seconds exceeded" = "Video length limit of 15 seconds exceeded";
+"Please enable location services to add an observation" = "Please enable location services to add an observation";
+"Ok" = "Ok";
+"Logged out" = "Logged out";
+
 

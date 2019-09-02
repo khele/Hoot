@@ -81,7 +81,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="ZqE-ig-Zvy"/>
+                    <navigationItem key="navigationItem" id="ZqE-ig-Zvy">
+                        <barButtonItem key="backBarButtonItem" title=" " id="8Tl-Y9-UUT"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="addButton" destination="4ik-xn-ki0" id="mgg-9e-Pck"/>
                         <outlet property="canvasView" destination="8bC-Xf-vdC" id="Ov1-Dt-CB6"/>

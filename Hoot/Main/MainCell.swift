@@ -30,33 +30,84 @@ class MainCell: UICollectionViewCell {
     
     var itemView: UIImageView = {
         let imageView = UIImageView()
-        // imageView.backgroundColor = UIColor.blue
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-   /* var borderLine: UIImageView = {
-        let imageView = UIImageView()
-        imageView.backgroundColor = UIColor.lightGray
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }() */
     
-    var itemName: UILabel = {
+    var species: UILabel = {
         let itemLabel = UILabel()
-        itemLabel.font = .systemFont(ofSize: 21)
+        itemLabel.font = .systemFont(ofSize: 23)
         itemLabel.text = "Test text"
         itemLabel.translatesAutoresizingMaskIntoConstraints = false
         return itemLabel
     }()
     
-    var itemPrice: UILabel = {
+    var rarity: UILabel = {
         let itemPrice = UILabel()
         itemPrice.font = .systemFont(ofSize: 24)
         itemPrice.text = "€xx"
         itemPrice.textColor = UIColor.darkGray
         itemPrice.translatesAutoresizingMaskIntoConstraints = false
         return itemPrice
+    }()
+    
+    
+    var soundImage: UIImageView = {
+        let soundImage = UIImageView()
+        soundImage.image = #imageLiteral(resourceName: "sound")
+        soundImage.translatesAutoresizingMaskIntoConstraints = false
+        return soundImage
+    }()
+    
+    var soundIndicatorImage: UIImageView = {
+        let soundIndicatorImage = UIImageView()
+        soundIndicatorImage.translatesAutoresizingMaskIntoConstraints = false
+        return soundIndicatorImage
+    }()
+    
+    var videoImage: UIImageView = {
+        let videoImage = UIImageView()
+        videoImage.image = #imageLiteral(resourceName: "video")
+        videoImage.translatesAutoresizingMaskIntoConstraints = false
+        return videoImage
+    }()
+    
+    var videoIndicatorImage: UIImageView = {
+        let videoIndicatorImage = UIImageView()
+        videoIndicatorImage.translatesAutoresizingMaskIntoConstraints = false
+        return videoIndicatorImage
+    }()
+    
+    var notes: UILabel = {
+        let notes = UILabel()
+        notes.font = .systemFont(ofSize: 21)
+        notes.textColor = UIColor.darkGray
+        notes.translatesAutoresizingMaskIntoConstraints = false
+        return notes
+    }()
+    
+    var locationImage: UIImageView = {
+        let locationImage = UIImageView()
+        locationImage.image = #imageLiteral(resourceName: "location")
+        locationImage.translatesAutoresizingMaskIntoConstraints = false
+        return locationImage
+    }()
+    
+    var lat: UILabel = {
+        let location = UILabel()
+        location.font = .systemFont(ofSize: 19)
+        location.textColor = UIColor.darkGray
+        location.translatesAutoresizingMaskIntoConstraints = false
+        return location
+    }()
+    
+    var long: UILabel = {
+        let location = UILabel()
+        location.font = .systemFont(ofSize: 19)
+        location.textColor = UIColor.darkGray
+        location.translatesAutoresizingMaskIntoConstraints = false
+        return location
     }()
     
     /* var itemOffers: UIButton = {
@@ -80,56 +131,23 @@ class MainCell: UICollectionViewCell {
      return itemSettings
      }() */
     
-    var offerImage: UIImageView = {
-        let offerImage = UIImageView()
-        //offerImage.backgroundColor = UIColor.blue
-        offerImage.translatesAutoresizingMaskIntoConstraints = false
-      //  offerImage.image = #imageLiteral(resourceName: "item")
-        return offerImage
-    }()
-    
-    var chatImage: UIImageView = {
-        let chatImage = UIImageView()
-        //chatImage.backgroundColor = UIColor.blue
-        chatImage.translatesAutoresizingMaskIntoConstraints = false
-       // chatImage.image = #imageLiteral(resourceName: "chat3")
-        chatImage.alpha = 0
-        return chatImage
-    }()
-    
-    var offerNumber: UILabel = {
-        let offerNumber = UILabel()
-        offerNumber.font = .systemFont(ofSize: 21)
-        offerNumber.text = "0"
-        offerNumber.textColor = UIColor.darkGray
-        offerNumber.translatesAutoresizingMaskIntoConstraints = false
-        return offerNumber
-    }()
-    
-    var chatNumber: UILabel = {
-        let chatNumber = UILabel()
-        chatNumber.font = .systemFont(ofSize: 19)
-        chatNumber.text = "0"
-        chatNumber.textColor = UIColor.darkGray
-        chatNumber.translatesAutoresizingMaskIntoConstraints = false
-        chatNumber.alpha = 0
-        return chatNumber
-    }()
-    
-    
+   
     func setupViews(){
         
         contentView.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 1, alpha: 1)
         
         self.contentView.addSubview(canvasView)
         self.contentView.addSubview(itemView)
-        self.contentView.addSubview(itemName)
-        self.contentView.addSubview(itemPrice)
-        self.contentView.addSubview(offerImage)
-        self.contentView.addSubview(chatImage)
-        self.contentView.addSubview(offerNumber)
-        self.contentView.addSubview(chatNumber)
-        
+        self.contentView.addSubview(species)
+        self.contentView.addSubview(rarity)
+        self.contentView.addSubview(soundImage)
+        self.contentView.addSubview(soundIndicatorImage)
+        self.contentView.addSubview(videoImage)
+        self.contentView.addSubview(videoIndicatorImage)
+        self.contentView.addSubview(notes)
+        self.contentView.addSubview(lat)
+        self.contentView.addSubview(long)
+        self.contentView.addSubview(locationImage)
         
         canvasView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         canvasView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
@@ -141,30 +159,53 @@ class MainCell: UICollectionViewCell {
         itemView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.9).isActive = true
         itemView.heightAnchor.constraint(equalTo: itemView.widthAnchor, multiplier: 1).isActive = true
         
-        itemName.topAnchor.constraint(equalTo: itemView.bottomAnchor, constant: 5).isActive = true
-        itemName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        itemName.textAlignment = .left
+        species.topAnchor.constraint(equalTo: itemView.bottomAnchor, constant: 8).isActive = true
+        species.centerXAnchor.constraint(equalTo: canvasView.centerXAnchor).isActive = true
+        species.textAlignment = .left
         
-        itemPrice.bottomAnchor.constraint(equalTo: offerNumber.bottomAnchor, constant: 2).isActive = true
-        itemPrice.trailingAnchor.constraint(equalTo: canvasView.trailingAnchor, constant: -8).isActive = true
+        rarity.topAnchor.constraint(equalTo: species.bottomAnchor, constant: 5).isActive = true
+        rarity.centerXAnchor.constraint(equalTo: species.centerXAnchor).isActive = true
+        
+        notes.topAnchor.constraint(equalTo: rarity.bottomAnchor, constant: 10).isActive = true
+        notes.centerXAnchor.constraint(equalTo: species.centerXAnchor).isActive = true
+        
+        soundImage.topAnchor.constraint(equalTo: notes.bottomAnchor, constant: 15).isActive = true
+        soundImage.trailingAnchor.constraint(equalTo: soundIndicatorImage.leadingAnchor, constant: -5).isActive = true
+        soundImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.09).isActive = true
+        soundImage.heightAnchor.constraint(equalTo: soundImage.widthAnchor, multiplier: 1).isActive = true
+        
+        soundIndicatorImage.topAnchor.constraint(equalTo: soundImage.topAnchor).isActive = true
+        soundIndicatorImage.trailingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -10).isActive = true
+        soundIndicatorImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.09).isActive = true
+        soundIndicatorImage.heightAnchor.constraint(equalTo: soundIndicatorImage.widthAnchor, multiplier: 1).isActive = true
+        
+        videoImage.topAnchor.constraint(equalTo: notes.bottomAnchor, constant: 15).isActive = true
+        videoImage.leadingAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 10).isActive = true
+        videoImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.09).isActive = true
+        videoImage.heightAnchor.constraint(equalTo: videoImage.widthAnchor, multiplier: 1).isActive = true
+        
+        videoIndicatorImage.topAnchor.constraint(equalTo: videoImage.topAnchor).isActive = true
+        videoIndicatorImage.leadingAnchor.constraint(equalTo: videoImage.trailingAnchor, constant: 5).isActive = true
+        videoIndicatorImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.09).isActive = true
+        videoIndicatorImage.heightAnchor.constraint(equalTo: videoIndicatorImage.widthAnchor, multiplier: 1).isActive = true
+        
+        locationImage.topAnchor.constraint(equalTo: videoImage.bottomAnchor, constant: 15).isActive = true
+        locationImage.centerXAnchor.constraint(equalTo: canvasView.centerXAnchor).isActive = true
+        locationImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.09).isActive = true
+        locationImage.heightAnchor.constraint(equalTo: locationImage.widthAnchor, multiplier: 1).isActive = true
+        
+        lat.topAnchor.constraint(equalTo: locationImage.bottomAnchor, constant: 5).isActive = true
+        lat.centerXAnchor.constraint(equalTo: locationImage.centerXAnchor).isActive = true
+       
+        long.topAnchor.constraint(equalTo: lat.bottomAnchor, constant: 2).isActive = true
+        long.centerXAnchor.constraint(equalTo: lat.centerXAnchor).isActive = true
+        
+       
         
         
-        offerImage.bottomAnchor.constraint(equalTo: canvasView.bottomAnchor, constant: -5).isActive = true
-        offerImage.leadingAnchor.constraint(equalTo: canvasView.leadingAnchor, constant: 16).isActive = true
-        offerImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.09).isActive = true
-        offerImage.heightAnchor.constraint(equalTo: offerImage.widthAnchor, multiplier: 1).isActive = true
+       
         
-        offerNumber.leadingAnchor.constraint(equalTo: offerImage.trailingAnchor, constant: 6).isActive = true
-        offerNumber.bottomAnchor.constraint(equalTo: offerImage.bottomAnchor).isActive = true
-        
-        
-        chatImage.topAnchor.constraint(equalTo: offerImage.topAnchor).isActive = true
-        chatImage.leadingAnchor.constraint(equalTo: offerNumber.trailingAnchor, constant: 8).isActive = true
-        chatImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.07).isActive = true
-        chatImage.heightAnchor.constraint(equalTo: offerImage.widthAnchor, multiplier: 1).isActive = true
-        
-        chatNumber.leadingAnchor.constraint(equalTo: chatImage.trailingAnchor, constant: 6).isActive = true
-        chatNumber.bottomAnchor.constraint(equalTo: offerImage.bottomAnchor).isActive = true
+       
         
         
     }

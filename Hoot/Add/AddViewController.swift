@@ -13,8 +13,10 @@ import CropViewController
 import AVFoundation
 import AVKit
 import MobileCoreServices
+import CoreData
+import CoreLocation
 
-class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
+class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, CLLocationManagerDelegate {
     
     
     // Firebase Storage itemImage ref
@@ -31,8 +33,10 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     let uid = Auth.auth().currentUser?.uid
     
-    
+    let dname = Auth.auth().currentUser?.displayName
 
+    
+    
     @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var canvasView: UIView!
@@ -104,6 +108,12 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     var deleteVideoButton: UIButton?
     
+    let locationManager = CLLocationManager()
+    
+    var lat: Double?
+    
+    var long: Double?
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -127,6 +137,11 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         hideKeyboard()
         
         id = randomString()
+        
+        locationManager.delegate = self;
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
         
     }
     
@@ -431,18 +446,18 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         if info[UIImagePickerController.InfoKey.mediaType] as! String == (kUTTypeImage as String) {
         
-        let img = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+            let img = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         
-        let image = imageOrientation(img)
+            let image = imageOrientation(img)
         
-        let cropViewController = CropViewController(croppingStyle: .default, image: image)
-        cropViewController.delegate = self
-        cropViewController.aspectRatioPreset = .presetSquare
-        cropViewController.aspectRatioLockEnabled = true
-        cropViewController.resetAspectRatioEnabled = false
-        picker.dismiss(animated: true, completion: nil)
-        present(cropViewController, animated: false, completion: nil)
-        }
+            let cropViewController = CropViewController(croppingStyle: .default, image: image)
+            cropViewController.delegate = self
+            cropViewController.aspectRatioPreset = .presetSquare
+            cropViewController.aspectRatioLockEnabled = true
+            cropViewController.resetAspectRatioEnabled = false
+            picker.dismiss(animated: true, completion: nil)
+            present(cropViewController, animated: false, completion: nil)
+            }
         
         
         if info[UIImagePickerController.InfoKey.mediaType] as! String == (kUTTypeMovie as String) {
@@ -682,7 +697,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
             
             let session = AVAudioSession.sharedInstance()
             try! session.setCategory(AVAudioSession.Category.playback)
-            
             soundPlayer = try!(AVAudioPlayer(contentsOf: soundUrl!))
             soundPlayer?.play()
         }
@@ -766,9 +780,9 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
         
-        try?(fileManager.removeItem(at: videoUrl!))
+        if videoUrl != nil {  try? fileManager.removeItem(at: videoUrl!) }
         
-        try?(fileManager.removeItem(at: soundUrl!))
+        if soundUrl != nil { try? fileManager.removeItem(at: soundUrl!) }
         
         navigationController?.popViewController(animated: true)
         
@@ -779,10 +793,44 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     @IBAction func confirmButtonPressed(_ sender: Any) {
         
+        guard lat != nil && long != nil else { present(notice.locationAlert, animated: true, completion: nil); return }
+        
+        showLoader()
+        
+        let pictureJpeg = pictureView.image?.jpegData(compressionQuality: 0.05)
+        
+        let picturePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(id).jpeg")
+        
+        fileManager.createFile(atPath: picturePath, contents: pictureJpeg, attributes: nil)
+       
         
         
+        let managedContext = appDelegate.persistentContainer.viewContext
         
+        let observationEntity = NSEntityDescription.entity(forEntityName: "OwnObservation", in: managedContext)
         
+        let observation = NSManagedObject(entity: observationEntity!, insertInto: managedContext)
+       
+        var soundU = ""
+        
+        var videoU = ""
+        
+        if soundUrl != nil { soundU = "\(id).m4a" }
+        
+        if videoUrl != nil { videoU = "\(id).mp4" }
+        
+        observation.setValuesForKeys(["species": speciesTextField.text!, "rarity": selectedRarity, "notes": notesTextField.text!, "created": Int(Date().timeIntervalSince1970), "id": id, "uid": uid!, "dname": dname!, "uploaded": false, "pictureUrl": "\(id).jpeg", "soundUrl": soundU, "videoUrl": videoU, "lat": lat!, "long": long!])
+        
+        do {
+            try managedContext.save()
+        }
+        catch let error as NSError {
+            print("Error occurred: \(error)")
+            self.present(self.notice.generalAlert, animated: true, completion: nil)
+            return
+        }
+        hideLoader()
+        navigationController?.popViewController(animated: true)
     }
     
     
@@ -805,6 +853,14 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         selectedRarity = categoryPickerList[row]
         rarityTextField.text = NSLocalizedString(categoryPickerList[row], comment: "")
         controlOkButtonState()
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        lat = locations.last?.coordinate.latitude
+     
+        long = locations.last?.coordinate.longitude
         
     }
     

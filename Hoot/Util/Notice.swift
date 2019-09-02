@@ -30,7 +30,7 @@ struct Notice {
         
     }
     
-    var firestoreAlert: UIAlertController {
+    var generalAlert: UIAlertController {
         
         let titleString = NSLocalizedString("Operation unsuccessful, please try again later.", comment: "")
         
@@ -53,6 +53,24 @@ struct Notice {
     var videoAlert: UIAlertController {
         
         let titleString = NSLocalizedString("Video length limit of 15 seconds exceeded", comment: "")
+        
+        let okString = NSLocalizedString("Ok", comment: "")
+        
+        let alert = UIAlertController(title: titleString, message: "", preferredStyle: .alert)
+        
+        let notice = UIAlertAction(title: okString, style: .default, handler: {(UIAlertAction) in
+            return
+        })
+        
+        alert.addAction(notice)
+        
+        return alert
+        
+    }
+    
+    var locationAlert: UIAlertController {
+        
+        let titleString = NSLocalizedString("Please enable location services to add an observation", comment: "")
         
         let okString = NSLocalizedString("Ok", comment: "")
         
