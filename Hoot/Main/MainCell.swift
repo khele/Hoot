@@ -110,6 +110,21 @@ class MainCell: UICollectionViewCell {
         return location
     }()
     
+    var timeImage: UIImageView = {
+        let timeImage = UIImageView()
+        timeImage.image = #imageLiteral(resourceName: "time")
+        timeImage.translatesAutoresizingMaskIntoConstraints = false
+        return timeImage
+    }()
+    
+    var time: UILabel = {
+        let time = UILabel()
+        time.font = .systemFont(ofSize: 18)
+        time.textColor = UIColor.darkGray
+        time.translatesAutoresizingMaskIntoConstraints = false
+        return time
+    }()
+    
     /* var itemOffers: UIButton = {
      let itemOffers = UIButton()
      itemOffers.setTitle(String("0"), for: .normal)
@@ -148,6 +163,9 @@ class MainCell: UICollectionViewCell {
         self.contentView.addSubview(lat)
         self.contentView.addSubview(long)
         self.contentView.addSubview(locationImage)
+        self.contentView.addSubview(timeImage)
+        self.contentView.addSubview(time)
+        
         
         canvasView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         canvasView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
@@ -200,9 +218,13 @@ class MainCell: UICollectionViewCell {
         long.topAnchor.constraint(equalTo: lat.bottomAnchor, constant: 2).isActive = true
         long.centerXAnchor.constraint(equalTo: lat.centerXAnchor).isActive = true
         
-       
+        timeImage.centerXAnchor.constraint(equalTo: canvasView.centerXAnchor).isActive = true
+        timeImage.topAnchor.constraint(equalTo: long.bottomAnchor, constant: 10).isActive = true
+        timeImage.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.09).isActive = true
+        timeImage.heightAnchor.constraint(equalTo: locationImage.widthAnchor, multiplier: 1).isActive = true
         
-        
+        time.topAnchor.constraint(equalTo: timeImage.bottomAnchor, constant: 5).isActive = true
+        time.centerXAnchor.constraint(equalTo: canvasView.centerXAnchor).isActive = true
        
         
        

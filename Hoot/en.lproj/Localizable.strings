@@ -23,7 +23,17 @@
 "Video length limit is 15 seconds!" = "Video length limit is 15 seconds!";
 "Video length limit of 15 seconds exceeded" = "Video length limit of 15 seconds exceeded";
 "Please enable location services to add an observation" = "Please enable location services to add an observation";
+"You can do this in Settings > Privacy > Location Services" = "You can do this in Settings > Privacy > Location Services";
+"Please enable microphone to record observation audio" = "Please enable microphone to record observation audio";
+"You can do this in Settings > Privacy > Microphone" = "You can do this in Settings > Privacy > Microphone";
+"Please enable camera to record observation audio" = "Please enable camera to record observation audio";
+"You can do this in Settings > Privacy > Camera" = "You can do this in Settings > Privacy > Camera";
+"Please allow photo library access to add observation images" = "Please allow photo library access to add observation images";
+"You can do this in Settings > Privacy > Photos" = "You can do this in Settings > Privacy > Photos";
 "Ok" = "Ok";
 "Logged out" = "Logged out";
-
-
+"Are you sure you want to remove this observation?" = "Are you sure you want to remove this observation?";
+"Confirm" = "confirm";
+"Log out" = "Log out";
+"Log out?" = "Log out?";
+"Are you sure you wish to log out?" =  "Are you sure you wish to log out?";

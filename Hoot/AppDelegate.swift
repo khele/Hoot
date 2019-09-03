@@ -36,8 +36,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         monitor.pathUpdateHandler = { [unowned self] pathUpdateHandler in
             if pathUpdateHandler.status == .satisfied {
                 self.connected = true
+                
+                
+                DispatchQueue.main.async {
+                if self.window?.rootViewController?.restorationIdentifier == "mainNavigationController"{
+                    unowned let nvc = self.window?.rootViewController as! UINavigationController
+                    unowned let vc = nvc.viewControllers[0] as! MainViewController
+                    vc.connected = true
+                }
+                }
+                    
             } else {
                 self.connected = false
+                
+                DispatchQueue.main.async {
+                if self.window?.rootViewController?.restorationIdentifier == "mainNavigationController"{
+                    unowned let nvc = self.window?.rootViewController as! UINavigationController
+                    unowned let vc = nvc.viewControllers[0] as! MainViewController
+                    vc.connected = false
+                }
+                }
             }
         }
         monitor.start(queue: queue)

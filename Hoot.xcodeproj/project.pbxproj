@@ -17,12 +17,15 @@
 		486C9509231AC79E0071B94F /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C9508231AC79E0071B94F /* Observation.swift */; };
 		486C950A231AC79E0071B94F /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C9508231AC79E0071B94F /* Observation.swift */; };
 		486C950B231AC79E0071B94F /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C9508231AC79E0071B94F /* Observation.swift */; };
-		48B37E8C231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8A231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift */; };
-		48B37E8D231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8A231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift */; };
-		48B37E8E231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8A231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift */; };
-		48B37E8F231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8B231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift */; };
-		48B37E90231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8B231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift */; };
-		48B37E91231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E8B231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift */; };
+		48AA58C7231EC50B00D8A26B /* OwnObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58C6231EC50B00D8A26B /* OwnObservationExtension.swift */; };
+		48AA58C8231EC50B00D8A26B /* OwnObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58C6231EC50B00D8A26B /* OwnObservationExtension.swift */; };
+		48AA58C9231EC50B00D8A26B /* OwnObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58C6231EC50B00D8A26B /* OwnObservationExtension.swift */; };
+		48AA58CC231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58CA231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift */; };
+		48AA58CD231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58CA231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift */; };
+		48AA58CE231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58CA231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift */; };
+		48AA58CF231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58CB231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift */; };
+		48AA58D0231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58CB231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift */; };
+		48AA58D1231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58CB231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift */; };
 		48B37E94231D4DDB00BA5387 /* Detail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48B37E93231D4DDB00BA5387 /* Detail.storyboard */; };
 		48B37E95231D4DDB00BA5387 /* Detail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48B37E93231D4DDB00BA5387 /* Detail.storyboard */; };
 		48B37E96231D4DDB00BA5387 /* Detail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48B37E93231D4DDB00BA5387 /* Detail.storyboard */; };
@@ -94,8 +97,9 @@
 		26E9E02D0D015E00209DCBA5 /* Pods-Hoot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoot.release.xcconfig"; path = "Target Support Files/Pods-Hoot/Pods-Hoot.release.xcconfig"; sourceTree = "<group>"; };
 		486C94FD231AC3BA0071B94F /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		486C9508231AC79E0071B94F /* Observation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observation.swift; sourceTree = "<group>"; };
-		48B37E8A231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataClass.swift"; sourceTree = "<group>"; };
-		48B37E8B231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		48AA58C6231EC50B00D8A26B /* OwnObservationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnObservationExtension.swift; sourceTree = "<group>"; };
+		48AA58CA231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataClass.swift"; sourceTree = "<group>"; };
+		48AA58CB231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		48B37E93231D4DDB00BA5387 /* Detail.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Detail.storyboard; sourceTree = "<group>"; };
 		48B37E97231D4DFE00BA5387 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		48B37E9B231D89ED00BA5387 /* SyncObservations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncObservations.swift; sourceTree = "<group>"; };
@@ -174,8 +178,9 @@
 			isa = PBXGroup;
 			children = (
 				486C9508231AC79E0071B94F /* Observation.swift */,
-				48B37E8A231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift */,
-				48B37E8B231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift */,
+				48AA58CA231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift */,
+				48AA58CB231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift */,
+				48AA58C6231EC50B00D8A26B /* OwnObservationExtension.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -633,16 +638,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				486C9509231AC79E0071B94F /* Observation.swift in Sources */,
+				48AA58C7231EC50B00D8A26B /* OwnObservationExtension.swift in Sources */,
 				48B37E9C231D89ED00BA5387 /* SyncObservations.swift in Sources */,
-				48B37E8C231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */,
+				48AA58CC231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift in Sources */,
 				48E21561231AB45D00A36A6B /* MainViewController.swift in Sources */,
 				48B37E98231D4DFE00BA5387 /* DetailViewController.swift in Sources */,
 				48BC852F231AAD91002F6543 /* Hoot.xcdatamodeld in Sources */,
 				48E2156B231AB5A200A36A6B /* AddViewController.swift in Sources */,
 				486C94FE231AC3BA0071B94F /* Notice.swift in Sources */,
 				48BEBC77231ADBF500ABF780 /* MainItem.swift in Sources */,
-				48B37E8F231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */,
 				48E21573231AB5C200A36A6B /* LoginViewController.swift in Sources */,
+				48AA58CF231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift in Sources */,
 				48BC8527231AAD91002F6543 /* AppDelegate.swift in Sources */,
 				48BEBC6D231ACEF000ABF780 /* MainCell.swift in Sources */,
 			);
@@ -656,13 +662,14 @@
 				48B37E9D231D89ED00BA5387 /* SyncObservations.swift in Sources */,
 				48BEBC70231AD17900ABF780 /* Hoot.xcdatamodeld in Sources */,
 				48BEBC78231ADBF500ABF780 /* MainItem.swift in Sources */,
+				48AA58C8231EC50B00D8A26B /* OwnObservationExtension.swift in Sources */,
 				486C950A231AC79E0071B94F /* Observation.swift in Sources */,
 				48ED136D231AE44100F7373A /* MainViewController.swift in Sources */,
+				48AA58CD231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift in Sources */,
 				48E21574231AB5C200A36A6B /* LoginViewController.swift in Sources */,
-				48B37E90231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */,
-				48B37E8D231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */,
 				48BC853F231AAD93002F6543 /* HootTests.swift in Sources */,
 				486C9501231AC5F30071B94F /* Notice.swift in Sources */,
+				48AA58D0231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift in Sources */,
 				486C94FF231AC5C30071B94F /* AppDelegate.swift in Sources */,
 				48E2156C231AB5A200A36A6B /* AddViewController.swift in Sources */,
 				48BEBC6E231ACEF000ABF780 /* MainCell.swift in Sources */,
@@ -677,13 +684,14 @@
 				48B37E9E231D89ED00BA5387 /* SyncObservations.swift in Sources */,
 				48BEBC71231AD17900ABF780 /* Hoot.xcdatamodeld in Sources */,
 				48BEBC79231ADBF500ABF780 /* MainItem.swift in Sources */,
+				48AA58C9231EC50B00D8A26B /* OwnObservationExtension.swift in Sources */,
 				486C950B231AC79E0071B94F /* Observation.swift in Sources */,
 				48ED136E231AE44200F7373A /* MainViewController.swift in Sources */,
+				48AA58CE231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift in Sources */,
 				48E21575231AB5C200A36A6B /* LoginViewController.swift in Sources */,
-				48B37E91231D2EA000BA5387 /* OwnObservation+CoreDataProperties.swift in Sources */,
-				48B37E8E231D2EA000BA5387 /* OwnObservation+CoreDataClass.swift in Sources */,
 				48BC854A231AAD93002F6543 /* HootUITests.swift in Sources */,
 				486C9502231AC5F40071B94F /* Notice.swift in Sources */,
+				48AA58D1231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift in Sources */,
 				486C9500231AC5C30071B94F /* AppDelegate.swift in Sources */,
 				48E2156D231AB5A200A36A6B /* AddViewController.swift in Sources */,
 				48BEBC6F231ACEF000ABF780 /* MainCell.swift in Sources */,

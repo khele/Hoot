@@ -34,4 +34,6 @@ protocol MainItem {
     
     var id: String? { get }
     
+    var rarityNumber: Int64 { get }
+    
 }

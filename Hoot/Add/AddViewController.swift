@@ -15,6 +15,7 @@ import AVKit
 import MobileCoreServices
 import CoreData
 import CoreLocation
+import Photos
 
 class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, CLLocationManagerDelegate {
     
@@ -114,7 +115,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     var long: Double?
     
-    
+    let session = AVAudioSession.sharedInstance()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -136,12 +137,16 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         hideKeyboard()
         
-        id = randomString()
+        id = getId()
         
         locationManager.delegate = self;
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
+        
+        session.requestRecordPermission() {result in print(result)}
+        
+        PHPhotoLibrary.requestAuthorization(){ result in print(result) }
         
     }
     
@@ -180,9 +185,14 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     }
     
     
-    func randomString() -> String {
-        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        return String((0..<8).map{ _ in letters.randomElement()! })
+    func getId() -> String {
+        
+        let idRef = db.collection("observation").document()
+        
+        let documentId = idRef.documentID
+        
+        return documentId
+        
     }
     
     
@@ -415,11 +425,17 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         let cancelString = NSLocalizedString("Cancel", comment: "")
         
         let actionSheet = UIAlertController(title: titleString, message: "", preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: photoString, style: .default, handler: {[unowned self] (action: UIAlertAction) in imagePicker.sourceType = .photoLibrary
+        actionSheet.addAction(UIAlertAction(title: photoString, style: .default, handler: {[unowned self] (action: UIAlertAction) in
+            
+            guard PHPhotoLibrary.authorizationStatus() == .authorized else { self.present(self.notice.photoAlert, animated: true, completion: nil); return }
+            
+            imagePicker.sourceType = .photoLibrary
             self.present(imagePicker, animated: true, completion: nil)
         }))
         
         actionSheet.addAction(UIAlertAction(title: cameraString, style: .default, handler: {[unowned self] (action: UIAlertAction) in
+            
+            guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else { self.present(self.notice.cameraAlert, animated: true, completion: nil); return }
             
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
                 imagePicker.sourceType = .camera
@@ -669,10 +685,11 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
             
         else if isRecordingSound == false && soundRecorded == false {
-        
-            let session = AVAudioSession.sharedInstance()
-            try! session.setCategory(AVAudioSession.Category.playAndRecord)
+      
+            guard session.recordPermission == .granted else { present(notice.microphoneAlert, animated: true, completion: nil); return}
             
+            try! session.setCategory(AVAudioSession.Category.playAndRecord)
+           
         soundUrl = FileManager.default.urls(for: .documentDirectory, in:.userDomainMask)[0].appendingPathComponent("\(id).m4a")
         
         let recordingSettings: [String: Any] = [AVFormatIDKey: kAudioFormatAppleLossless,
@@ -684,7 +701,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         soundRecorder!.isMeteringEnabled = true
         soundRecorder!.prepareToRecord()
         soundRecorder!.record()
-        
+    
         isRecordingSound = true
         addSoundButton.setBackgroundImage(#imageLiteral(resourceName: "stopButton"), for: .normal)
         addSoundLabel.text = NSLocalizedString("Recording", comment: "")
@@ -713,6 +730,8 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         if videoRecorded == false {
         
+        guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else { present(notice.cameraAlert, animated: true, completion: nil); return }
+            
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         
@@ -800,7 +819,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         let pictureJpeg = pictureView.image?.jpegData(compressionQuality: 0.05)
         
         let picturePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(id).jpeg")
-        
+        print(picturePath)
         fileManager.createFile(atPath: picturePath, contents: pictureJpeg, attributes: nil)
        
         
@@ -819,7 +838,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         if videoUrl != nil { videoU = "\(id).mp4" }
         
-        observation.setValuesForKeys(["species": speciesTextField.text!, "rarity": selectedRarity, "notes": notesTextField.text!, "created": Int(Date().timeIntervalSince1970), "id": id, "uid": uid!, "dname": dname!, "uploaded": false, "pictureUrl": "\(id).jpeg", "soundUrl": soundU, "videoUrl": videoU, "lat": lat!, "long": long!])
+        observation.setValuesForKeys(["species": speciesTextField.text!, "rarity": selectedRarity, "notes": notesTextField.text!, "created": Int(Date().timeIntervalSince1970), "id": id, "uid": uid!, "dname": dname!, "uploaded": false, "uploading": false, "pictureUrl": "\(id).jpeg", "soundUrl": soundU, "videoUrl": videoU, "lat": lat!, "long": long!])
         
         do {
             try managedContext.save()

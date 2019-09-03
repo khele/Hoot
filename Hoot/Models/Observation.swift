@@ -34,6 +34,8 @@ struct Observation: MainItem {
     
     var id: String?
     
+    var rarityNumber: Int64
+    
     init(_ data: [String : Any]){
      
         
@@ -60,6 +62,8 @@ struct Observation: MainItem {
         dname = data["dname"] as? String
         
         id = data["id"] as? String
+        
+        rarityNumber = data["rarityNumber"] as! Int64
         
     }
     

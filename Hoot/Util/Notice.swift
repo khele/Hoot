@@ -72,9 +72,71 @@ struct Notice {
         
         let titleString = NSLocalizedString("Please enable location services to add an observation", comment: "")
         
+        let messageString = NSLocalizedString("You can do this in Settings > Privacy > Location Services", comment: "")
+        
         let okString = NSLocalizedString("Ok", comment: "")
         
-        let alert = UIAlertController(title: titleString, message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .alert)
+        
+        let notice = UIAlertAction(title: okString, style: .default, handler: {(UIAlertAction) in
+            return
+        })
+        
+        alert.addAction(notice)
+        
+        return alert
+        
+    }
+    
+    var microphoneAlert: UIAlertController {
+        
+        let titleString = NSLocalizedString("Please enable microphone to record observation audio", comment: "")
+        
+        let messageString = NSLocalizedString("You can do this in Settings > Privacy > Microphone", comment: "")
+        
+        let okString = NSLocalizedString("Ok", comment: "")
+        
+        let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .alert)
+        
+        let notice = UIAlertAction(title: okString, style: .default, handler: {(UIAlertAction) in
+            return
+        })
+        
+        alert.addAction(notice)
+        
+        return alert
+        
+    }
+    
+    var cameraAlert: UIAlertController {
+        
+        let titleString = NSLocalizedString("Please enable camera to capture observation photos and video", comment: "")
+        
+        let messageString = NSLocalizedString("You can do this in Settings > Privacy > Camera", comment: "")
+        
+        let okString = NSLocalizedString("Ok", comment: "")
+        
+        let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .alert)
+        
+        let notice = UIAlertAction(title: okString, style: .default, handler: {(UIAlertAction) in
+            return
+        })
+        
+        alert.addAction(notice)
+        
+        return alert
+        
+    }
+    
+    var photoAlert: UIAlertController {
+        
+        let titleString = NSLocalizedString("Please allow photo library access to add observation images", comment: "")
+        
+        let messageString = NSLocalizedString("You can do this in Settings > Privacy > Photos", comment: "")
+        
+        let okString = NSLocalizedString("Ok", comment: "")
+        
+        let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .alert)
         
         let notice = UIAlertAction(title: okString, style: .default, handler: {(UIAlertAction) in
             return
