@@ -148,4 +148,22 @@ struct Notice {
         
     }
     
+    var syncAlert: UIAlertController {
+        
+        let titleString = NSLocalizedString("This observation is still synchronizing, please try again in a few moments.", comment: "")
+        
+        let okString = NSLocalizedString("Ok", comment: "")
+        
+        let alert = UIAlertController(title: titleString, message: "", preferredStyle: .alert)
+        
+        let notice = UIAlertAction(title: okString, style: .default, handler: {(UIAlertAction) in
+            return
+        })
+        
+        alert.addAction(notice)
+        
+        return alert
+        
+    }
+    
 }

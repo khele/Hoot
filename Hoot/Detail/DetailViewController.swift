@@ -242,8 +242,9 @@ class DetailViewController: UIViewController {
     func deleteObservation(){
         
         
-        
         let obs = observation as! OwnObservation
+        
+        var checkObs: OwnObservation?
         
         let soundAndVideo = (Bool(obs.soundUrl != ""), Bool(obs.videoUrl != ""))
         
@@ -254,6 +255,23 @@ class DetailViewController: UIViewController {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
         print(documentsPath)
         print(documentsUrl)
+        
+        let checkFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "OwnObservation")
+        checkFetchRequest.predicate = NSPredicate(format: "id = %@", observation.id!)
+        
+        do{
+            let result = try managedContext.fetch(checkFetchRequest)
+            for data in result as! [NSManagedObject] {
+                checkObs = data as? OwnObservation
+            }
+        }
+        catch{
+            print(error)
+        }
+        
+        guard checkObs!.uploading != true else { present(notice.syncAlert, animated: true, completion: nil); return }
+        
+        
         if obs.uploaded == true {
             
             let objectId = obs.id!

@@ -19,21 +19,21 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hoot240" translatesAutoresizingMaskIntoConstraints="NO" id="DXR-fc-bGv">
-                                <rect key="frame" x="67.5" y="20" width="240" height="240"/>
+                                <rect key="frame" x="9.5" y="81" width="318.5" height="319"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="DXR-fc-bGv" secondAttribute="height" multiplier="1:1" id="WIu-6s-pNp"/>
                                 </constraints>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gFD-om-T4O">
-                                <rect key="frame" x="54.5" y="293" width="266" height="324"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="45" translatesAutoresizingMaskIntoConstraints="NO" id="gFD-om-T4O">
+                                <rect key="frame" x="8" y="433" width="359" height="189"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HootText" translatesAutoresizingMaskIntoConstraints="NO" id="z4T-pc-Rbo">
-                                        <rect key="frame" x="73" y="0.0" width="120" height="274"/>
+                                        <rect key="frame" x="119.5" y="0.0" width="120" height="96"/>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q0b-KI-EUr">
-                                        <rect key="frame" x="0.0" y="274" width="266" height="50"/>
+                                        <rect key="frame" x="54.5" y="141" width="250" height="48"/>
                                         <color key="backgroundColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                         <inset key="contentEdgeInsets" minX="30" minY="10" maxX="30" maxY="10"/>
                                         <state key="normal" title="LOGIN / REGISTER">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -47,11 +47,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="DXR-fc-bGv" firstAttribute="top" secondItem="gkj-O2-zsV" secondAttribute="top" id="5hm-dk-EsC"/>
-                            <constraint firstItem="DXR-fc-bGv" firstAttribute="centerX" secondItem="gkj-O2-zsV" secondAttribute="centerX" id="94B-Db-zE4"/>
-                            <constraint firstItem="gkj-O2-zsV" firstAttribute="trailing" secondItem="gFD-om-T4O" secondAttribute="trailing" constant="54.5" id="WHg-r5-1Hf"/>
-                            <constraint firstItem="gkj-O2-zsV" firstAttribute="bottom" secondItem="gFD-om-T4O" secondAttribute="bottom" constant="50" id="Z3T-pP-BVd"/>
-                            <constraint firstItem="gFD-om-T4O" firstAttribute="leading" secondItem="gkj-O2-zsV" secondAttribute="leading" constant="54.5" id="nuE-wh-TsZ"/>
+                            <constraint firstItem="DXR-fc-bGv" firstAttribute="centerX" secondItem="gkj-O2-zsV" secondAttribute="centerX" multiplier="0.9" id="94B-Db-zE4"/>
+                            <constraint firstItem="DXR-fc-bGv" firstAttribute="centerY" secondItem="gkj-O2-zsV" secondAttribute="centerY" multiplier="0.7" id="AsA-A5-bvI"/>
+                            <constraint firstItem="gkj-O2-zsV" firstAttribute="trailing" secondItem="gFD-om-T4O" secondAttribute="trailing" constant="8" id="WHg-r5-1Hf"/>
+                            <constraint firstItem="gkj-O2-zsV" firstAttribute="bottom" secondItem="gFD-om-T4O" secondAttribute="bottom" constant="45" id="Z3T-pP-BVd"/>
+                            <constraint firstItem="DXR-fc-bGv" firstAttribute="width" secondItem="cUQ-n4-xEG" secondAttribute="width" multiplier="0.85" id="i38-0m-Jl7"/>
+                            <constraint firstItem="gFD-om-T4O" firstAttribute="leading" secondItem="gkj-O2-zsV" secondAttribute="leading" constant="8" id="nuE-wh-TsZ"/>
                             <constraint firstItem="gFD-om-T4O" firstAttribute="top" secondItem="DXR-fc-bGv" secondAttribute="bottom" constant="33" id="phY-U8-xUE"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gkj-O2-zsV"/>

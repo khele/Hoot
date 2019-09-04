@@ -119,8 +119,6 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     let sync = SyncObservations()
     
-    var viewHasLoaded = false
-    
     var connected: Bool?{
         
         willSet {
@@ -135,7 +133,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 if OnlyOwn == false { ownSwitch.isOn = false; mainCollectionView.reloadData() }
                 ownSwitch.isUserInteractionEnabled = true
                 UIView.animate(withDuration: 0.2, animations: { self.offlineLabel.alpha = 0 } )
-                if viewHasLoaded == true { sync.sync() }
+                
             }
         }
         
@@ -166,8 +164,6 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        viewHasLoaded = true
         
         setupLayout()
         
@@ -274,13 +270,15 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         let logOutString = NSLocalizedString("Log out?", comment: "")
         
+        let logOutSecondString = NSLocalizedString("Log out", comment: "")
+        
         let cancelString = NSLocalizedString("Cancel", comment: "")
         
         let messageString = NSLocalizedString("Are you sure you wish to log out?", comment: "")
         
         let alert = UIAlertController(title: logOutString, message: messageString, preferredStyle: .alert)
         
-        let confirm = UIAlertAction(title: logOutString, style: .default, handler: { [unowned self] (UIAlertAction) in
+        let confirm = UIAlertAction(title: logOutSecondString, style: .default, handler: { [unowned self] (UIAlertAction) in
             self.logOut()
         })
         
@@ -567,7 +565,9 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
             
             cell.long.text = "\(mainItemSetSorted[indexPath.row].long)"
         
-            cell.time.text = String(describing: Date(timeIntervalSince1970: Double(mainItemSetSorted[indexPath.row].created)))
+            let dateAndTime = DateFormatter.localizedString(from: Date(timeIntervalSince1970: Double(mainItemSetSorted[indexPath.row].created)), dateStyle: .short, timeStyle: .short)
+        
+            cell.time.text = dateAndTime
         
         return cell
         

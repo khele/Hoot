@@ -81,6 +81,8 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     var selectedRarity = ""
     
+    var selectedRarityNumber = 1
+    
     let notice = Notice()
     
     var categoryPickerList: [String] = ["-- Select rarity --", "Common", "Rare", "Extremely rare"]
@@ -146,6 +148,8 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         session.requestRecordPermission() {result in print(result)}
         
+        AVCaptureDevice.requestAccess(for: AVMediaType.video) { result in print(result) }
+        
         PHPhotoLibrary.requestAuthorization(){ result in print(result) }
         
     }
@@ -181,6 +185,8 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         confirmButton.alpha = 0.5
         confirmButton.isUserInteractionEnabled = false
+        
+        
         
     }
     
@@ -284,7 +290,11 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     
     @objc func dismissKeyboard(){
-        view.endEditing(true)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [unowned self] in
+            self.view.endEditing(true)
+        }
+        
     }
     
     
@@ -729,8 +739,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     @IBAction func addVideoButtonPressed(_ sender: Any) {
         
         if videoRecorded == false {
-        
-        guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else { present(notice.cameraAlert, animated: true, completion: nil); return }
             
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -747,6 +755,9 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         let actionSheet = UIAlertController(title: titleString, message: messageString, preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: photoString, style: .default, handler: {[unowned self] (action: UIAlertAction) in
+            
+            guard PHPhotoLibrary.authorizationStatus() == .authorized else { self.present(self.notice.photoAlert, animated: true, completion: nil); return }
+            
             imagePicker.sourceType = .photoLibrary
             imagePicker.mediaTypes = [kUTTypeMovie as String]
             imagePicker.videoMaximumDuration = 0.1
@@ -757,6 +768,8 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         }))
         
         actionSheet.addAction(UIAlertAction(title: cameraString, style: .default, handler: {[unowned self] (action: UIAlertAction) in
+            
+            guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else { self.present(self.notice.cameraAlert, animated: true, completion: nil); return }
             
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
                 imagePicker.sourceType = .camera
@@ -838,7 +851,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         if videoUrl != nil { videoU = "\(id).mp4" }
         
-        observation.setValuesForKeys(["species": speciesTextField.text!, "rarity": selectedRarity, "notes": notesTextField.text!, "created": Int(Date().timeIntervalSince1970), "id": id, "uid": uid!, "dname": dname!, "uploaded": false, "uploading": false, "pictureUrl": "\(id).jpeg", "soundUrl": soundU, "videoUrl": videoU, "lat": lat!, "long": long!])
+        observation.setValuesForKeys(["species": speciesTextField.text!, "rarity": selectedRarity, "rarityNumber": selectedRarityNumber, "notes": notesTextField.text!, "created": Int(Date().timeIntervalSince1970), "id": id, "uid": uid!, "dname": dname!, "uploaded": false, "uploading": false, "pictureUrl": "\(id).jpeg", "soundUrl": soundU, "videoUrl": videoU, "lat": lat!, "long": long!])
         
         do {
             try managedContext.save()
@@ -870,6 +883,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedRarity = categoryPickerList[row]
+        selectedRarityNumber = row + 1
         rarityTextField.text = NSLocalizedString(categoryPickerList[row], comment: "")
         controlOkButtonState()
         

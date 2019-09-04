@@ -30,6 +30,7 @@ struct SyncObservations {
     
     unowned let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
+   
     
     
     
@@ -66,6 +67,7 @@ struct SyncObservations {
                     print("error getting documents: \(err)")
                 }
                 else {
+                    print("Downloading documents")
                     if let querySnapshot = querySnapshot {
                         for doc in querySnapshot.documents{
                             let data = doc.data()
@@ -100,34 +102,44 @@ struct SyncObservations {
                         
                             
                         if item.soundUrl! == "" && item.videoUrl == ""{
-                            observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "", "videoUrl": "", "lat": item.lat, "long": item.long])
+                            observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "", "videoUrl": "", "lat": item.lat, "long": item.long])
                         }
                             
                             
                             
                         if item.soundUrl! != "" && item.videoUrl! == "" {
-                        observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "\(item.id!).m4a", "videoUrl": "", "lat": item.lat, "long": item.long])
+                        observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "\(item.id!).m4a", "videoUrl": "", "lat": item.lat, "long": item.long])
                         }
                             
                             
                         if item.soundUrl! == "" && item.videoUrl != "" {
-                             observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "", "videoUrl": "\(item.id!).mp4", "lat": item.lat, "long": item.long])
+                             observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "", "videoUrl": "\(item.id!).mp4", "lat": item.lat, "long": item.long])
                         }
                             
                             
                             
                         if item.soundUrl! != "" && item.videoUrl! != "" {
-                             observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "\(item.id!).m4a", "videoUrl": "\(item.id!).mp4", "lat": item.lat, "long": item.long])
+                            observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "\(item.id!).m4a", "videoUrl": "\(item.id!).mp4", "lat": item.lat, "long": item.long])
                         }
                             
                         do {
                             try managedContext.save()
+                            print("save done")
                         }
                         catch let error as NSError {
                             print("Error occurred: \(error)")
                         }
                     }
                 }
+                
+                if self.appDelegate.window?.rootViewController?.restorationIdentifier == "mainNavigationController"{
+                        
+                    let nvc = self.appDelegate.window?.rootViewController as! UINavigationController
+                    let vc = nvc.viewControllers[0] as! MainViewController
+                    vc.getOwnObservations()
+                        
+                    }
+                
             }
         }
             
@@ -150,8 +162,12 @@ struct SyncObservations {
                 print("own data retrieve failed")
             }
             print(localItemSet.count)
-            for item in localItemSet {
-                
+            
+            guard localItemSet.count != 0 else { return }
+            
+            let item = localItemSet[0]
+            
+          
                 fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
                 
                 do {
@@ -173,12 +189,6 @@ struct SyncObservations {
                 
                 let documentsUrl = FileManager.default.urls(for: .documentDirectory, in:.userDomainMask)[0]
                 
-                var pictureUrl = URL(string: "www.example.com")
-                
-                var soundUrl = URL(string: "www.example.com")
-                
-                var videoUrl = URL(string: "www.example.com")
-                
                 let pictureFileUrl = documentsUrl.appendingPathComponent("\(item.id!).jpeg")
               
                 let pictureFileRef = pictureRef.child("\(item.id!).jpeg")
@@ -193,504 +203,507 @@ struct SyncObservations {
                 
                 let soundAndVideo = (Bool(item.soundUrl! != ""), Bool(item.videoUrl! != ""))
                 
-                var soundTask: StorageUploadTask?
                 
-                var videoTask: StorageUploadTask?
                 
                 switch soundAndVideo {
                     
                 case (true, true):
                     
-                    pictureFileRef.putFile(from: pictureFileUrl, metadata: StorageMetadata()) { (metadata, error) in
+                    var pictureTask: StorageUploadTask!
+                    
+                    var soundTask: StorageUploadTask!
+                    
+                    var videoTask: StorageUploadTask!
+                    
+                    let pictureGroup = DispatchGroup()
+                    
+                    var success = true
+                    
+                    var pictureUrl = URL(string: "www.example.com")
+                    
+                    var soundUrl = URL(string: "www.example.com")
+                    
+                    var videoUrl = URL(string: "www.example.com")
+                    
+                    pictureGroup.enter()
+                    
+                    pictureTask = pictureFileRef.putFile(from: pictureFileUrl, metadata: StorageMetadata()) { (metadata, error) in
                         guard metadata != nil else {
                             print("Upload error")
                             return
                         }
                         
-                        
                         pictureFileRef.downloadURL { url, error in
                             if let error = error {
                                 print("DownloadURL error: \(error)")
+                                return
                             } else {
                                 if let urlTemp = url{
                                     pictureUrl = urlTemp
+                                    pictureGroup.leave()
+                                }
+                            }
+                        }
+                    }
+                    
+                    pictureTask.observe(.failure){ snapShot in
+                        success = false
+                        pictureGroup.leave()
+                    }
+                    
+                    pictureTask.observe(.success){ snapShot in
+                     
+                        print("picture success")
+                        
+                    }
+                    
+                    pictureGroup.notify(queue: .main){
+                        
+                        if success == false { return }
+                        
+                        let soundGroup = DispatchGroup()
+                        soundGroup.enter()
+                        
+                        soundTask = soundFileRef.putFile(from: soundFileUrl, metadata: StorageMetadata()) { (metadata, error) in
+                            guard metadata != nil else {
+                                print("Upload error")
+                                return
+                            }
+                            soundFileRef.downloadURL { url, error in
+                                if let error = error {
+                                    print(error)
+                                    return
+                                } else {
+                                    if let urlTemp = url{
+                                        soundUrl = urlTemp
+                                        soundGroup.leave()
+                                    }
+                                }
+                            }
+                        }
+                        
+                        soundTask.observe(.failure){ snapShot in
+                            success = false
+                            soundGroup.leave()
+                        }
+                        
+                        soundTask.observe(.success){ snapShot in
+                            
+                            print("sound success (in both)")
+                            
+                        }
+                        
+                        soundGroup.notify(queue: .main){
+                            
+                            if success == false { return }
+                            
+                            let videoGroup = DispatchGroup()
+                            videoGroup.enter()
+                            
+                            videoTask = videoFileRef.putFile(from: videoFileUrl, metadata: StorageMetadata()) { (metadata, error) in
+                                guard metadata != nil else {
+                                    print("Upload error")
+                                    return
+                                }
+                                videoFileRef.downloadURL { url, error in
+                                    if let error = error {
+                                        print("error in downloadurl \(error)")
+                                        return
+                                    } else {
+                                        print("downloadurl else")
+                                        if let urlTemp = url{
+                                            print("download url url")
+                                            videoUrl = urlTemp
+                                            print(urlTemp)
+                                            print(videoUrl!)
+                                            videoGroup.leave()
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            videoTask.observe(.failure){ snapShot in
+                                success = false
+                                videoGroup.leave()
+                            }
+                            
+                            videoTask.observe(.success){ snapShot in
+                                print("video success (in both)")
+                                
+                            }
+                            
+                            videoGroup.notify(queue: .main){
+                                
+                                if success == false { return }
+                                
+                                let documentGroup = DispatchGroup()
+                                
+                                documentGroup.enter()
+                                print(videoUrl!)
+                                self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": soundUrl!.absoluteString, "videoUrl": videoUrl!.absoluteString, "lat": item.lat, "long": item.long]){  err in
+                                    if let err = err {
+                                        print("Error writing document: \(err)")
+                                    } else {
+                                        print("Document successfully written! in both")
                                         
-                                        soundTask = soundFileRef.putFile(from: soundFileUrl, metadata: StorageMetadata()) { (metadata, error) in
-                                            guard metadata != nil else {
-                                                print("Upload error")
-                                                return
+                                        fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
+                                        
+                                        do {
+                                            let fetched = try managedContext.fetch(fetchRequest)
+                                            
+                                            let objectUpdate = fetched[0] as! NSManagedObject
+                                            objectUpdate.setValue(true, forKey: "uploaded")
+                                            objectUpdate.setValue(false, forKey: "uploading")
+                                            
+                                            do{
+                                                try managedContext.save()
                                             }
-                                            soundFileRef.downloadURL { url, error in
-                                                if let error = error {
-                                                    print(error)
-                                                } else {
-                                                    if let urlTemp = url{
-                                                        soundUrl = urlTemp
-                                                            
-                                                            videoTask =  videoFileRef.putFile(from: videoFileUrl, metadata: StorageMetadata()) { (metadata, error) in
-                                                                guard metadata != nil else {
-                                                                    print("Upload error")
-                                                                    return
-                                                                }
-                                                                videoFileRef.downloadURL { url, error in
-                                                                    if let error = error {
-                                                                        print(error)
-                                                                    } else {
-                                                                        if let urlTemp = url{
-                                                                            videoUrl = urlTemp
-                                                                            
-                                                                            self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": soundUrl!.absoluteString, "videoUrl": videoUrl!.absoluteString, "lat": item.lat, "long": item.long]){  err in
-                                                                                if let err = err {
-                                                                                    print("Error writing document: \(err)")
-                                                                                } else {
-                                                                                    
-                                                                                    fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
-                                                                                    
-                                                                                    do {
-                                                                                        let fetched = try managedContext.fetch(fetchRequest)
-                                                                                        
-                                                                                        let objectUpdate = fetched[0] as! NSManagedObject
-                                                                                        objectUpdate.setValue(true, forKey: "uploaded")
-                                                                                        
-                                                                                        do{
-                                                                                            try managedContext.save()
-                                                                                        }
-                                                                                        catch{
-                                                                                            print(error)
-                                                                                        }
-                                                                                    }
-                                                                                    catch {
-                                                                                        print(error)
-                                                                                    }
-                                                                                    print("Document successfully written!")
-                                                                                    
-                                                                                   
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                case (true, false):
-                    
-                    pictureFileRef.putFile(from: pictureFileUrl, metadata: StorageMetadata()) { (metadata, error) in
-                        guard metadata != nil else {
-                            print("Upload error")
-                            return
-                        }
-                        
-                        
-                        pictureFileRef.downloadURL { url, error in
-                            if let error = error {
-                                print("DownloadURL error: \(error)")
-                            } else {
-                                if let urlTemp = url{
-                                    pictureUrl = urlTemp
-                                    
-                                    soundTask = soundFileRef.putFile(from: soundFileUrl, metadata: StorageMetadata()) { (metadata, error) in
-                                        guard metadata != nil else {
-                                            print("Upload error")
-                                            return
-                                        }
-                                        soundFileRef.downloadURL { url, error in
-                                            if let error = error {
+                                            catch{
                                                 print(error)
-                                            } else {
-                                                if let urlTemp = url{
-                                                    soundUrl = urlTemp
-                                                                    
-                                                                    self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": soundUrl!.absoluteString, "videoUrl": "", "lat": item.lat, "long": item.long]){  err in
-                                                                        if let err = err {
-                                                                            print("Error writing document: \(err)")
-                                                                        } else {
-                                                                            
-                                                                            fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
-                                                                            
-                                                                            do {
-                                                                                let fetched = try managedContext.fetch(fetchRequest)
-                                                                                
-                                                                                let objectUpdate = fetched[0] as! NSManagedObject
-                                                                                objectUpdate.setValue(true, forKey: "uploaded")
-                                                                                
-                                                                                do{
-                                                                                    try managedContext.save()
-                                                                                }
-                                                                                catch{
-                                                                                    print(error)
-                                                                                }
-                                                                            }
-                                                                            catch {
-                                                                                print(error)
-                                                                            }
-                                                                            print("Document successfully written!")
-                                                                            
-                                                                            
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                }
                                             }
                                         }
+                                        catch {
+                                            print(error)
+                                        }
+                                        if localItemSet.count > 1 { self.sync() }
                                     }
                                 }
-                            }
-                    
-                case (false, true):
-                    
-                    pictureFileRef.putFile(from: pictureFileUrl, metadata: StorageMetadata()) { (metadata, error) in
-                        guard metadata != nil else {
-                            print("Upload error")
-                            return
-                        }
-                        
-                        
-                        pictureFileRef.downloadURL { url, error in
-                            if let error = error {
-                                print("DownloadURL error: \(error)")
-                            } else {
-                                if let urlTemp = url{
-                                    pictureUrl = urlTemp
-                                                    
-                                                    videoTask =  videoFileRef.putFile(from: videoFileUrl, metadata: StorageMetadata()) { (metadata, error) in
-                                                        guard metadata != nil else {
-                                                            print("Upload error")
-                                                            return
-                                                        }
-                                                        videoFileRef.downloadURL { url, error in
-                                                            if let error = error {
-                                                                print(error)
-                                                            } else {
-                                                                if let urlTemp = url{
-                                                                    videoUrl = urlTemp
-                                                                    
-                                                                    self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": "", "videoUrl": videoUrl!.absoluteString, "lat": item.lat, "long": item.long]){  err in
-                                                                        if let err = err {
-                                                                            print("Error writing document: \(err)")
-                                                                        } else {
-                                                                            
-                                                                            fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
-                                                                            
-                                                                            do {
-                                                                                let fetched = try managedContext.fetch(fetchRequest)
-                                                                                
-                                                                                let objectUpdate = fetched[0] as! NSManagedObject
-                                                                                objectUpdate.setValue(true, forKey: "uploaded")
-                                                                                
-                                                                                do{
-                                                                                    try managedContext.save()
-                                                                                }
-                                                                                catch{
-                                                                                    print(error)
-                                                                                }
-                                                                            }
-                                                                            catch {
-                                                                                print(error)
-                                                                            }
-                                                                            print("Document successfully written!")
-                                                                           
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                    
-                case (false, false):
-                    
-                    pictureFileRef.putFile(from: pictureFileUrl, metadata: StorageMetadata()) { (metadata, error) in
-                        guard metadata != nil else {
-                            print("Upload error")
-                            return
-                        }
-                        
-                        
-                        pictureFileRef.downloadURL { url, error in
-                            if let error = error {
-                                print("DownloadURL error: \(error)")
-                            } else {
-                                if let urlTemp = url{
-                                    pictureUrl = urlTemp
-                                    
-                                                                    
-                                                                    self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": "", "videoUrl": "", "lat": item.lat, "long": item.long]){  err in
-                                                                        if let err = err {
-                                                                            print("Error writing document: \(err)")
-                                                                        } else {
-                                                                            
-                                                                            fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
-                                                                            
-                                                                            do {
-                                                                                let fetched = try managedContext.fetch(fetchRequest)
-                                                                                
-                                                                                let objectUpdate = fetched[0] as! NSManagedObject
-                                                                                objectUpdate.setValue(true, forKey: "uploaded")
-                                                                                
-                                                                                do{
-                                                                                    try managedContext.save()
-                                                                                }
-                                                                                catch{
-                                                                                    print(error)
-                                                                                }
-                                                                            }
-                                                                            catch {
-                                                                                print(error)
-                                                                            }
-                                                                            print("Document successfully written!")
-                                                                            
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                    
-                }
-                
-                let soundAndAudioTasks = (Bool(soundTask != nil), Bool(videoTask != nil))
-                
-                var soundUploaded = false
-                
-                var videoUploaded = false
-                
-                switch soundAndAudioTasks {
-                    
-                case (true, true):
-                    
-                    soundTask?.observe(.failure){ snapShot in
-                        
-                        do {
-                            let fetched = try managedContext.fetch(fetchRequest)
-                            
-                            let objectUpdate = fetched[0] as! NSManagedObject
-                            objectUpdate.setValue(false, forKey: "uploading")
-                            objectUpdate.setValue(false, forKey: "uploaded")
-                            do{
-                                try managedContext.save()
-                            }
-                            catch{
-                                print(error)
-                            }
-                        }
-                        catch {
-                            print(error)
-                        }
-                    }
-                    
-                    videoTask?.observe(.failure){ snapShot in
-                        
-                        do {
-                            let fetched = try managedContext.fetch(fetchRequest)
-                            
-                            let objectUpdate = fetched[0] as! NSManagedObject
-                            objectUpdate.setValue(false, forKey: "uploading")
-                            objectUpdate.setValue(false, forKey: "uploaded")
-                            do{
-                                try managedContext.save()
-                            }
-                            catch{
-                                print(error)
-                            }
-                        }
-                        catch {
-                            print(error)
-                        }
-                        
-                        self.db.collection("observation").document(item.id!).delete()
-                    }
-                    
-                    soundTask?.observe(.success){ snapShot in
-                        soundUploaded = true
-                        
-                        if videoUploaded == true {
-                        
-                        fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
-                        
-                        do {
-                            let fetched = try managedContext.fetch(fetchRequest)
-                            
-                            let objectUpdate = fetched[0] as! NSManagedObject
-                            objectUpdate.setValue(false, forKey: "uploading")
-                            do{
-                                try managedContext.save()
-                            }
-                            catch{
-                                print(error)
-                            }
-                        }
-                        catch {
-                            print(error)
-                        }
-                        }
-                        
-                    }
-                    
-                    videoTask?.observe(.success){ snapShot in
-                        videoUploaded = true
-                        
-                        if soundUploaded == true {
-                            
-                            fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
-                            
-                            do {
-                                let fetched = try managedContext.fetch(fetchRequest)
                                 
-                                let objectUpdate = fetched[0] as! NSManagedObject
-                                objectUpdate.setValue(false, forKey: "uploading")
-                                do{
-                                    try managedContext.save()
-                                }
-                                catch{
-                                    print(error)
-                                }
+                                
+                                
                             }
-                            catch {
-                                print(error)
-                            }
+                            
                         }
                         
                     }
+                    
                     
                 case (true, false):
                     
-                    soundTask?.observe(.success){ snapShot in
+                    
+                    var pictureTask: StorageUploadTask!
+                    
+                    var soundTask: StorageUploadTask!
+                    
+                    let pictureGroup = DispatchGroup()
+                    
+                    var success = true
+                    
+                    var pictureUrl = URL(string: "www.example.com")
+                    
+                    var soundUrl = URL(string: "www.example.com")
+                    
+                    pictureGroup.enter()
+                    
+                    pictureTask = pictureFileRef.putFile(from: pictureFileUrl, metadata: StorageMetadata()) { (metadata, error) in
+                        guard metadata != nil else {
+                            print("Upload error")
+                            return
+                        }
                         
-                        fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
-                        
-                        do {
-                            let fetched = try managedContext.fetch(fetchRequest)
-                            
-                            let objectUpdate = fetched[0] as! NSManagedObject
-                            objectUpdate.setValue(false, forKey: "uploading")
-                            do{
-                                try managedContext.save()
-                            }
-                            catch{
-                                print(error)
+                        pictureFileRef.downloadURL { url, error in
+                            if let error = error {
+                                print("DownloadURL error: \(error)")
+                                return
+                            } else {
+                                if let urlTemp = url{
+                                    pictureUrl = urlTemp
+                                }
                             }
                         }
-                        catch {
-                            print(error)
-                        }
-                        
                     }
+                    
+                    pictureTask.observe(.failure){ snapShot in
+                        success = false
+                        pictureGroup.leave()
+                    }
+                    
+                    pictureTask.observe(.success){ snapShot in
+                        
+                        print("picture success")
+                        pictureGroup.leave()
+                    }
+                    
+                    pictureGroup.notify(queue: .main){
+                        
+                        if success == false { return }
+                        
+                        let soundGroup = DispatchGroup()
+                        soundGroup.enter()
+                        
+                        soundTask = soundFileRef.putFile(from: soundFileUrl, metadata: StorageMetadata()) { (metadata, error) in
+                            guard metadata != nil else {
+                                print("Upload error")
+                                return
+                            }
+                            soundFileRef.downloadURL { url, error in
+                                if let error = error {
+                                    print(error)
+                                    return
+                                } else {
+                                    if let urlTemp = url{
+                                        soundUrl = urlTemp
+                                    }
+                                }
+                            }
+                        }
+                        
+                        soundTask.observe(.failure){ snapShot in
+                            success = false
+                            soundGroup.leave()
+                        }
+                        
+                        soundTask.observe(.success){ snapShot in
+                            
+                            print("sound success")
+                            soundGroup.leave()
+                        }
+                        
+                        soundGroup.notify(queue: .main){
+                            
+                            if success == false { return }
+                            
+                            let documentGroup = DispatchGroup()
+                            
+                            documentGroup.enter()
+                            
+                            self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": soundUrl!.absoluteString, "videoUrl": "", "lat": item.lat, "long": item.long]){  err in
+                                if let err = err {
+                                    print("Error writing document: \(err)")
+                                } else {
+                                    print("Document successfully written! in only sound")
+                                    
+                                    fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
+                                    
+                                    do {
+                                        let fetched = try managedContext.fetch(fetchRequest)
+                                        
+                                        let objectUpdate = fetched[0] as! NSManagedObject
+                                        objectUpdate.setValue(true, forKey: "uploaded")
+                                        objectUpdate.setValue(false, forKey: "uploading")
+                                        
+                                        do{
+                                            try managedContext.save()
+                                        }
+                                        catch{
+                                            print(error)
+                                        }
+                                    }
+                                    catch {
+                                        print(error)
+                                    }
+                                    if localItemSet.count > 1 { self.sync() }
+                                }
+                            }
+                            }
+                        }
+                        
                     
                 case (false, true):
                     
-                    videoTask?.observe(.success){ snapShot in
+                    var pictureTask: StorageUploadTask!
+                    
+                    var videoTask: StorageUploadTask!
+                    
+                    let pictureGroup = DispatchGroup()
+                    
+                    var success = true
+                    
+                    var pictureUrl = URL(string: "www.example.com")
+                    
+                    var videoUrl = URL(string: "www.example.com")
+                    
+                    pictureGroup.enter()
+                    
+                    pictureTask = pictureFileRef.putFile(from: pictureFileUrl, metadata: StorageMetadata()) { (metadata, error) in
+                        guard metadata != nil else {
+                            print("Upload error")
+                            return
+                        }
                         
-                        fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
-                        
-                        do {
-                            let fetched = try managedContext.fetch(fetchRequest)
-                            
-                            let objectUpdate = fetched[0] as! NSManagedObject
-                            objectUpdate.setValue(false, forKey: "uploading")
-                            do{
-                                try managedContext.save()
-                            }
-                            catch{
-                                print(error)
+                        pictureFileRef.downloadURL { url, error in
+                            if let error = error {
+                                print("DownloadURL error: \(error)")
+                                return
+                            } else {
+                                if let urlTemp = url{
+                                    pictureUrl = urlTemp
+                                }
                             }
                         }
-                        catch {
-                            print(error)
-                        }
-                        
                     }
+                    
+                    pictureTask.observe(.failure){ snapShot in
+                        success = false
+                        pictureGroup.leave()
+                    }
+                    
+                    pictureTask.observe(.success){ snapShot in
+                        
+                        print("picture success")
+                        pictureGroup.leave()
+                    }
+                    
+                    pictureGroup.notify(queue: .main){
+                        
+                        if success == false { return }
+                        
+                        let videoGroup = DispatchGroup()
+                        videoGroup.enter()
+                        
+                        videoTask = videoFileRef.putFile(from: videoFileUrl, metadata: StorageMetadata()) { (metadata, error) in
+                            guard metadata != nil else {
+                                print("Upload error")
+                                return
+                            }
+                            videoFileRef.downloadURL { url, error in
+                                if let error = error {
+                                    print(error)
+                                    return
+                                } else {
+                                    if let urlTemp = url{
+                                        videoUrl = urlTemp
+                                    }
+                                }
+                            }
+                        }
+                        
+                        videoTask.observe(.failure){ snapShot in
+                            success = false
+                            videoGroup.leave()
+                        }
+                        
+                        videoTask.observe(.success){ snapShot in
+                            print("sound success")
+                            videoGroup.leave()
+                        }
+                        
+                        videoGroup.notify(queue: .main){
+                            
+                            if success == false { return }
+                            
+                            let documentGroup = DispatchGroup()
+                            
+                            documentGroup.enter()
+                            
+                            self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": "", "videoUrl": videoUrl!.absoluteString, "lat": item.lat, "long": item.long]){  err in
+                                if let err = err {
+                                    print("Error writing document: \(err)")
+                                } else {
+                                    print("Document successfully written! in only video")
+                                    
+                                    fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
+                                    
+                                    do {
+                                        let fetched = try managedContext.fetch(fetchRequest)
+                                        
+                                        let objectUpdate = fetched[0] as! NSManagedObject
+                                        objectUpdate.setValue(true, forKey: "uploaded")
+                                        objectUpdate.setValue(false, forKey: "uploading")
+                                        
+                                        do{
+                                            try managedContext.save()
+                                        }
+                                        catch{
+                                            print(error)
+                                        }
+                                    }
+                                    catch {
+                                        print(error)
+                                    }
+                                    if localItemSet.count > 1 { self.sync() }
+                                }
+                            }
+                        }
+                        }
+                        
+                    
                     
                 case (false, false):
                     
-                    fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
+                    var pictureTask: StorageUploadTask!
                     
-                    do {
-                        let fetched = try managedContext.fetch(fetchRequest)
-                        
-                        let objectUpdate = fetched[0] as! NSManagedObject
-                        objectUpdate.setValue(false, forKey: "uploading")
-                        do{
-                            try managedContext.save()
+                    let pictureGroup = DispatchGroup()
+                    
+                    var success = true
+                    
+                    var pictureUrl = URL(string: "www.example.com")
+                    
+                    pictureGroup.enter()
+                    
+                    pictureTask = pictureFileRef.putFile(from: pictureFileUrl, metadata: StorageMetadata()) { (metadata, error) in
+                        guard metadata != nil else {
+                            print("Upload error")
+                            return
                         }
-                        catch{
-                            print(error)
-                        }
-                    }
-                    catch {
-                        print(error)
-                    }
-                    
-                }
-                
-                if soundTask != nil {
-                    
-                    soundTask?.observe(.success) { snapshot in
                         
-                        soundUploaded = true
-                        
-                        if videoUrl != nil && videoUploaded == true {
-                            
-                            fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
-                            
-                            do {
-                                let fetched = try managedContext.fetch(fetchRequest)
-                                
-                                let objectUpdate = fetched[0] as! NSManagedObject
-                                objectUpdate.setValue(false, forKey: "uploading")
-                                do{
-                                    try managedContext.save()
+                        pictureFileRef.downloadURL { url, error in
+                            if let error = error {
+                                print("DownloadURL error: \(error)")
+                                return
+                            } else {
+                                if let urlTemp = url{
+                                    pictureUrl = urlTemp
                                 }
-                                catch{
+                            }
+                        }
+                    }
+                    
+                    pictureTask.observe(.failure){ snapShot in
+                        success = false
+                        pictureGroup.leave()
+                    }
+                    
+                    pictureTask.observe(.success){ snapShot in
+                        
+                        print("picture success")
+                        pictureGroup.leave()
+                    }
+                    
+                    pictureGroup.notify(queue: .main){
+                        
+                        if success == false { return }
+                        
+                        let documentGroup = DispatchGroup()
+                        
+                        documentGroup.enter()
+                        
+                        self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": "", "videoUrl": "", "lat": item.lat, "long": item.long]){  err in
+                            if let err = err {
+                                print("Error writing document: \(err)")
+                            } else {
+                                print("Document successfully written! in neither")
+                                
+                                fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
+                                
+                                do {
+                                    let fetched = try managedContext.fetch(fetchRequest)
+                                    
+                                    let objectUpdate = fetched[0] as! NSManagedObject
+                                    objectUpdate.setValue(true, forKey: "uploaded")
+                                    objectUpdate.setValue(false, forKey: "uploading")
+                                    
+                                    do{
+                                        try managedContext.save()
+                                    }
+                                    catch{
+                                        print(error)
+                                    }
+                                }
+                                catch {
                                     print(error)
                                 }
+                                if localItemSet.count > 1 { self.sync() }
                             }
-                            catch {
-                                print(error)
-                            }
-                            
-                        }
-                        if videoUrl == nil {
-                            
-                            fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
-                            
-                            do {
-                                let fetched = try managedContext.fetch(fetchRequest)
-                                
-                                let objectUpdate = fetched[0] as! NSManagedObject
-                                objectUpdate.setValue(false, forKey: "uploading")
-                                do{
-                                    try managedContext.save()
-                                }
-                                catch{
-                                    print(error)
-                                }
-                            }
-                            catch {
-                                print(error)
-                            }
-                            
                         }
                     }
-                    
-                    
-                    
                 }
                 
-               
-                
+            
             }
+        
         }
+    
+    
     }
-}
+
