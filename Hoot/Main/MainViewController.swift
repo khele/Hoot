@@ -174,6 +174,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         setupCategoryPicker()
         createCategoryPickerToolBar()
         
+        setupUserDefaults()
         
     }
     
@@ -219,6 +220,23 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         confirmSortButton.layer.shadowColor = UIColor.lightGray.cgColor
         confirmSortButton.layer.shadowOffset = CGSize(width: 0, height: 4)
         confirmSortButton.layer.shadowOpacity = 0.2
+        
+    }
+    
+    func setupUserDefaults(){
+        
+        
+        if UserDefaults.standard.object(forKey: "uid") == nil || UserDefaults.standard.object(forKey: "uid") as! String != uid! {
+            UserDefaults.standard.set(uid!, forKey: "uid")
+            if UserDefaults.standard.object(forKey: "sort") != nil{
+                UserDefaults.standard.removeObject(forKey: "sort")}
+        }
+        
+        if UserDefaults.standard.object(forKey: "sort") != nil {
+            selectedSort = UserDefaults.standard.object(forKey: "sort") as! String
+            selectedSortTemp = UserDefaults.standard.object(forKey: "sort") as! String
+            sortTextField.text = UserDefaults.standard.object(forKey: "sort") as? String
+        }
         
     }
     
@@ -344,6 +362,8 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         UIView.animate(withDuration: 0.3, animations:{ self.view.layoutIfNeeded() })
         
         selectedSort = selectedSortTemp
+        
+        UserDefaults.standard.set(selectedSort, forKey: "sort")
         
         mainCollectionView.reloadData()
         
@@ -494,9 +514,9 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
             
         case "Date: Oldest first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.created > $0.created })
             
-        case "Alphabetically: Ascending": mainItemSetSorted = mainItemSet.sorted(by:{ $1.species! > $0.species! })
+        case "Alphabetically: Ascending": mainItemSetSorted = mainItemSet.sorted(by:{ $0.species! > $1.species! })
             
-        case "Alphabetically: Descending": mainItemSetSorted = mainItemSet.sorted(by:{ $0.species! > $1.species! })
+        case "Alphabetically: Descending": mainItemSetSorted = mainItemSet.sorted(by:{ $1.species! > $0.species! })
             
         case "Rarity: Extremely rare first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber })
             

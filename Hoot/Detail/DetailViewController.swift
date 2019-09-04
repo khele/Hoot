@@ -51,6 +51,10 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var longLabel: UILabel!
     
+    @IBOutlet weak var timeIndicatorLabel: UILabel!
+    
+    @IBOutlet weak var timeLabel: UILabel!
+    
     @IBOutlet weak var soundImage: UIImageView!
     
     @IBOutlet weak var videoImage: UIImageView!
@@ -111,6 +115,11 @@ class DetailViewController: UIViewController {
         navigationItem.rightBarButtonItem?.tintColor = UIColor.lightGray
         }
         
+        let hootIcon = UIImageView()
+        hootIcon.image = #imageLiteral(resourceName: "hoot144")
+        hootIcon.contentMode = .scaleAspectFit
+        navigationItem.titleView = hootIcon
+        
         speciesLabel.text = observation.species!
         rarityLabel.text = observation.rarity!
         
@@ -145,6 +154,8 @@ class DetailViewController: UIViewController {
         latLabel.text = "\(observation.lat)"
         longLabel.text = "\(observation.long)"
         
+        timeLabel.text = DateFormatter.localizedString(from: Date(timeIntervalSince1970: Double(observation.created)), dateStyle: .short, timeStyle: .short)
+        
         soundUrl = observation.soundUrl!
         videoUrl = observation.videoUrl!
         
@@ -173,8 +184,19 @@ class DetailViewController: UIViewController {
             let session = AVAudioSession.sharedInstance()
             try! session.setCategory(AVAudioSession.Category.playback)
             
-            soundPlayer = try!(AVAudioPlayer(contentsOf: URL(string: soundUrl)!))
-            soundPlayer?.play()
+            let soundFile = URL(string: soundUrl)!
+            
+            do{
+             self.soundPlayer =  try AVAudioPlayer(data: Data(contentsOf: soundFile))
+                
+            }
+            catch{
+                print(error)
+            }
+            
+            
+            
+            self.soundPlayer?.play()
             
         }
         

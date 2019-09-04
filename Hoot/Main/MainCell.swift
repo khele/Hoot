@@ -124,28 +124,7 @@ class MainCell: UICollectionViewCell {
         time.translatesAutoresizingMaskIntoConstraints = false
         return time
     }()
-    
-    /* var itemOffers: UIButton = {
-     let itemOffers = UIButton()
-     itemOffers.setTitle(String("0"), for: .normal)
-     itemOffers.backgroundColor = UIColor.green
-     itemOffers.titleLabel?.textColor = UIColor.white
-     itemOffers.titleLabel?.font = .systemFont(ofSize: 21)
-     itemOffers.translatesAutoresizingMaskIntoConstraints = false
-     return itemOffers
-     }()
-     
-     var itemSettings: UIButton = {
-     let itemSettings = UIButton()
-     itemSettings.setTitle("Se", for: .normal)
-     itemSettings.backgroundColor = UIColor.green
-     itemSettings.titleLabel?.textColor = UIColor.white
-     itemSettings.titleLabel?.font = .systemFont(ofSize: 21)
-     itemSettings.translatesAutoresizingMaskIntoConstraints = false
-     
-     return itemSettings
-     }() */
-    
+  
    
     func setupViews(){
         

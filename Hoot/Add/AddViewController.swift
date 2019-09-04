@@ -186,7 +186,10 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         confirmButton.alpha = 0.5
         confirmButton.isUserInteractionEnabled = false
         
-        
+        let hootIcon = UIImageView()
+        hootIcon.image = #imageLiteral(resourceName: "hoot144")
+        hootIcon.contentMode = .scaleAspectFit
+        navigationItem.titleView = hootIcon
         
     }
     
