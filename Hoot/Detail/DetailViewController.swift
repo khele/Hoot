@@ -19,6 +19,8 @@ class DetailViewController: UIViewController {
     
     let db = Firestore.firestore()
     
+    let observationRef = Firestore.firestore().collection("observation")
+    
     let pictureFireRef = Storage.storage().reference().child("picture")
     
     let soundFireRef = Storage.storage().reference().child("sound")
@@ -320,7 +322,7 @@ class DetailViewController: UIViewController {
                                         } else {
                                             print("video deleted successfully")
                                             
-                                            self.db.collection("observation").document(obs.id!).delete(){ err in
+                                            self.observationRef.document(obs.id!).delete(){ err in
                                                 if let err = err {
                                                     print("error deleting image: \(err)")
                                                 } else {
@@ -373,7 +375,7 @@ class DetailViewController: UIViewController {
                             } else {
                                 print("image deleted successfully")
                                         
-                                        self.db.collection("observation").document(obs.id!).delete(){ err in
+                                        self.observationRef.document(obs.id!).delete(){ err in
                                             if let err = err {
                                                 print("error deleting image: \(err)")
                                             } else {
@@ -425,7 +427,7 @@ class DetailViewController: UIViewController {
                                     } else {
                                         print("image deleted successfully")
                                         
-                                        self.db.collection("observation").document(obs.id!).delete(){ err in
+                                        self.observationRef.document(obs.id!).delete(){ err in
                                             if let err = err {
                                                 print("error deleting image: \(err)")
                                             } else {
@@ -470,7 +472,7 @@ class DetailViewController: UIViewController {
                     } else {
                         print("image deleted successfully")
                         
-                                        self.db.collection("observation").document(obs.id!).delete(){ err in
+                                        self.observationRef.document(obs.id!).delete(){ err in
                                             if let err = err {
                                                 print("error deleting image: \(err)")
                                             } else {

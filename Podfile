@@ -18,7 +18,7 @@ target 'Hoot' do
 
 
   target 'HootTests' do
-    inherit! :complete
+     inherit! :complete
     # Pods for testing
   end
 

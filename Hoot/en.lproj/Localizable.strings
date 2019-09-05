@@ -12,6 +12,9 @@
 "Species" = "Species";
 "Rarity" = "Rarity";
 "Notes" = "Notes";
+"Common" = "Common";
+"Rare" = "Rare";
+"Extremely rare" = "Extremely rare";
 "Add sound (optional)" = "Add sound (optional)";
 "Add video (optional)" = "Add video (optional)";
 "Choose from gallery or use camera?" = "Choose from gallery or use camera?";

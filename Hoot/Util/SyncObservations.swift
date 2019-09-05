@@ -16,17 +16,21 @@ struct SyncObservations {
     
     let fileManager = FileManager.default
     
-    let pictureRef = Storage.storage().reference().child("picture")
+    var storage = Storage.storage().reference()
     
-    let soundRef = Storage.storage().reference().child("sound")
+    var pictureRef = Storage.storage().reference().child("picture")
     
-    let videoRef = Storage.storage().reference().child("video")
+    var soundRef = Storage.storage().reference().child("sound")
     
-    let observationRef = Firestore.firestore().collection("observation")
+    var videoRef = Storage.storage().reference().child("video")
     
-    let uid = Auth.auth().currentUser?.uid
+    var observationRef = Firestore.firestore().collection("observation")
+    
+    var uid = Auth.auth().currentUser?.uid
     
     let db = Firestore.firestore()
+    
+    let auth = Auth.auth()
     
     unowned let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -38,7 +42,7 @@ struct SyncObservations {
         
         guard appDelegate.connected == true else { return }
         
-        print("SYNC RAN")
+       
         
         var itemSet: [OwnObservation] = []
         
@@ -61,7 +65,7 @@ struct SyncObservations {
             print("ITEMSET WAS EMPTY IN SYNC")
             var worldItemSet: [MainItem] = []
             
-            db.collection("observation").whereField("uid", isEqualTo: uid!).getDocuments(){
+            observationRef.whereField("uid", isEqualTo: uid!).getDocuments(){
                 (querySnapshot, err) in
                 if let err = err {
                     print("error getting documents: \(err)")
@@ -99,29 +103,31 @@ struct SyncObservations {
                         
                         let observation = NSManagedObject(entity: observationEntity!, insertInto: managedContext)
                         
+                        let soundAndVideo = (Bool(item.soundUrl! != ""), Bool(item.videoUrl! != ""))
+                        
+                        switch soundAndVideo{
                         
                             
-                        if item.soundUrl! == "" && item.videoUrl == ""{
-                            observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "", "videoUrl": "", "lat": item.lat, "long": item.long])
+                        case (false, false):
+                            observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "uploading": false, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "", "videoUrl": "", "lat": item.lat, "long": item.long])
+                        
+                            
+                            
+                        case (true, false):
+                        observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "uploading": false, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "\(item.id!).m4a", "videoUrl": "", "lat": item.lat, "long": item.long])
+                        
+                            
+                            
+                        case (false, true):
+                             observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "uploading": false, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "", "videoUrl": "\(item.id!).mp4", "lat": item.lat, "long": item.long])
+                        
+                            
+                            
+                        case (true, true):
+                            observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "uploading": false, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "\(item.id!).m4a", "videoUrl": "\(item.id!).mp4", "lat": item.lat, "long": item.long])
+                         
                         }
-                            
-                            
-                            
-                        if item.soundUrl! != "" && item.videoUrl! == "" {
-                        observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "\(item.id!).m4a", "videoUrl": "", "lat": item.lat, "long": item.long])
-                        }
-                            
-                            
-                        if item.soundUrl! == "" && item.videoUrl != "" {
-                             observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "", "videoUrl": "\(item.id!).mp4", "lat": item.lat, "long": item.long])
-                        }
-                            
-                            
-                            
-                        if item.soundUrl! != "" && item.videoUrl! != "" {
-                            observation.setValuesForKeys(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "uploaded": true, "pictureUrl": "\(item.id!).jpeg", "soundUrl": "\(item.id!).m4a", "videoUrl": "\(item.id!).mp4", "lat": item.lat, "long": item.long])
-                        }
-                            
+                        
                         do {
                             try managedContext.save()
                             print("save done")
@@ -142,6 +148,7 @@ struct SyncObservations {
                 
             }
         }
+            
             
         else{
             print("ITEMSET WAS NOT EMPTY IN SYNC")
@@ -181,10 +188,12 @@ struct SyncObservations {
                     }
                     catch{
                         print(error)
+                        return
                     }
                 }
                 catch {
                     print(error)
+                    return
                 }
                 
                 let documentsUrl = FileManager.default.urls(for: .documentDirectory, in:.userDomainMask)[0]
@@ -339,8 +348,8 @@ struct SyncObservations {
                                 let documentGroup = DispatchGroup()
                                 
                                 documentGroup.enter()
-                                print(videoUrl!)
-                                self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": soundUrl!.absoluteString, "videoUrl": videoUrl!.absoluteString, "lat": item.lat, "long": item.long]){  err in
+                             
+                                self.observationRef.document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": soundUrl!.absoluteString, "videoUrl": videoUrl!.absoluteString, "lat": item.lat, "long": item.long]){  err in
                                     if let err = err {
                                         print("Error writing document: \(err)")
                                     } else {
@@ -408,6 +417,7 @@ struct SyncObservations {
                             } else {
                                 if let urlTemp = url{
                                     pictureUrl = urlTemp
+                                    pictureGroup.leave()
                                 }
                             }
                         }
@@ -421,7 +431,7 @@ struct SyncObservations {
                     pictureTask.observe(.success){ snapShot in
                         
                         print("picture success")
-                        pictureGroup.leave()
+                        
                     }
                     
                     pictureGroup.notify(queue: .main){
@@ -443,6 +453,7 @@ struct SyncObservations {
                                 } else {
                                     if let urlTemp = url{
                                         soundUrl = urlTemp
+                                        soundGroup.leave()
                                     }
                                 }
                             }
@@ -456,7 +467,7 @@ struct SyncObservations {
                         soundTask.observe(.success){ snapShot in
                             
                             print("sound success")
-                            soundGroup.leave()
+                            
                         }
                         
                         soundGroup.notify(queue: .main){
@@ -467,7 +478,7 @@ struct SyncObservations {
                             
                             documentGroup.enter()
                             
-                            self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": soundUrl!.absoluteString, "videoUrl": "", "lat": item.lat, "long": item.long]){  err in
+                            self.observationRef.document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": soundUrl!.absoluteString, "videoUrl": "", "lat": item.lat, "long": item.long]){  err in
                                 if let err = err {
                                     print("Error writing document: \(err)")
                                 } else {
@@ -528,6 +539,7 @@ struct SyncObservations {
                             } else {
                                 if let urlTemp = url{
                                     pictureUrl = urlTemp
+                                    pictureGroup.leave()
                                 }
                             }
                         }
@@ -541,7 +553,7 @@ struct SyncObservations {
                     pictureTask.observe(.success){ snapShot in
                         
                         print("picture success")
-                        pictureGroup.leave()
+                        
                     }
                     
                     pictureGroup.notify(queue: .main){
@@ -563,6 +575,7 @@ struct SyncObservations {
                                 } else {
                                     if let urlTemp = url{
                                         videoUrl = urlTemp
+                                        videoGroup.leave()
                                     }
                                 }
                             }
@@ -575,7 +588,7 @@ struct SyncObservations {
                         
                         videoTask.observe(.success){ snapShot in
                             print("sound success")
-                            videoGroup.leave()
+                            
                         }
                         
                         videoGroup.notify(queue: .main){
@@ -586,7 +599,7 @@ struct SyncObservations {
                             
                             documentGroup.enter()
                             
-                            self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": "", "videoUrl": videoUrl!.absoluteString, "lat": item.lat, "long": item.long]){  err in
+                            self.observationRef.document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": "", "videoUrl": videoUrl!.absoluteString, "lat": item.lat, "long": item.long]){  err in
                                 if let err = err {
                                     print("Error writing document: \(err)")
                                 } else {
@@ -644,6 +657,7 @@ struct SyncObservations {
                             } else {
                                 if let urlTemp = url{
                                     pictureUrl = urlTemp
+                                    pictureGroup.leave()
                                 }
                             }
                         }
@@ -657,7 +671,7 @@ struct SyncObservations {
                     pictureTask.observe(.success){ snapShot in
                         
                         print("picture success")
-                        pictureGroup.leave()
+                        
                     }
                     
                     pictureGroup.notify(queue: .main){
@@ -668,7 +682,7 @@ struct SyncObservations {
                         
                         documentGroup.enter()
                         
-                        self.db.collection("observation").document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": "", "videoUrl": "", "lat": item.lat, "long": item.long]){  err in
+                        self.observationRef.document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": "", "videoUrl": "", "lat": item.lat, "long": item.long]){  err in
                             if let err = err {
                                 print("Error writing document: \(err)")
                             } else {

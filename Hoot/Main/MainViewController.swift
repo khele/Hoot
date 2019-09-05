@@ -19,9 +19,13 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     let db = Firestore.firestore()
     
+    var observationsRef = Firestore.firestore().collection("observation")
+    
     // User uid ref
     
-    let uid = Auth.auth().currentUser?.uid
+    let auth = Auth.auth()
+    
+    var uid = Auth.auth().currentUser?.uid
     
     
     @IBOutlet var canvasView: UIView!
@@ -393,10 +397,11 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func getWorldObservations(){
         
-        let observationsRef = db.collection("observation")
+        
         
         let listener = observationsRef.limit(to: 15).addSnapshotListener(){
             [unowned self] (querySnapshot, err) in
+            self.lastSnapshot = []
             if let err = err{
                 print("error getting documents: \(err)")
                 // error alert here
@@ -658,10 +663,10 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         guard refComplete == false else { return }
         
-        if indexPath.row == localMasterItemSet.count - 1{
+        if indexPath.row == localMasterItemSet.count - 1 {
             
             
-                let observationRef = db.collection("observation")
+                let observationRef = db.collection("observation").start(afterDocument: lastSnapshot[lastSnapshot.count - 1])
                 
                 
                 let listener = observationRef.limit(to: 15).addSnapshotListener(){
