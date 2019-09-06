@@ -16,7 +16,7 @@ class SyncAndDeleteTests: XCTestCase {
     
     func testDelete(){
         
-        var sync = SyncObservations()
+        let sync = SyncObservations()
         
         let managedContext = sync.appDelegate.persistentContainer.viewContext
         
@@ -82,13 +82,13 @@ class SyncAndDeleteTests: XCTestCase {
         
         let fileExpectation = expectation(description: "wait for files to be saved locally")
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 6){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 8){
             fileExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 7, handler: nil)
+        waitForExpectations(timeout: 9, handler: nil)
         
-        XCTAssert(sync.fileManager.fileExists(atPath: picturePath) && sync.fileManager.fileExists(atPath: soundPath) && sync.fileManager.fileExists(atPath: videoPath))
+        XCTAssert(sync.fileManager.fileExists(atPath: soundPath) && sync.fileManager.fileExists(atPath: picturePath) && sync.fileManager.fileExists(atPath: videoPath))
         
         let managedContext = sync.appDelegate.persistentContainer.viewContext
         
@@ -133,6 +133,10 @@ class SyncAndDeleteTests: XCTestCase {
         
         obs.uploaded = false
         
+        vc.scrollOffset = 1
+        
+        let _ = vc.view
+        
         vc.deleteObservation()
         
         let deleteExpectation = expectation(description: "Wait for local delete")
@@ -157,6 +161,8 @@ class SyncAndDeleteTests: XCTestCase {
             try! sync.fileManager.removeItem(atPath: videoPath)
             XCTFail()
         }
+        
+        XCTAssert(!sync.fileManager.fileExists(atPath: picturePath) && !sync.fileManager.fileExists(atPath: soundPath) && !sync.fileManager.fileExists(atPath: videoPath))
         
         do {
             try sync.auth.signOut()
@@ -257,6 +263,14 @@ class SyncAndDeleteTests: XCTestCase {
         
         sync.sync()
         
+        let syncExp = expectation(description: "wait for sync")
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 13){
+            syncExp.fulfill()
+        }
+        
+        waitForExpectations(timeout: 15, handler: nil)
+        
         let documentExp = expectation(description: "check that doc was uploaded")
         let pictureExp = expectation(description: "check that picture was uploaded")
         let soundExp = expectation(description: "check that sound was uploaded")
@@ -286,7 +300,7 @@ class SyncAndDeleteTests: XCTestCase {
             }
         }
         
-        sync.pictureRef.child("zmezAIVVMxkxvAvgUqDL.m4a").downloadURL(){ (url, error) in
+        sync.soundRef.child("zmezAIVVMxkxvAvgUqDL.m4a").downloadURL(){ (url, error) in
             if let err = error {
                 print(err)
                 XCTFail()
@@ -298,7 +312,7 @@ class SyncAndDeleteTests: XCTestCase {
             }
         }
         
-        sync.pictureRef.child("zmezAIVVMxkxvAvgUqDL.mp4").downloadURL(){ (url, error) in
+        sync.videoRef.child("zmezAIVVMxkxvAvgUqDL.mp4").downloadURL(){ (url, error) in
             if let err = error {
                 print(err)
                 XCTFail()
@@ -314,8 +328,130 @@ class SyncAndDeleteTests: XCTestCase {
         waitForExpectations(timeout: 10, handler: nil)
         
         
+        let vc = UIStoryboard(name: "Detail", bundle: Bundle.main).instantiateViewController(withIdentifier: "detailViewController") as! DetailViewController
+        
+        vc.observationRef = vc.db.collection("syncTest")
+        vc.pictureFireRef = vc.storageRef.child("syncTest").child("picture")
+        vc.soundFireRef = vc.storageRef.child("syncTest").child("sound")
+        vc.videoFireRef = vc.storageRef.child("syncTest").child("video")
+        
+        do{
+            let result = try managedContext.fetch(fetchRequest)
+            
+            let data = result as! [NSManagedObject]
+            
+            let own = data[0] as! OwnObservation
+            
+            vc.observation = own as MainItem
+        }
+        catch{
+            print(error)
+            try! sync.fileManager.removeItem(atPath: picturePath)
+            try! sync.fileManager.removeItem(atPath: soundPath)
+            try! sync.fileManager.removeItem(atPath: videoPath)
+            XCTFail()
+        }
+
+        vc.scrollOffset = 1
+        
+        let _ = vc.view
+        
+        vc.deleteObservation()
+        
+        
+        let delExpectation = expectation(description: "wait for firebase and local delete")
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 6){
+            
+            delExpectation.fulfill()
+            
+        }
+        
+        waitForExpectations(timeout: 7, handler: nil)
+        
+        let docCheckExp = expectation(description: "Wait for doc downloadUrl")
+        let pictureCheckExp = expectation(description: "Wait for picture downloadUrl")
+        let soundCheckExp = expectation(description: "Wait for sound downloadUrl")
+        let videoCheckExp = expectation(description: "Wait for video downloadUrl")
+        
+        
+        sync.observationRef.document("zmezAIVVMxkxvAvgUqDL").getDocument(){
+            (document, err) in if let err = err {
+                print(err)
+              
+            }
+            else{
+                if let document = document{
+                    let data = document.data()
+                    if data == nil { docCheckExp.fulfill() }else { XCTFail() }
+                    
+                }
+            }
+        }
+        
+        sync.pictureRef.child("zmezAIVVMxkxvAvgUqDL.jpeg").downloadURL(){ (url, error) in
+            if let err = error {
+                print("EXPECTED \(err)")
+                pictureCheckExp.fulfill()
+            }
+            else{
+                if url != nil {
+                    XCTFail()
+                }
+            }
+        }
+        
+        sync.soundRef.child("zmezAIVVMxkxvAvgUqDL.m4a").downloadURL(){ (url, error) in
+            if let err = error {
+                print("EXPECTED \(err)")
+                soundCheckExp.fulfill()
+            }
+            else{
+                if url != nil {
+                    XCTFail()
+                }
+            }
+        }
+        
+        sync.videoRef.child("zmezAIVVMxkxvAvgUqDL.mp4").downloadURL(){ (url, error) in
+            if let err = error {
+                print("EXPECTED \(err)")
+                videoCheckExp.fulfill()
+            }
+            else{
+                if url != nil {
+                    XCTFail()
+                }
+            }
+        }
+        
+        
+        waitForExpectations(timeout: 8, handler: nil)
+        
+        
+        do{
+            let result = try managedContext.fetch(fetchRequest)
+            
+            let data = result as! [NSManagedObject]
+            
+            XCTAssert(data.isEmpty)
+        }
+        catch{
+            print(error)
+            try! sync.fileManager.removeItem(atPath: picturePath)
+            try! sync.fileManager.removeItem(atPath: soundPath)
+            try! sync.fileManager.removeItem(atPath: videoPath)
+            XCTFail()
+        }
+        
+        XCTAssert(!sync.fileManager.fileExists(atPath: picturePath) && !sync.fileManager.fileExists(atPath: soundPath) && !sync.fileManager.fileExists(atPath: videoPath))
+        
+        do {
+            try sync.auth.signOut()
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
+        
     }
     
-    
-
 }

@@ -1,0 +1,15 @@
+
+/* Class = "UIBarButtonItem"; title = " "; ObjectID = "8Tl-Y9-UUT"; */
+"8Tl-Y9-UUT.title" = " ";
+
+/* Class = "UILabel"; text = "No observations yet!"; ObjectID = "9Lv-pI-HPr"; */
+"9Lv-pI-HPr.text" = "No observations yet!";
+
+/* Class = "UILabel"; text = "OFFLINE"; ObjectID = "ULr-9g-IXo"; */
+"ULr-9g-IXo.text" = "OFFLINE";
+
+/* Class = "UILabel"; text = "Only own"; ObjectID = "imQ-Pn-SLq"; */
+"imQ-Pn-SLq.text" = "Only own";
+
+/* Class = "UILabel"; text = "Sort by:"; ObjectID = "wtJ-pa-XMb"; */
+"wtJ-pa-XMb.text" = "Sort by:";

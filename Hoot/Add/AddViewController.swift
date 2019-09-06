@@ -30,13 +30,13 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     let db = Firestore.firestore()
     
     
-    // User uid ref
+    // User refs
     
     let uid = Auth.auth().currentUser?.uid
     
     let dname = Auth.auth().currentUser?.displayName
 
-    
+    // IB vars
     
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -71,6 +71,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     @IBOutlet weak var soundButtonStackView: UIStackView!
     
     @IBOutlet weak var videoButtonStackView: UIStackView!
+    
     
     
     unowned let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -119,12 +120,15 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     let session = AVAudioSession.sharedInstance()
     
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         registerForKeyboardNotifications()
         
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -443,6 +447,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
             guard PHPhotoLibrary.authorizationStatus() == .authorized else { self.present(self.notice.photoAlert, animated: true, completion: nil); return }
             
             imagePicker.sourceType = .photoLibrary
+            imagePicker.mediaTypes = [kUTTypeImage as String]
             self.present(imagePicker, animated: true, completion: nil)
         }))
         
@@ -473,7 +478,9 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        if info[UIImagePickerController.InfoKey.mediaType] as! String == (kUTTypeImage as String) {
+        let mediaType = info[UIImagePickerController.InfoKey.mediaType] as! String
+        
+        if mediaType == (kUTTypeImage as String) {
         
             let img = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         
@@ -489,7 +496,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
             }
         
         
-        if info[UIImagePickerController.InfoKey.mediaType] as! String == (kUTTypeMovie as String) {
+        if mediaType == (kUTTypeMovie as String) {
             
             
             
@@ -527,7 +534,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     }
     
     
-    
+    // Orientate image correctly by EXIF
     
     func imageOrientation(_ src:UIImage)->UIImage {
         print(src.imageOrientation.rawValue)
@@ -599,7 +606,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
         
         pictureView.image = image
-        
         
         
         guard pictureView.image != #imageLiteral(resourceName: "addImage") && speciesTextField.text?.isEmpty != true && rarityTextField.text?.isEmpty != true && rarityTextField.text != "-- Select rarity --" && notesTextField.text?.isEmpty != true
@@ -830,6 +836,12 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         guard lat != nil && long != nil else { present(notice.locationAlert, animated: true, completion: nil); return }
         
+        cancelButton.isUserInteractionEnabled = false
+        addSoundButton.isUserInteractionEnabled = false
+        addVideoButton.isUserInteractionEnabled = false
+        deleteSoundButton?.isUserInteractionEnabled = false
+        deleteVideoButton?.isUserInteractionEnabled = false
+        
         showLoader()
         
         let pictureJpeg = pictureView.image?.jpegData(compressionQuality: 0.05)
@@ -862,6 +874,11 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         catch let error as NSError {
             print("Error occurred: \(error)")
             self.present(self.notice.generalAlert, animated: true, completion: nil)
+            cancelButton.isUserInteractionEnabled = true
+            addSoundButton.isUserInteractionEnabled = true
+            addVideoButton.isUserInteractionEnabled = true
+            deleteSoundButton?.isUserInteractionEnabled = true
+            deleteVideoButton?.isUserInteractionEnabled = true
             return
         }
         hideLoader()

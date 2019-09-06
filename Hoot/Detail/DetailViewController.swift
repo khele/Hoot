@@ -14,20 +14,25 @@ import AVKit
 import CoreData
 
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, UIScrollViewDelegate {
 
+    // Firebase
     
     let db = Firestore.firestore()
     
-    let observationRef = Firestore.firestore().collection("observation")
+    var observationRef = Firestore.firestore().collection("observation")
     
-    let pictureFireRef = Storage.storage().reference().child("picture")
+    var pictureFireRef = Storage.storage().reference().child("picture")
     
-    let soundFireRef = Storage.storage().reference().child("sound")
+    var soundFireRef = Storage.storage().reference().child("sound")
    
-    let videoFireRef = Storage.storage().reference().child("video")
+    var videoFireRef = Storage.storage().reference().child("video")
     
-    let uid = Auth.auth().currentUser?.uid
+    let storageRef = Storage.storage().reference()
+    
+    var uid = Auth.auth().currentUser?.uid
+    
+    // IB vars
     
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -79,31 +84,29 @@ class DetailViewController: UIViewController {
     
     let notice = Notice()
     
+    var spinner: UIActivityIndicatorView!
+    
+    var scrollOffset: CGFloat?
+    
+    var loaderView: UIView!
+    
     unowned let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     
     deinit {
         print("DETAIL DEINIT RAN")
     }
     
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-      
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
        setupLayout()
+       scrollView.delegate = self
         
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        
-    }
     
     
     func setupLayout(){
@@ -165,6 +168,7 @@ class DetailViewController: UIViewController {
         if videoUrl == "" { videoPlayButton.alpha = 0.5; videoPlayButton.isUserInteractionEnabled = false }
         
     }
+    
     
     
     @IBAction func soundPlayButtonPressed(_ sender: Any) {
@@ -237,6 +241,49 @@ class DetailViewController: UIViewController {
         
     }
     
+    func showLoader() {
+        DispatchQueue.main.async() { [unowned self] in
+            
+            self.loaderView = UIView()
+            self.loaderView.backgroundColor = .white
+            self.loaderView.layer.cornerRadius = 5
+            self.loaderView.layer.masksToBounds = false
+            self.loaderView.translatesAutoresizingMaskIntoConstraints = false
+            self.loaderView.layer.shadowColor = UIColor.darkGray.cgColor
+            self.loaderView.layer.shadowOffset = CGSize(width: 0, height: 4)
+            self.loaderView.layer.shadowOpacity = 0.9
+            
+            self.canvasView.addSubview(self.loaderView)
+     
+            self.loaderView.centerXAnchor.constraint(equalTo: self.canvasView.centerXAnchor).isActive = true
+            self.loaderView.centerYAnchor.constraint(equalTo: self.scrollView.centerYAnchor, constant: self.scrollOffset!).isActive = true
+            self.loaderView.widthAnchor.constraint(equalTo: self.canvasView.widthAnchor, multiplier: 0.25).isActive = true
+            self.loaderView.heightAnchor.constraint(equalTo: self.loaderView.widthAnchor, multiplier: 1).isActive = true
+            
+            
+            self.spinner = UIActivityIndicatorView(style: .gray)
+            self.spinner.frame = CGRect(x: 0.0, y: 0.0, width: 120.0, height: 120.0)
+            self.spinner.translatesAutoresizingMaskIntoConstraints = false
+            self.loaderView.addSubview(self.spinner)
+            self.spinner.centerXAnchor.constraint(equalTo: self.loaderView.centerXAnchor).isActive = true
+            self.spinner.centerYAnchor.constraint(equalTo: self.loaderView.centerYAnchor).isActive = true
+            
+            self.spinner.startAnimating()
+        }
+    }
+    
+    func hideLoader() {
+        DispatchQueue.main.async() { [unowned self] in
+            self.spinner.stopAnimating()
+            self.spinner.removeFromSuperview()
+            self.loaderView.removeFromSuperview()
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+      scrollOffset = scrollView.contentOffset.y
+    }
+    
     
     @objc func showConfirmAlert(){
         
@@ -265,7 +312,6 @@ class DetailViewController: UIViewController {
     
     func deleteObservation(){
         
-        
         let obs = observation as! OwnObservation
         
         var checkObs: OwnObservation?
@@ -290,11 +336,18 @@ class DetailViewController: UIViewController {
             }
         }
         catch{
-            print(error)
+            print("IS THIS THE ERROR \(error)")
         }
         
-        guard checkObs!.uploading != true else { present(notice.syncAlert, animated: true, completion: nil); return }
+        guard checkObs!.uploading != true else {  present(notice.syncAlert, animated: true, completion: nil); return }
         
+        showLoader()
+        
+        
+        navigationItem.hidesBackButton = true
+        soundPlayButton.isUserInteractionEnabled = false
+        videoPlayButton.isUserInteractionEnabled = false
+        scrollView.isUserInteractionEnabled = false
         
         if obs.uploaded == true {
             
@@ -341,16 +394,17 @@ class DetailViewController: UIViewController {
                                                         try managedContext.save()
                                                     }
                                                     catch {
-                                                        print(error)
+                                                        print("OR IS THIS THE ERROR \(error)")
                                                     }
                                                     }
                                                     catch {
-                                                        print(error)
+                                                        print("OR THIS ONE \(error)")
                                                     }
                                                    
                                                     try? self.fileManager.removeItem(atPath: documentsPath.appendingPathComponent("\(objectId).jpeg"))
                                                     try? self.fileManager.removeItem(atPath: documentsPath.appendingPathComponent("\(objectId).m4a"))
                                                     try? self.fileManager.removeItem(atPath: documentsPath.appendingPathComponent("\(objectId).mp4"))
+                                                    self.hideLoader()
                                                     self.navigationController?.popViewController(animated: true)
                                                 }
                                             }
@@ -403,6 +457,7 @@ class DetailViewController: UIViewController {
                                                 
                                                 try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).jpeg"))
                                                 try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).m4a"))
+                                                self.hideLoader()
                                                 self.navigationController?.popViewController(animated: true)
                                             }
                                         }
@@ -455,6 +510,7 @@ class DetailViewController: UIViewController {
                                                 
                                                 try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).jpeg"))
                                                 try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).mp4"))
+                                                self.hideLoader()
                                                 self.navigationController?.popViewController(animated: true)
                                             }
                                         }
@@ -499,6 +555,7 @@ class DetailViewController: UIViewController {
                                                 }
                                                 
                                                 try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).jpeg"))
+                                                self.hideLoader()
                                                 self.navigationController?.popViewController(animated: true)
                                             }
                                         }
@@ -553,11 +610,13 @@ class DetailViewController: UIViewController {
             case (false, false):
                 
                 try? fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).jpeg"))
+                hideLoader()
                 self.navigationController?.popViewController(animated: true)
             }
             
             
         }
+       
         
     }
     

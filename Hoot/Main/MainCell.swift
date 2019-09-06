@@ -206,8 +206,6 @@ class MainCell: UICollectionViewCell {
         time.centerXAnchor.constraint(equalTo: canvasView.centerXAnchor).isActive = true
        
         
-       
-        
         
     }
     

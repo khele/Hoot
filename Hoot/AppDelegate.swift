@@ -61,14 +61,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         monitor.start(queue: queue)
         
         
+        
         if Auth.auth().currentUser != nil {
             
             self.window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "mainNavigationController")
-            
         }
         
         
-       
         return true
     }
 

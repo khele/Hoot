@@ -1,0 +1,33 @@
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "5Jp-QQ-6vr"; */
+"5Jp-QQ-6vr.text" = "Label";
+
+/* Class = "UILabel"; text = "Notes"; ObjectID = "6lq-ir-fc9"; */
+"6lq-ir-fc9.text" = "Notes";
+
+/* Class = "UILabel"; text = "Date and time"; ObjectID = "9UP-kH-2cN"; */
+"9UP-kH-2cN.text" = "Date and time";
+
+/* Class = "UILabel"; text = "Rare"; ObjectID = "DPh-cq-chw"; */
+"DPh-cq-chw.text" = "Rare";
+
+/* Class = "UILabel"; text = "Location"; ObjectID = "HEe-1J-Z2Z"; */
+"HEe-1J-Z2Z.text" = "Location";
+
+/* Class = "UILabel"; text = "Ipsum"; ObjectID = "Tla-GC-MSN"; */
+"Tla-GC-MSN.text" = "Ipsum";
+
+/* Class = "UILabel"; text = "Long"; ObjectID = "dIy-SW-TCI"; */
+"dIy-SW-TCI.text" = "Long";
+
+/* Class = "UILabel"; text = "Species"; ObjectID = "dao-cj-zdQ"; */
+"dao-cj-zdQ.text" = "Species";
+
+/* Class = "UILabel"; text = "Chicken"; ObjectID = "oc7-JB-MFY"; */
+"oc7-JB-MFY.text" = "Chicken";
+
+/* Class = "UILabel"; text = "Rarity"; ObjectID = "pdU-Lz-qeO"; */
+"pdU-Lz-qeO.text" = "Rarity";
+
+/* Class = "UILabel"; text = "Lat"; ObjectID = "tD7-9f-Kkt"; */
+"tD7-9f-Kkt.text" = "Lat";

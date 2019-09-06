@@ -37,3 +37,5 @@ protocol MainItem {
     var rarityNumber: Int64 { get }
     
 }
+
+

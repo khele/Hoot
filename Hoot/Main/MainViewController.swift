@@ -27,6 +27,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     var uid = Auth.auth().currentUser?.uid
     
+    // IB vars
     
     @IBOutlet var canvasView: UIView!
     
@@ -132,9 +133,20 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 ownSwitch.isUserInteractionEnabled = false
                 UIView.animate(withDuration: 0.2, animations: { self.offlineLabel.alpha = 1 } )
                 mainCollectionView.reloadData()
+                if ownItemSet.isEmpty{
+                    mainCollectionView.alpha = 0
+                    emptyImage.alpha = 1
+                    emptyLabel.alpha = 1
+                }
             }
             if newValue == true {
-                if OnlyOwn == false { ownSwitch.isOn = false; mainCollectionView.reloadData() }
+                if OnlyOwn == false { ownSwitch.isOn = false; mainCollectionView.reloadData()
+                    if !worldItemSet.isEmpty {
+                        mainCollectionView.alpha = 1
+                        emptyImage.alpha = 0
+                        emptyLabel.alpha = 0
+                    }
+                }
                 ownSwitch.isUserInteractionEnabled = true
                 UIView.animate(withDuration: 0.2, animations: { self.offlineLabel.alpha = 0 } )
                 
@@ -161,7 +173,11 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         getOwnObservations()
         
-        sync.sync()
+        DispatchQueue.global().async {
+            self.sync.sync()
+        }
+
+        
         
     }
 
@@ -227,6 +243,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
     }
     
+    
     func setupUserDefaults(){
         
         
@@ -244,10 +261,10 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
     }
     
+    
     func setupCategoryPicker(){
         
         categoryPicker.delegate = self
-        
         sortTextField.inputView = categoryPicker
     }
     
@@ -350,6 +367,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
     }
     
+    
     @objc func showFilterView(){
         
         sortViewTopConstraint.constant = 0
@@ -404,7 +422,6 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
             self.lastSnapshot = []
             if let err = err{
                 print("error getting documents: \(err)")
-                // error alert here
             }
             else {
                 var localItemSet: [Observation] = []
@@ -428,7 +445,6 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                 }
             }
-        
             self.mainCollectionView.reloadData()
         }
         self.listereners.append(listener)
@@ -452,10 +468,21 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         if ownSwitch.isOn == true {
             OnlyOwn = true
             mainCollectionView.reloadData()
+           
+            if ownItemSet.isEmpty{
+            mainCollectionView.alpha = 0
+            emptyImage.alpha = 1
+            emptyLabel.alpha = 1
+            }
         }
         else{
             OnlyOwn = false
             mainCollectionView.reloadData()
+            if !worldItemSet.isEmpty {
+                mainCollectionView.alpha = 1
+                emptyImage.alpha = 0
+                emptyLabel.alpha = 0
+            }
         }
     }
     
@@ -537,9 +564,9 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
             let processor = ResizingImageProcessor(referenceSize: CGSize(width: view.bounds.width * 0.9 * UIScreen.main.scale, height: view.bounds.width * 0.9 * UIScreen.main.scale)) >> RoundCornerImageProcessor(cornerRadius: 10)
             
             let pictureUrl = URL(string: mainItemSetSorted[indexPath.row].pictureUrl!)
-            
+          
             cell.itemView.kf.setImage(with: pictureUrl, options: [.cacheSerializer(FormatIndicatedCacheSerializer.png), .processor(processor)])
-         
+            
          }
          
         else {
@@ -687,18 +714,15 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                             }
                             if self.worldItemSet.indices.contains(self.itemSetNumber) {
                                 self.worldItemSet[self.itemSetNumber] = localItemSet
-                                //  print("index existed, added to \(self.itemSetNumber), total number: \(self.masterItemSet.count)")
                             }
                             else {
                                 self.worldItemSet.insert(localItemSet, at: self.itemSetNumber)
-                                // print("index didn't exist, added to \(self.itemSetNumber), total number: \(self.masterItemSet.count)")
                                 var veryLocal: [Observation] = []
                                 for itemSet in self.worldItemSet{
                                     for doc in itemSet{
                                         veryLocal.append(doc)
                                     }
                                 }
-                                //   print("The new count of masterdata is \(veryLocal.count), consists of 1: \(self.masterItemSet[0].count) and 2: \(self.masterItemSet[1].count)")
                             }
                             if let lastSnapshot = querySnapshot.documents.last{
                                 self.lastSnapshot.append(lastSnapshot)

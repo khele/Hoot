@@ -11,11 +11,13 @@
 		39AA38E91F495C37043AF27C /* Pods_Hoot_HootUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 040C446301DC9047A6F9D31C /* Pods_Hoot_HootUITests.framework */; };
 		486C94FE231AC3BA0071B94F /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C94FD231AC3BA0071B94F /* Notice.swift */; };
 		486C9509231AC79E0071B94F /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C9508231AC79E0071B94F /* Observation.swift */; };
+		487166062322884F00D63E4D /* Add.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 487166082322884F00D63E4D /* Add.storyboard */; };
+		4871660B2322886C00D63E4D /* Detail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4871660D2322886C00D63E4D /* Detail.storyboard */; };
+		487166102322887900D63E4D /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 487166122322887900D63E4D /* Login.storyboard */; };
 		488407FF23216600005FB263 /* SyncAndDeleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488407FE23216600005FB263 /* SyncAndDeleteTests.swift */; };
 		48AA58C7231EC50B00D8A26B /* OwnObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58C6231EC50B00D8A26B /* OwnObservationExtension.swift */; };
 		48AA58CC231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58CA231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift */; };
 		48AA58CF231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58CB231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift */; };
-		48B37E94231D4DDB00BA5387 /* Detail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48B37E93231D4DDB00BA5387 /* Detail.storyboard */; };
 		48B37E98231D4DFE00BA5387 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E97231D4DFE00BA5387 /* DetailViewController.swift */; };
 		48B37E9C231D89ED00BA5387 /* SyncObservations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B37E9B231D89ED00BA5387 /* SyncObservations.swift */; };
 		48BC8527231AAD91002F6543 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BC8526231AAD91002F6543 /* AppDelegate.swift */; };
@@ -33,9 +35,7 @@
 		48E2155C231AB1F300A36A6B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48E21559231AB1F300A36A6B /* GoogleService-Info.plist */; };
 		48E2155F231AB3F100A36A6B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48E2155E231AB3F100A36A6B /* MapKit.framework */; };
 		48E21561231AB45D00A36A6B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E21560231AB45D00A36A6B /* MainViewController.swift */; };
-		48E21567231AB58C00A36A6B /* Add.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48E21566231AB58C00A36A6B /* Add.storyboard */; };
 		48E2156B231AB5A200A36A6B /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E2156A231AB5A200A36A6B /* AddViewController.swift */; };
-		48E2156F231AB5B200A36A6B /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48E2156E231AB5B200A36A6B /* Login.storyboard */; };
 		48E21573231AB5C200A36A6B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E21572231AB5C200A36A6B /* LoginViewController.swift */; };
 		48E2157A231AB84D00A36A6B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48E2157E231AB84D00A36A6B /* Localizable.strings */; };
 		48E2157B231AB84D00A36A6B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48E2157E231AB84D00A36A6B /* Localizable.strings */; };
@@ -65,11 +65,17 @@
 		26E9E02D0D015E00209DCBA5 /* Pods-Hoot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoot.release.xcconfig"; path = "Target Support Files/Pods-Hoot/Pods-Hoot.release.xcconfig"; sourceTree = "<group>"; };
 		486C94FD231AC3BA0071B94F /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		486C9508231AC79E0071B94F /* Observation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observation.swift; sourceTree = "<group>"; };
+		487166072322884F00D63E4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Add.storyboard; sourceTree = "<group>"; };
+		4871660A2322885900D63E4D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Add.strings; sourceTree = "<group>"; };
+		4871660C2322886C00D63E4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Detail.storyboard; sourceTree = "<group>"; };
+		4871660F2322887100D63E4D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Detail.strings; sourceTree = "<group>"; };
+		487166132322887D00D63E4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
+		487166142322889300D63E4D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Login.strings; sourceTree = "<group>"; };
+		48716616232288A400D63E4D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		488407FE23216600005FB263 /* SyncAndDeleteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAndDeleteTests.swift; sourceTree = "<group>"; };
 		48AA58C6231EC50B00D8A26B /* OwnObservationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnObservationExtension.swift; sourceTree = "<group>"; };
 		48AA58CA231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataClass.swift"; sourceTree = "<group>"; };
 		48AA58CB231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		48B37E93231D4DDB00BA5387 /* Detail.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Detail.storyboard; sourceTree = "<group>"; };
 		48B37E97231D4DFE00BA5387 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		48B37E9B231D89ED00BA5387 /* SyncObservations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncObservations.swift; sourceTree = "<group>"; };
 		48BC8523231AAD91002F6543 /* Hoot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hoot.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,9 +97,7 @@
 		48E21559231AB1F300A36A6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		48E2155E231AB3F100A36A6B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		48E21560231AB45D00A36A6B /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		48E21566231AB58C00A36A6B /* Add.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Add.storyboard; sourceTree = "<group>"; };
 		48E2156A231AB5A200A36A6B /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
-		48E2156E231AB5B200A36A6B /* Login.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		48E21572231AB5C200A36A6B /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		48E2157D231AB84D00A36A6B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4BDA39913E9C60402A9AB3FA /* Pods-Hoot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoot.debug.xcconfig"; path = "Target Support Files/Pods-Hoot/Pods-Hoot.debug.xcconfig"; sourceTree = "<group>"; };
@@ -158,7 +162,7 @@
 		48B37E92231D4DC300BA5387 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
-				48B37E93231D4DDB00BA5387 /* Detail.storyboard */,
+				4871660D2322886C00D63E4D /* Detail.storyboard */,
 				48B37E97231D4DFE00BA5387 /* DetailViewController.swift */,
 			);
 			path = Detail;
@@ -239,7 +243,7 @@
 		48E21564231AB55500A36A6B /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				48E2156E231AB5B200A36A6B /* Login.storyboard */,
+				487166122322887900D63E4D /* Login.storyboard */,
 				48E21572231AB5C200A36A6B /* LoginViewController.swift */,
 			);
 			path = Login;
@@ -248,7 +252,7 @@
 		48E21565231AB55E00A36A6B /* Add */ = {
 			isa = PBXGroup;
 			children = (
-				48E21566231AB58C00A36A6B /* Add.storyboard */,
+				487166082322884F00D63E4D /* Add.storyboard */,
 				48E2156A231AB5A200A36A6B /* AddViewController.swift */,
 			);
 			path = Add;
@@ -398,10 +402,10 @@
 			files = (
 				48BC8534231AAD93002F6543 /* LaunchScreen.storyboard in Resources */,
 				48E2155A231AB1F300A36A6B /* GoogleService-Info.plist in Resources */,
-				48E2156F231AB5B200A36A6B /* Login.storyboard in Resources */,
-				48B37E94231D4DDB00BA5387 /* Detail.storyboard in Resources */,
+				487166102322887900D63E4D /* Login.storyboard in Resources */,
+				4871660B2322886C00D63E4D /* Detail.storyboard in Resources */,
 				48E2157A231AB84D00A36A6B /* Localizable.strings in Resources */,
-				48E21567231AB58C00A36A6B /* Add.storyboard in Resources */,
+				487166062322884F00D63E4D /* Add.storyboard in Resources */,
 				48BC8531231AAD93002F6543 /* Assets.xcassets in Resources */,
 				48BC852C231AAD91002F6543 /* Main.storyboard in Resources */,
 			);
@@ -654,10 +658,38 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		487166082322884F00D63E4D /* Add.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				487166072322884F00D63E4D /* Base */,
+				4871660A2322885900D63E4D /* en */,
+			);
+			name = Add.storyboard;
+			sourceTree = "<group>";
+		};
+		4871660D2322886C00D63E4D /* Detail.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4871660C2322886C00D63E4D /* Base */,
+				4871660F2322887100D63E4D /* en */,
+			);
+			name = Detail.storyboard;
+			sourceTree = "<group>";
+		};
+		487166122322887900D63E4D /* Login.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				487166132322887D00D63E4D /* Base */,
+				487166142322889300D63E4D /* en */,
+			);
+			name = Login.storyboard;
+			sourceTree = "<group>";
+		};
 		48BC852A231AAD91002F6543 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				48BC852B231AAD91002F6543 /* Base */,
+				48716616232288A400D63E4D /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -801,7 +833,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4BDA39913E9C60402A9AB3FA /* Pods-Hoot.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7L9D446N7H;
 				INFOPLIST_FILE = Hoot/Info.plist;
@@ -812,7 +844,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = GoldenPot.Hoot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -820,7 +852,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 26E9E02D0D015E00209DCBA5 /* Pods-Hoot.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7L9D446N7H;
 				INFOPLIST_FILE = Hoot/Info.plist;
@@ -831,7 +863,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = GoldenPot.Hoot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

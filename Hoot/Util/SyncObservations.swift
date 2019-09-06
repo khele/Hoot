@@ -78,9 +78,9 @@ struct SyncObservations {
                             worldItemSet.append(Observation(data))
                         }
                     }
-            
+                    var saveRun = 0
                     for item in worldItemSet{
-                        
+                        DispatchQueue.global().async {
                         let documentsPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString)
                         
                         let picturePath = documentsPath.appendingPathComponent("\(item.id!).jpeg")
@@ -135,19 +135,35 @@ struct SyncObservations {
                         catch let error as NSError {
                             print("Error occurred: \(error)")
                         }
+                            
+                            saveRun += 1
+                            print(saveRun)
+                            print(worldItemSet.count)
+                            if saveRun == worldItemSet.count{
+                                DispatchQueue.main.async {
+                                
+                                if self.appDelegate.window?.rootViewController?.restorationIdentifier == "mainNavigationController"{
+                                    
+                                    let nvc = self.appDelegate.window?.rootViewController as! UINavigationController
+                                    let vc = nvc.viewControllers[0] as! MainViewController
+                                    vc.getOwnObservations()
+                                    }
+                                }
+                                
+                            }
                     }
-                }
+                        
+                    }
                 
-                if self.appDelegate.window?.rootViewController?.restorationIdentifier == "mainNavigationController"{
-                        
-                    let nvc = self.appDelegate.window?.rootViewController as! UINavigationController
-                    let vc = nvc.viewControllers[0] as! MainViewController
-                    vc.getOwnObservations()
-                        
-                    }
+                  
+                    
+                
+                    
                 
             }
         }
+        }
+            
             
             
         else{
@@ -262,7 +278,7 @@ struct SyncObservations {
                     
                     pictureTask.observe(.success){ snapShot in
                      
-                        print("picture success")
+                        print("picture success (in both)")
                         
                     }
                     
@@ -345,9 +361,6 @@ struct SyncObservations {
                                 
                                 if success == false { return }
                                 
-                                let documentGroup = DispatchGroup()
-                                
-                                documentGroup.enter()
                              
                                 self.observationRef.document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": soundUrl!.absoluteString, "videoUrl": videoUrl!.absoluteString, "lat": item.lat, "long": item.long]){  err in
                                     if let err = err {
@@ -474,10 +487,6 @@ struct SyncObservations {
                             
                             if success == false { return }
                             
-                            let documentGroup = DispatchGroup()
-                            
-                            documentGroup.enter()
-                            
                             self.observationRef.document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": soundUrl!.absoluteString, "videoUrl": "", "lat": item.lat, "long": item.long]){  err in
                                 if let err = err {
                                     print("Error writing document: \(err)")
@@ -595,10 +604,6 @@ struct SyncObservations {
                             
                             if success == false { return }
                             
-                            let documentGroup = DispatchGroup()
-                            
-                            documentGroup.enter()
-                            
                             self.observationRef.document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": "", "videoUrl": videoUrl!.absoluteString, "lat": item.lat, "long": item.long]){  err in
                                 if let err = err {
                                     print("Error writing document: \(err)")
@@ -677,10 +682,6 @@ struct SyncObservations {
                     pictureGroup.notify(queue: .main){
                         
                         if success == false { return }
-                        
-                        let documentGroup = DispatchGroup()
-                        
-                        documentGroup.enter()
                         
                         self.observationRef.document(item.id!).setData(["species": item.species!, "rarity": item.rarity!, "rarityNumber": item.rarityNumber, "notes": item.notes!, "created": item.created, "id": item.id!, "uid": item.uid!, "dname": item.dname!, "pictureUrl": pictureUrl!.absoluteString, "soundUrl": "", "videoUrl": "", "lat": item.lat, "long": item.long]){  err in
                             if let err = err {

@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "Rarity"; ObjectID = "WPO-pZ-X8A"; */
+"WPO-pZ-X8A.text" = "Rarity";
+
+/* Class = "UILabel"; text = "Notes"; ObjectID = "jRE-uW-hd1"; */
+"jRE-uW-hd1.text" = "Notes";
+
+/* Class = "UILabel"; text = "Add sound (optional)"; ObjectID = "jyT-5g-zqS"; */
+"jyT-5g-zqS.text" = "Add sound (optional)";
+
+/* Class = "UILabel"; text = "Species"; ObjectID = "ma1-Mc-Uis"; */
+"ma1-Mc-Uis.text" = "Species";
+
+/* Class = "UILabel"; text = "Add video (optional)"; ObjectID = "uVf-gO-D95"; */
+"uVf-gO-D95.text" = "Add video (optional)";

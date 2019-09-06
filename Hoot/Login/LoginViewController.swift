@@ -19,21 +19,17 @@ class LoginViewController: UIViewController, FUIAuthDelegate {
     lazy var db = Firestore.firestore()
     lazy var uid = Auth.auth().currentUser!.uid
     
-    let notice = Notice()
     
+    
+    let notice = Notice()
     unowned let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
       setupLayout()
-        
         
     }
     
@@ -59,16 +55,14 @@ class LoginViewController: UIViewController, FUIAuthDelegate {
     }
    
     
+    
     @IBAction func loginButtonPressed(_ sender: Any) {
         
         if appDelegate.connected == false {
-            
             present(notice.networkAlert, animated: true, completion: nil)
-            
         }
             
         else {
-            
             weak var authUI = FUIAuth.defaultAuthUI()
             weak var authViewController = authUI?.authViewController()
             authUI?.delegate = self
@@ -76,8 +70,9 @@ class LoginViewController: UIViewController, FUIAuthDelegate {
             present(authViewController!, animated: true, completion: nil)
             
         }
-        
     }
+    
+    
     
     func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
         
