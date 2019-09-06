@@ -379,7 +379,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     @IBAction func confirmSortButtonPressed(_ sender: Any) {
         
-        sortViewTopConstraint.constant = -300
+        sortViewTopConstraint.constant = -500
         
         UIView.animate(withDuration: 0.3, animations:{ self.view.layoutIfNeeded() })
         
@@ -739,8 +739,12 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if traitCollection.horizontalSizeClass == .regular{
+            return CGSize(width: view.frame.width, height: view.frame.width * 1.5)
+        }
+        else {
         return CGSize(width: view.frame.width, height: view.frame.width * 1.9)
-        
+        }
     }
     
     

@@ -182,6 +182,7 @@
                                             <constraint firstItem="z9q-p7-J4q" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Lo4-u6-6qm" secondAttribute="bottom" id="8SZ-nU-2vp"/>
                                             <constraint firstItem="ZKo-aI-z2M" firstAttribute="centerX" secondItem="S1C-EP-uaG" secondAttribute="centerX" multiplier="1.25" id="BSb-uU-9Mo"/>
                                             <constraint firstItem="Lo4-u6-6qm" firstAttribute="top" secondItem="bZw-Cq-byc" secondAttribute="bottom" id="EQq-Gg-kPa"/>
+                                            <constraint firstItem="D6e-Nv-Bg5" firstAttribute="width" secondItem="S1C-EP-uaG" secondAttribute="width" multiplier="0.1" id="F3F-3c-t59"/>
                                             <constraint firstItem="ZKo-aI-z2M" firstAttribute="height" secondItem="5NX-wd-MVo" secondAttribute="height" id="FH6-EZ-qeF"/>
                                             <constraint firstItem="z9q-p7-J4q" firstAttribute="leading" secondItem="S1C-EP-uaG" secondAttribute="leading" constant="8" id="HOu-iN-O7m"/>
                                             <constraint firstItem="D6e-Nv-Bg5" firstAttribute="width" secondItem="S1C-EP-uaG" secondAttribute="width" multiplier="0.17" id="KFh-uE-uKM"/>
@@ -196,24 +197,33 @@
                                             <constraint firstAttribute="bottom" secondItem="ZKo-aI-z2M" secondAttribute="bottom" constant="5" id="j2z-Iv-gJz"/>
                                             <constraint firstAttribute="bottom" secondItem="5NX-wd-MVo" secondAttribute="bottom" constant="5" id="mFu-tD-j30"/>
                                             <constraint firstItem="5NX-wd-MVo" firstAttribute="top" secondItem="z9q-p7-J4q" secondAttribute="bottom" constant="15" id="pEU-8U-mYT"/>
+                                            <constraint firstItem="5NX-wd-MVo" firstAttribute="width" secondItem="S1C-EP-uaG" secondAttribute="width" multiplier="0.1" id="pcY-Ed-wq9"/>
                                             <constraint firstItem="bZw-Cq-byc" firstAttribute="top" secondItem="S1C-EP-uaG" secondAttribute="top" id="pe6-3a-Xo4"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="8DE-2b-NSe"/>
                                                 <exclude reference="ghp-ud-WAS"/>
+                                                <exclude reference="F3F-3c-t59"/>
+                                                <exclude reference="KFh-uE-uKM"/>
+                                                <exclude reference="XpK-IE-rWp"/>
+                                                <exclude reference="pcY-Ed-wq9"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
                                                 <exclude reference="8DE-2b-NSe"/>
                                                 <include reference="ghp-ud-WAS"/>
+                                                <include reference="KFh-uE-uKM"/>
+                                                <include reference="XpK-IE-rWp"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=regular">
                                             <mask key="constraints">
                                                 <include reference="8DE-2b-NSe"/>
                                                 <exclude reference="ghp-ud-WAS"/>
+                                                <include reference="F3F-3c-t59"/>
+                                                <include reference="pcY-Ed-wq9"/>
                                             </mask>
                                         </variation>
                                     </view>

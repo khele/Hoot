@@ -172,6 +172,8 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         navigationItem.hidesBackButton = true
         
+        pictureView.layer.cornerRadius = 10
+        
         speciesLabel.text = NSLocalizedString("Species", comment: "")
         rarityLabel.text = NSLocalizedString("Rarity", comment: "")
         notesLabel.text = NSLocalizedString("Notes", comment: "")
@@ -468,7 +470,11 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         actionSheet.addAction(UIAlertAction(title: cancelString, style: .cancel, handler: nil))
         
-      
+        if let popoverController = actionSheet.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
         
         present(actionSheet, animated: true, completion: nil)
     }
@@ -513,7 +519,12 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
             
             videoButtonStackView.addArrangedSubview(deleteVideoButton!)
             
+            if traitCollection.horizontalSizeClass == .regular{
+                deleteVideoButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.1).isActive = true
+            }
+            else{
             deleteVideoButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.17).isActive = true
+            }
             deleteVideoButton!.heightAnchor.constraint(equalTo: deleteVideoButton!.widthAnchor, multiplier: 1).isActive = true
             
             videoRecorded = true
@@ -694,7 +705,12 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
             
             soundButtonStackView.addArrangedSubview(deleteSoundButton!)
             
+            if traitCollection.horizontalSizeClass == .regular{
+                deleteSoundButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.1).isActive = true
+            }
+            else{
             deleteSoundButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.17).isActive = true
+            }
             deleteSoundButton!.heightAnchor.constraint(equalTo: deleteSoundButton!.widthAnchor, multiplier: 1).isActive = true
             
             addSoundLabel.text = NSLocalizedString("Add sound (optional)", comment: "")
@@ -733,7 +749,12 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
             
             let session = AVAudioSession.sharedInstance()
             try! session.setCategory(AVAudioSession.Category.playback)
-            soundPlayer = try!(AVAudioPlayer(contentsOf: soundUrl!))
+            do{
+            soundPlayer = try AVAudioPlayer(contentsOf: soundUrl!)
+            }
+            catch{
+                print(error)
+            }
             soundPlayer?.play()
         }
         
@@ -794,7 +815,11 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         actionSheet.addAction(UIAlertAction(title: cancelString, style: .cancel, handler: nil))
         
-        
+            if let popoverController = actionSheet.popoverPresentationController {
+                popoverController.sourceView = self.view
+                popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+                popoverController.permittedArrowDirections = []
+            }
         
         present(actionSheet, animated: true, completion: nil)
         
