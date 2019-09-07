@@ -121,7 +121,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     let session = AVAudioSession.sharedInstance()
     
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         

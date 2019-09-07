@@ -370,7 +370,7 @@
 						CreatedOnToolsVersion = 10.3;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -846,8 +846,9 @@
 			baseConfigurationReference = 4BDA39913E9C60402A9AB3FA /* Pods-Hoot.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7L9D446N7H;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Hoot/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -855,6 +856,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = GoldenPot.Hoot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -865,8 +867,9 @@
 			baseConfigurationReference = 26E9E02D0D015E00209DCBA5 /* Pods-Hoot.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7L9D446N7H;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Hoot/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -874,6 +877,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = GoldenPot.Hoot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -41,4 +41,9 @@
 "Log out?" = "Log out?";
 "Are you sure you wish to log out?" =  "Are you sure you wish to log out?";
 "This observation is still synchronizing, please try again in a few moments." = "This observation is still synchronizing, please try again in a few moments.";
+"No network connection available" = "No network connection available";
+"Operation unsuccessful, please try again later." = "Operation unsuccessful, please try again later.";
+"An observation is still synchronizing, please try to log out again in a few moments." = "An observation is still synchronizing, please try to log out again in a few moments.";
+
+
 

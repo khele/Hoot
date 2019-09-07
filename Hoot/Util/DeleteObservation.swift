@@ -73,7 +73,9 @@ struct DeleteObservation{
             }
         }
         catch{
-            print("IS THIS THE ERROR \(error)")
+            print(error)
+            delegate?.deleteObservationDidRun(result: .failure)
+            return
         }
         
         guard checkObs!.uploading != true else {  delegate?.deleteObservationDidRun(result: .uploading); return }
@@ -91,24 +93,28 @@ struct DeleteObservation{
                 pictureFireRef.child("\(obs.id!).jpeg").delete(){ error in
                     if let error = error {
                         print("error deleting image: \(error)")
+                        self.delegate?.deleteObservationDidRun(result: .failure)
+                        return
                     } else {
                         print("image deleted successfully")
-                        
+                    
                         self.soundFireRef.child("\(obs.id!).m4a").delete(){ error in
                             if let error = error {
-                                print("error deleting image: \(error)")
+                                print("error deleting sound: \(error)")
                             } else {
                                 print("sound deleted successfully")
-                                
+                            }
                                 self.videoFireRef.child("\(obs.id!).mp4").delete(){ error in
                                     if let error = error {
-                                        print("error deleting image: \(error)")
+                                        print("error deleting video: \(error)")
                                     } else {
                                         print("video deleted successfully")
-                                        
+                                    }
                                         self.observationRef.document(obs.id!).delete(){ err in
                                             if let err = err {
-                                                print("error deleting image: \(err)")
+                                                print("error deleting document: \(err)")
+                                                self.delegate?.deleteObservationDidRun(result: .failure)
+                                                return
                                             } else {
                                                 print("document deleted successfully")
                                                 
@@ -125,11 +131,15 @@ struct DeleteObservation{
                                                         try managedContext.save()
                                                     }
                                                     catch {
-                                                        print("OR IS THIS THE ERROR \(error)")
+                                                        print(error)
+                                                        self.delegate?.deleteObservationDidRun(result: .failure)
+                                                        return
                                                     }
                                                 }
                                                 catch {
-                                                    print("OR THIS ONE \(error)")
+                                                    print(error)
+                                                    self.delegate?.deleteObservationDidRun(result: .failure)
+                                                    return
                                                 }
                                                 
                                                 try? self.fileManager.removeItem(atPath: documentsPath.appendingPathComponent("\(objectId).jpeg"))
@@ -138,11 +148,11 @@ struct DeleteObservation{
                                                 self.delegate?.deleteObservationDidRun(result: .success)
                                             }
                                         }
-                                    }
+                                    
                                 }
-                            }
+                            
                         }
-                    }
+                }
                 }
                 
             case (true, false):
@@ -150,18 +160,22 @@ struct DeleteObservation{
                 pictureFireRef.child("\(obs.id!).jpeg").delete(){ error in
                     if let error = error {
                         print("error deleting image: \(error)")
+                        self.delegate?.deleteObservationDidRun(result: .failure)
+                        return
                     } else {
                         print("image deleted successfully")
                         
                         self.soundFireRef.child("\(obs.id!).m4a").delete(){ error in
                             if let error = error {
-                                print("error deleting image: \(error)")
+                                print("error deleting sound: \(error)")
                             } else {
                                 print("sound deleted successfully")
-                                
+                            }
                                 self.observationRef.document(obs.id!).delete(){ err in
                                     if let err = err {
-                                        print("error deleting image: \(err)")
+                                        print("error deleting document: \(err)")
+                                        self.delegate?.deleteObservationDidRun(result: .failure)
+                                        return
                                     } else {
                                         print("document deleted successfully")
                                         
@@ -179,10 +193,14 @@ struct DeleteObservation{
                                             }
                                             catch {
                                                 print(error)
+                                                self.delegate?.deleteObservationDidRun(result: .failure)
+                                                return
                                             }
                                         }
                                         catch {
                                             print(error)
+                                            self.delegate?.deleteObservationDidRun(result: .failure)
+                                            return
                                         }
                                         
                                         try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).jpeg"))
@@ -190,7 +208,7 @@ struct DeleteObservation{
                                         self.delegate?.deleteObservationDidRun(result: .success)
                                     }
                                 }
-                            }
+                            
                         }
                     }
                 }
@@ -199,21 +217,25 @@ struct DeleteObservation{
                 
             case (false, true):
                 
-                pictureFireRef.child(obs.id!).delete(){ error in
+                pictureFireRef.child("\(obs.id!).jpeg").delete(){ error in
                     if let error = error {
                         print("error deleting image: \(error)")
+                        self.delegate?.deleteObservationDidRun(result: .failure)
+                        return
                     } else {
                         print("image deleted successfully")
                         
                         self.videoFireRef.child("\(obs.id!).mp4").delete(){ error in
                             if let error = error {
-                                print("error deleting image: \(error)")
+                                print("error deleting video: \(error)")
                             } else {
                                 print("video deleted successfully")
-                                
+                            }
                                 self.observationRef.document(obs.id!).delete(){ err in
                                     if let err = err {
-                                        print("error deleting image: \(err)")
+                                        print("error deleting document: \(err)")
+                                        self.delegate?.deleteObservationDidRun(result: .failure)
+                                        return
                                     } else {
                                         print("document deleted successfully")
                                         
@@ -231,10 +253,14 @@ struct DeleteObservation{
                                             }
                                             catch {
                                                 print(error)
+                                                self.delegate?.deleteObservationDidRun(result: .failure)
+                                                return
                                             }
                                         }
                                         catch {
                                             print(error)
+                                            self.delegate?.deleteObservationDidRun(result: .failure)
+                                            return
                                         }
                                         
                                         try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).jpeg"))
@@ -242,7 +268,7 @@ struct DeleteObservation{
                                         self.delegate?.deleteObservationDidRun(result: .success)
                                     }
                                 }
-                            }
+                            
                         }
                     }
                 }
@@ -253,12 +279,16 @@ struct DeleteObservation{
                 pictureFireRef.child("\(obs.id!).jpeg").delete(){ error in
                     if let error = error {
                         print("error deleting image: \(error)")
+                        self.delegate?.deleteObservationDidRun(result: .failure)
+                        return
                     } else {
                         print("image deleted successfully")
                         
                         self.observationRef.document(obs.id!).delete(){ err in
                             if let err = err {
-                                print("error deleting image: \(err)")
+                                print("error deleting document: \(err)")
+                                self.delegate?.deleteObservationDidRun(result: .failure)
+                                return
                             } else {
                                 print("document deleted successfully")
                                 
@@ -276,10 +306,14 @@ struct DeleteObservation{
                                     }
                                     catch {
                                         print(error)
+                                        self.delegate?.deleteObservationDidRun(result: .failure)
+                                        return
                                     }
                                 }
                                 catch {
                                     print(error)
+                                    self.delegate?.deleteObservationDidRun(result: .failure)
+                                    return
                                 }
                                 
                                 try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).jpeg"))
@@ -309,10 +343,14 @@ struct DeleteObservation{
                 }
                 catch {
                     print(error)
+                    self.delegate?.deleteObservationDidRun(result: .failure)
+                    return
                 }
             }
             catch {
                 print(error)
+                self.delegate?.deleteObservationDidRun(result: .failure)
+                return
             }
             
             

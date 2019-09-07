@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VKU-Du-xWW">
-    <device id="ipad10_5" orientation="portrait">
+    <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,23 +15,23 @@
             <objects>
                 <viewController storyboardIdentifier="loginViewController" id="VKU-Du-xWW" customClass="LoginViewController" customModule="Hoot" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cUQ-n4-xEG">
-                        <rect key="frame" x="0.0" y="0.0" width="834" height="1112"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hoot240" translatesAutoresizingMaskIntoConstraints="NO" id="DXR-fc-bGv">
-                                <rect key="frame" x="21" y="42" width="709" height="708.5"/>
+                                <rect key="frame" x="10.5" y="141" width="352" height="352"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="DXR-fc-bGv" secondAttribute="height" multiplier="1:1" id="WIu-6s-pNp"/>
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="45" translatesAutoresizingMaskIntoConstraints="NO" id="gFD-om-T4O">
-                                <rect key="frame" x="8" y="783.5" width="818" height="283.5"/>
+                                <rect key="frame" x="8" y="526" width="398" height="291"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HootText" translatesAutoresizingMaskIntoConstraints="NO" id="z4T-pc-Rbo">
-                                        <rect key="frame" x="349" y="0.0" width="120" height="190.5"/>
+                                        <rect key="frame" x="139" y="0.0" width="120" height="198"/>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q0b-KI-EUr">
-                                        <rect key="frame" x="284" y="235.5" width="250" height="48"/>
+                                        <rect key="frame" x="74" y="243" width="250" height="48"/>
                                         <color key="backgroundColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                         <inset key="contentEdgeInsets" minX="30" minY="10" maxX="30" maxY="10"/>

@@ -63,7 +63,7 @@ struct SyncObservations {
         
         if itemSet.isEmpty {
             print("ITEMSET WAS EMPTY IN SYNC")
-            var worldItemSet: [MainItem] = []
+            var remoteItemSet: [MainItem] = []
             
             observationRef.whereField("uid", isEqualTo: uid!).getDocuments(){
                 (querySnapshot, err) in
@@ -75,11 +75,11 @@ struct SyncObservations {
                     if let querySnapshot = querySnapshot {
                         for doc in querySnapshot.documents{
                             let data = doc.data()
-                            worldItemSet.append(Observation(data))
+                            remoteItemSet.append(Observation(data))
                         }
                     }
                     var saveRun = 0
-                    for item in worldItemSet{
+                    for item in remoteItemSet{
                         DispatchQueue.global().async {
                         let documentsPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString)
                         
@@ -137,7 +137,7 @@ struct SyncObservations {
                         }
                             
                             saveRun += 1
-                            if saveRun == worldItemSet.count{
+                            if saveRun == remoteItemSet.count{
                                 DispatchQueue.main.async {
                                 
                                 if self.appDelegate.window?.rootViewController?.restorationIdentifier == "mainNavigationController"{
@@ -189,12 +189,19 @@ struct SyncObservations {
             let item = localItemSet[0]
             
           
+            
+            
                 fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
                 
                 do {
                     let fetched = try managedContext.fetch(fetchRequest)
                     
                     let objectUpdate = fetched[0] as! NSManagedObject
+                    let checkObs: OwnObservation?
+                    checkObs = objectUpdate as? OwnObservation
+                    
+                    if checkObs?.uploading == true { return }
+                    
                     objectUpdate.setValue(true, forKey: "uploading")
                     
                     do{
@@ -590,7 +597,7 @@ struct SyncObservations {
                         }
                         
                         videoTask.observe(.success){ snapShot in
-                            print("sound success")
+                            print("video success")
                             
                         }
                         

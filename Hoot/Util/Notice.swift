@@ -34,11 +34,9 @@ struct Notice {
         
         let titleString = NSLocalizedString("Operation unsuccessful, please try again later.", comment: "")
         
-        let messageString = NSLocalizedString("If problem persists, please contact support.", comment: "")
-        
         let okString = NSLocalizedString("Ok", comment: "")
         
-        let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .alert)
+        let alert = UIAlertController(title: titleString, message: "", preferredStyle: .alert)
         
         let notice = UIAlertAction(title: okString, style: .default, handler: {(UIAlertAction) in
             return
@@ -151,6 +149,24 @@ struct Notice {
     var syncAlert: UIAlertController {
         
         let titleString = NSLocalizedString("This observation is still synchronizing, please try again in a few moments.", comment: "")
+        
+        let okString = NSLocalizedString("Ok", comment: "")
+        
+        let alert = UIAlertController(title: titleString, message: "", preferredStyle: .alert)
+        
+        let notice = UIAlertAction(title: okString, style: .default, handler: {(UIAlertAction) in
+            return
+        })
+        
+        alert.addAction(notice)
+        
+        return alert
+        
+    }
+    
+    var syncLogoutAlert: UIAlertController {
+        
+        let titleString = NSLocalizedString("An observation is still synchronizing, please try to log out again in a few moments.", comment: "")
         
         let okString = NSLocalizedString("Ok", comment: "")
         

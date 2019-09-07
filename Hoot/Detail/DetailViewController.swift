@@ -86,12 +86,6 @@ class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObserv
     unowned let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     
-    deinit {
-        print("DETAIL DEINIT RAN")
-    }
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -314,9 +308,10 @@ class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObserv
         
     }
     
+    
     func deleteObservationDidRun(result: DeleteResult) {
         
-        if result == .success {
+        if result == .success{
             hideLoader()
             navigationController?.popViewController(animated: true)
         }
@@ -330,6 +325,19 @@ class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObserv
             scrollView.isUserInteractionEnabled = true
             
             present(notice.syncAlert, animated: true, completion: nil)
+            
+        }
+        
+        if result == .failure{
+            
+            hideLoader()
+            
+            navigationItem.hidesBackButton = false
+            soundPlayButton.isUserInteractionEnabled = true
+            videoPlayButton.isUserInteractionEnabled = true
+            scrollView.isUserInteractionEnabled = true
+            
+            present(notice.generalAlert, animated: true, completion: nil)
             
         }
         

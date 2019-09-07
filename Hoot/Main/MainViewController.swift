@@ -64,11 +64,18 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 emptyImage.alpha = 1
                 emptyLabel.alpha = 1
             }
+            else if newValue.isEmpty && ownSwitch.isOn == true {
+                mainCollectionView.alpha = 0
+                emptyImage.alpha = 1
+                emptyLabel.alpha = 1
+            }
+                
             else{
                 mainCollectionView.alpha = 1
                 emptyImage.alpha = 0
                 emptyLabel.alpha = 0
             }
+            
         }
         
         didSet{
@@ -81,6 +88,11 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         willSet {
             if newValue.isEmpty && ownItemSet.isEmpty {
+                mainCollectionView.alpha = 0
+                emptyImage.alpha = 1
+                emptyLabel.alpha = 1
+            }
+            else if ownItemSet.isEmpty && ownSwitch.isOn == true {
                 mainCollectionView.alpha = 0
                 emptyImage.alpha = 1
                 emptyLabel.alpha = 1
@@ -175,8 +187,6 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         DispatchQueue.global().async {
             self.sync.sync()
         }
-
-        
         
     }
 
@@ -317,6 +327,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         let alert = UIAlertController(title: logOutString, message: messageString, preferredStyle: .alert)
         
         let confirm = UIAlertAction(title: logOutSecondString, style: .default, handler: { [unowned self] (UIAlertAction) in
+            
             self.logOut()
         })
         
@@ -331,13 +342,38 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     
     func logOut(){
-                
-        do { try Auth.auth().signOut() }
-        catch { print("there was an error in sign out: \(error)") }
-                
-        showLogOutNotice()
-                
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "OwnObservation")
+        fetchRequest.predicate = NSPredicate(format: "uid = %@", uid!)
+        
+        var tempItemSet: [OwnObservation] = []
+        
+        do{
+            let result = try managedContext.fetch(fetchRequest)
+            for data in result as! [OwnObservation] {
+                tempItemSet.append(data)
+            }
+            for item in tempItemSet{
+                if item.uploading == true { present(notice.syncLogoutAlert, animated: true, completion: nil); return }
+            }
             
+        }
+        catch {
+            print("own data retrieve failed")
+        }
+        
+        for l in listereners{
+            l.remove()
+        }
+        
+        do { try Auth.auth().signOut() }
+        catch { print("there was an error in sign out: \(error)")
+            present(notice.generalAlert, animated: true, completion: nil); return
+        }
+        
+        showLogOutNotice()
         
     }
     

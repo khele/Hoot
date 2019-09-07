@@ -83,6 +83,8 @@ class LoginViewController: UIViewController, FUIAuthDelegate {
         
         guard authDataResult != nil else { return }
         
+       
+        
         appDelegate.window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "mainNavigationController")
         
         self.dismiss(animated: false, completion: nil)

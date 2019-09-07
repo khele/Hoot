@@ -15,4 +15,6 @@ enum DeleteResult {
     
     case uploading
     
+    case failure
+    
 }
