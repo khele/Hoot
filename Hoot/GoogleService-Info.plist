@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>312535050114-q0dfphg1d393h39ge0l9o3ctiikjfgpj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.312535050114-q0dfphg1d393h39ge0l9o3ctiikjfgpj</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAqagoIqIWkNVpKTi_o3ZK8cQDfYLID5GM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>312535050114</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>GoldenPot.Hoot</string>
+	<key>PROJECT_ID</key>
+	<string>hoot-26efb</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hoot-26efb.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:312535050114:ios:b0d62c372b3fc7ab</string>
+	<key>DATABASE_URL</key>
+	<string>https://hoot-26efb.firebaseio.com</string>
+</dict>
+</plist>
