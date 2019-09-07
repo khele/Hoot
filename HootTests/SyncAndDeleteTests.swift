@@ -14,7 +14,7 @@ import CoreData
 class SyncAndDeleteTests: XCTestCase {
 
     
-    func testDeleteBeforeTests(){
+    func testSafetyDeleteBeforeTests(){
         
         let sync = SyncObservations()
         
