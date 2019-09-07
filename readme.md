@@ -11,7 +11,7 @@ Set your preferred Team, Provisioning Profile & Signing certificate in the Hoot 
 
 If any problems with the pods, reinstall with the included podfile.
 
-**If running on simulator, toggle the hardware keyboard off and use the simulator’s software keyboard. ⇧⌘K  
+**If running on simulator, toggle the hardware keyboard off and use the simulator’s software keyboard. ⇧⌘K ⌘K  
 Hardware keyboard in the simulator doesn't play together well with the keyboardnotifications.**
 
 
