@@ -137,8 +137,6 @@ struct SyncObservations {
                         }
                             
                             saveRun += 1
-                            print(saveRun)
-                            print(worldItemSet.count)
                             if saveRun == worldItemSet.count{
                                 DispatchQueue.main.async {
                                 
@@ -184,7 +182,7 @@ struct SyncObservations {
             catch {
                 print("own data retrieve failed")
             }
-            print(localItemSet.count)
+            print("\(localItemSet.count) item(s) to sync")
             
             guard localItemSet.count != 0 else { return }
             
@@ -335,12 +333,8 @@ struct SyncObservations {
                                         print("error in downloadurl \(error)")
                                         return
                                     } else {
-                                        print("downloadurl else")
                                         if let urlTemp = url{
-                                            print("download url url")
                                             videoUrl = urlTemp
-                                            print(urlTemp)
-                                            print(videoUrl!)
                                             videoGroup.leave()
                                         }
                                     }

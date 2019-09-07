@@ -15,6 +15,9 @@
 		4871660B2322886C00D63E4D /* Detail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4871660D2322886C00D63E4D /* Detail.storyboard */; };
 		487166102322887900D63E4D /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 487166122322887900D63E4D /* Login.storyboard */; };
 		488407FF23216600005FB263 /* SyncAndDeleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488407FE23216600005FB263 /* SyncAndDeleteTests.swift */; };
+		488CCC6323237FDC00540799 /* DeleteObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488CCC6223237FDC00540799 /* DeleteObservation.swift */; };
+		488CCC6523237FFA00540799 /* DeleteObservationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488CCC6423237FFA00540799 /* DeleteObservationDelegate.swift */; };
+		488CCC672323838100540799 /* DeleteResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488CCC662323838100540799 /* DeleteResult.swift */; };
 		48AA58C7231EC50B00D8A26B /* OwnObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58C6231EC50B00D8A26B /* OwnObservationExtension.swift */; };
 		48AA58CC231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58CA231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift */; };
 		48AA58CF231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA58CB231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift */; };
@@ -73,6 +76,9 @@
 		487166142322889300D63E4D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Login.strings; sourceTree = "<group>"; };
 		48716616232288A400D63E4D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		488407FE23216600005FB263 /* SyncAndDeleteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAndDeleteTests.swift; sourceTree = "<group>"; };
+		488CCC6223237FDC00540799 /* DeleteObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteObservation.swift; sourceTree = "<group>"; };
+		488CCC6423237FFA00540799 /* DeleteObservationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteObservationDelegate.swift; sourceTree = "<group>"; };
+		488CCC662323838100540799 /* DeleteResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteResult.swift; sourceTree = "<group>"; };
 		48AA58C6231EC50B00D8A26B /* OwnObservationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnObservationExtension.swift; sourceTree = "<group>"; };
 		48AA58CA231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataClass.swift"; sourceTree = "<group>"; };
 		48AA58CB231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OwnObservation+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -144,6 +150,9 @@
 				486C94FD231AC3BA0071B94F /* Notice.swift */,
 				48BEBC76231ADBF500ABF780 /* MainItem.swift */,
 				48B37E9B231D89ED00BA5387 /* SyncObservations.swift */,
+				488CCC6223237FDC00540799 /* DeleteObservation.swift */,
+				488CCC6423237FFA00540799 /* DeleteObservationDelegate.swift */,
+				488CCC662323838100540799 /* DeleteResult.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -155,6 +164,7 @@
 				48AA58CA231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift */,
 				48AA58CB231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift */,
 				48AA58C6231EC50B00D8A26B /* OwnObservationExtension.swift */,
+				48BC852D231AAD91002F6543 /* Hoot.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -203,7 +213,6 @@
 				48BC8530231AAD93002F6543 /* Assets.xcassets */,
 				48BC8532231AAD93002F6543 /* LaunchScreen.storyboard */,
 				48BC8535231AAD93002F6543 /* Info.plist */,
-				48BC852D231AAD91002F6543 /* Hoot.xcdatamodeld */,
 				48E21559231AB1F300A36A6B /* GoogleService-Info.plist */,
 				48E2157E231AB84D00A36A6B /* Localizable.strings */,
 			);
@@ -607,14 +616,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				488CCC672323838100540799 /* DeleteResult.swift in Sources */,
 				486C9509231AC79E0071B94F /* Observation.swift in Sources */,
 				48AA58C7231EC50B00D8A26B /* OwnObservationExtension.swift in Sources */,
 				48B37E9C231D89ED00BA5387 /* SyncObservations.swift in Sources */,
 				48AA58CC231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift in Sources */,
+				488CCC6523237FFA00540799 /* DeleteObservationDelegate.swift in Sources */,
 				48E21561231AB45D00A36A6B /* MainViewController.swift in Sources */,
 				48B37E98231D4DFE00BA5387 /* DetailViewController.swift in Sources */,
 				48BC852F231AAD91002F6543 /* Hoot.xcdatamodeld in Sources */,
 				48E2156B231AB5A200A36A6B /* AddViewController.swift in Sources */,
+				488CCC6323237FDC00540799 /* DeleteObservation.swift in Sources */,
 				486C94FE231AC3BA0071B94F /* Notice.swift in Sources */,
 				48BEBC77231ADBF500ABF780 /* MainItem.swift in Sources */,
 				48E21573231AB5C200A36A6B /* LoginViewController.swift in Sources */,

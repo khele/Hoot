@@ -110,7 +110,7 @@ class SyncAndDeleteTests: XCTestCase {
             XCTFail()
         }
         
-        let vc = UIStoryboard(name: "Detail", bundle: Bundle.main).instantiateViewController(withIdentifier: "detailViewController") as! DetailViewController
+        var deleteObservation: DeleteObservation!
         
         do{
             let result = try managedContext.fetch(fetchRequest)
@@ -119,7 +119,7 @@ class SyncAndDeleteTests: XCTestCase {
             
             let own = data[0] as! OwnObservation
             
-            vc.observation = own as MainItem
+            deleteObservation = DeleteObservation(observationToDelete: own as MainItem)
         }
         catch{
             print(error)
@@ -129,15 +129,11 @@ class SyncAndDeleteTests: XCTestCase {
             XCTFail()
         }
         
-        let obs = vc.observation as! OwnObservation
+        let obs = deleteObservation.observation as! OwnObservation
         
         obs.uploaded = false
         
-        vc.scrollOffset = 1
-        
-        let _ = vc.view
-        
-        vc.deleteObservation()
+        deleteObservation.deleteObservation()
         
         let deleteExpectation = expectation(description: "Wait for local delete")
         
@@ -328,12 +324,8 @@ class SyncAndDeleteTests: XCTestCase {
         waitForExpectations(timeout: 10, handler: nil)
         
         
-        let vc = UIStoryboard(name: "Detail", bundle: Bundle.main).instantiateViewController(withIdentifier: "detailViewController") as! DetailViewController
+        var deleteObservation: DeleteObservation!
         
-        vc.observationRef = vc.db.collection("syncTest")
-        vc.pictureFireRef = vc.storageRef.child("syncTest").child("picture")
-        vc.soundFireRef = vc.storageRef.child("syncTest").child("sound")
-        vc.videoFireRef = vc.storageRef.child("syncTest").child("video")
         
         do{
             let result = try managedContext.fetch(fetchRequest)
@@ -342,7 +334,7 @@ class SyncAndDeleteTests: XCTestCase {
             
             let own = data[0] as! OwnObservation
             
-            vc.observation = own as MainItem
+            deleteObservation = DeleteObservation(observationToDelete: own as MainItem)
         }
         catch{
             print(error)
@@ -352,11 +344,12 @@ class SyncAndDeleteTests: XCTestCase {
             XCTFail()
         }
 
-        vc.scrollOffset = 1
+        deleteObservation.observationRef = deleteObservation.db.collection("syncTest")
+        deleteObservation.pictureFireRef = deleteObservation.storageRef.child("syncTest").child("picture")
+        deleteObservation.soundFireRef = deleteObservation.storageRef.child("syncTest").child("sound")
+        deleteObservation.videoFireRef = deleteObservation.storageRef.child("syncTest").child("video")
         
-        let _ = vc.view
-        
-        vc.deleteObservation()
+        deleteObservation.deleteObservation()
         
         
         let delExpectation = expectation(description: "wait for firebase and local delete")
@@ -390,8 +383,7 @@ class SyncAndDeleteTests: XCTestCase {
         }
         
         sync.pictureRef.child("zmezAIVVMxkxvAvgUqDL.jpeg").downloadURL(){ (url, error) in
-            if let err = error {
-                print("EXPECTED \(err)")
+            if error != nil {
                 pictureCheckExp.fulfill()
             }
             else{
@@ -402,8 +394,7 @@ class SyncAndDeleteTests: XCTestCase {
         }
         
         sync.soundRef.child("zmezAIVVMxkxvAvgUqDL.m4a").downloadURL(){ (url, error) in
-            if let err = error {
-                print("EXPECTED \(err)")
+            if error != nil {
                 soundCheckExp.fulfill()
             }
             else{
@@ -414,8 +405,7 @@ class SyncAndDeleteTests: XCTestCase {
         }
         
         sync.videoRef.child("zmezAIVVMxkxvAvgUqDL.mp4").downloadURL(){ (url, error) in
-            if let err = error {
-                print("EXPECTED \(err)")
+            if error != nil {
                 videoCheckExp.fulfill()
             }
             else{

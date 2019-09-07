@@ -14,7 +14,7 @@ import AVKit
 import CoreData
 
 
-class DetailViewController: UIViewController, UIScrollViewDelegate {
+class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObservationDelegate {
 
     // Firebase
     
@@ -31,6 +31,8 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
     let storageRef = Storage.storage().reference()
     
     var uid = Auth.auth().currentUser?.uid
+    
+    var deleteObservation: DeleteObservation!
     
     // IB vars
     
@@ -295,8 +297,21 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
         
         let alert = UIAlertController(title: titleString, message: "", preferredStyle: .alert)
         
-        let confirmOption = UIAlertAction(title: confirmString, style: .default, handler: {[unowned self](UIAlertAction) in
-            self.deleteObservation()
+        let confirmOption = UIAlertAction(title: confirmString, style: .default, handler: {(UIAlertAction) in
+            
+            let obs = self.observation as! OwnObservation
+            
+            self.deleteObservation = DeleteObservation(observationToDelete: obs)
+            self.deleteObservation.delegate = self
+            
+            self.navigationItem.hidesBackButton = true
+            self.soundPlayButton.isUserInteractionEnabled = false
+            self.videoPlayButton.isUserInteractionEnabled = false
+            self.scrollView.isUserInteractionEnabled = false
+            
+            self.showLoader()
+            
+            self.deleteObservation.deleteObservation()
         })
         
         let cancelOption = UIAlertAction(title: cancelString, style: .cancel, handler: nil)
@@ -308,9 +323,29 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
         
     }
     
+    func deleteObservationDidRun(result: DeleteResult) {
+        
+        if result == .success {
+            hideLoader()
+            navigationController?.popViewController(animated: true)
+        }
+        
+        if result == .uploading{
+            hideLoader()
+            
+            navigationItem.hidesBackButton = false
+            soundPlayButton.isUserInteractionEnabled = true
+            videoPlayButton.isUserInteractionEnabled = true
+            scrollView.isUserInteractionEnabled = true
+            
+            present(notice.syncAlert, animated: true, completion: nil)
+            
+        }
+        
+    }
     
     
-    func deleteObservation(){
+  /*  func deleteObservation(){
         
         let obs = observation as! OwnObservation
         
@@ -618,6 +653,6 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
         }
        
         
-    }
+    }*/
     
 }
