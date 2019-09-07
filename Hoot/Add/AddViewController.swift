@@ -167,6 +167,8 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
         canvasView.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 1, alpha: 1)
         
+        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 1, alpha: 1)
+        
         navigationItem.hidesBackButton = true
         
         pictureView.layer.cornerRadius = 10

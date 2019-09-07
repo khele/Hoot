@@ -100,6 +100,8 @@ class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObserv
         
         canvasView.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 1, alpha: 1)
         
+        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 1, alpha: 1)
+        
         if observation.uid! == uid! {
         let trashButton = UIBarButtonItem(image: #imageLiteral(resourceName: "trash"), style: .plain, target: self, action: #selector(showConfirmAlert))
         navigationItem.rightBarButtonItem = nil

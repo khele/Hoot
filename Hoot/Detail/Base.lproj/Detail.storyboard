@@ -197,10 +197,10 @@
                                             <mask key="constraints">
                                                 <exclude reference="8tm-Iu-jXK"/>
                                                 <exclude reference="nS1-qF-23t"/>
-                                                <exclude reference="ICq-9X-7OO"/>
-                                                <exclude reference="yHX-9v-MYL"/>
                                                 <exclude reference="gxC-OA-rBh"/>
                                                 <exclude reference="xCo-rr-rjc"/>
+                                                <exclude reference="ICq-9X-7OO"/>
+                                                <exclude reference="yHX-9v-MYL"/>
                                                 <exclude reference="K8u-ht-ReN"/>
                                                 <exclude reference="pu6-La-Lx7"/>
                                             </mask>
@@ -208,16 +208,16 @@
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
                                                 <include reference="nS1-qF-23t"/>
-                                                <include reference="yHX-9v-MYL"/>
                                                 <include reference="gxC-OA-rBh"/>
+                                                <include reference="yHX-9v-MYL"/>
                                                 <include reference="pu6-La-Lx7"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=regular">
                                             <mask key="constraints">
                                                 <include reference="8tm-Iu-jXK"/>
-                                                <include reference="ICq-9X-7OO"/>
                                                 <include reference="xCo-rr-rjc"/>
+                                                <include reference="ICq-9X-7OO"/>
                                                 <include reference="K8u-ht-ReN"/>
                                             </mask>
                                         </variation>
@@ -239,11 +239,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="4lh-vg-7af" firstAttribute="leading" secondItem="FW6-jw-U3w" secondAttribute="leading" id="BsP-eA-79M"/>
-                            <constraint firstItem="4lh-vg-7af" firstAttribute="height" secondItem="FW6-jw-U3w" secondAttribute="height" id="Vpw-Qp-PS0"/>
                             <constraint firstItem="FW6-jw-U3w" firstAttribute="trailing" secondItem="4lh-vg-7af" secondAttribute="trailing" id="mZV-A8-ERL"/>
-                            <constraint firstItem="FW6-jw-U3w" firstAttribute="bottom" secondItem="4lh-vg-7af" secondAttribute="bottom" id="mcn-9J-V5P"/>
+                            <constraint firstAttribute="bottom" secondItem="4lh-vg-7af" secondAttribute="bottom" id="mcn-9J-V5P"/>
                             <constraint firstItem="4lh-vg-7af" firstAttribute="width" secondItem="FW6-jw-U3w" secondAttribute="width" id="ou8-b5-Qdc"/>
-                            <constraint firstItem="4lh-vg-7af" firstAttribute="top" secondItem="FW6-jw-U3w" secondAttribute="top" id="xpn-Qr-FuL"/>
+                            <constraint firstItem="4lh-vg-7af" firstAttribute="top" secondItem="BC8-64-U0s" secondAttribute="top" constant="20" symbolic="YES" id="xpn-Qr-FuL"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="FW6-jw-U3w"/>
                     </view>
