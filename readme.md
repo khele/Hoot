@@ -8,6 +8,8 @@ Clone the project to your Xcode with the GitHub provided address, or with the Gi
 
 Install pods with the included podfile
 
+Open using Hoot.xcworkspace
+
 Set your preferred Team, Provisioning Profile & Signing certificate in the Hoot target, and build to your device.
 
 **If running on simulator, use the simulator’s software keyboard.**

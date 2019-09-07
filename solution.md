@@ -1,7 +1,8 @@
 
 # Description of solution / experience with the assignment
 
-
+  
+    
 I started the project by conceptualizing it;   
 - what the architecture of the app will be  
 - what kind of a solution there will be for data management
