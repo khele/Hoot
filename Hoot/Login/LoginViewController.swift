@@ -87,7 +87,7 @@ class LoginViewController: UIViewController, FUIAuthDelegate {
         
         self.dismiss(animated: false, completion: nil)
         
-    }
+    } 
     
     
 }

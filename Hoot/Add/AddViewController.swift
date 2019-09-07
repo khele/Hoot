@@ -872,7 +872,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         let pictureJpeg = pictureView.image?.jpegData(compressionQuality: 0.05)
         
         let picturePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(id).jpeg")
-        print(picturePath)
+       
         fileManager.createFile(atPath: picturePath, contents: pictureJpeg, attributes: nil)
        
         

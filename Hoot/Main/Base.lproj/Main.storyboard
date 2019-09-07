@@ -76,13 +76,6 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="euh-Ky-JBx">
                                 <rect key="frame" x="51" y="-430" width="922" height="212"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qRA-bT-XV5">
-                                        <rect key="frame" x="0.0" y="212" width="922" height="1"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="1" id="Ihd-FU-Rsy"/>
-                                        </constraints>
-                                    </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wtJ-pa-XMb">
                                         <rect key="frame" x="430.5" y="5" width="61" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -110,17 +103,14 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="j0M-4t-UbW" firstAttribute="centerX" secondItem="euh-Ky-JBx" secondAttribute="centerX" id="73p-PU-mTD"/>
-                                    <constraint firstItem="qRA-bT-XV5" firstAttribute="width" secondItem="euh-Ky-JBx" secondAttribute="width" id="9fZ-lS-Oyr"/>
                                     <constraint firstAttribute="height" secondItem="euh-Ky-JBx" secondAttribute="width" multiplier="0.23" id="FXW-hW-0vJ"/>
                                     <constraint firstItem="wtJ-pa-XMb" firstAttribute="top" secondItem="euh-Ky-JBx" secondAttribute="top" constant="5" id="JpX-12-cHZ"/>
-                                    <constraint firstItem="qRA-bT-XV5" firstAttribute="centerX" secondItem="euh-Ky-JBx" secondAttribute="centerX" id="LNq-HU-j2Z"/>
                                     <constraint firstItem="bpL-9g-He4" firstAttribute="width" secondItem="euh-Ky-JBx" secondAttribute="width" multiplier="0.17" id="QDY-z1-ZNy"/>
                                     <constraint firstItem="bpL-9g-He4" firstAttribute="top" secondItem="j0M-4t-UbW" secondAttribute="bottom" constant="7.5" id="VK6-ox-eVM"/>
                                     <constraint firstItem="wtJ-pa-XMb" firstAttribute="centerX" secondItem="euh-Ky-JBx" secondAttribute="centerX" id="XxI-4M-Xku"/>
                                     <constraint firstItem="j0M-4t-UbW" firstAttribute="height" secondItem="euh-Ky-JBx" secondAttribute="height" multiplier="0.35" id="Zkm-Js-xQV"/>
                                     <constraint firstItem="j0M-4t-UbW" firstAttribute="height" secondItem="euh-Ky-JBx" secondAttribute="height" multiplier="0.2" id="aLq-dp-gpa"/>
                                     <constraint firstItem="j0M-4t-UbW" firstAttribute="width" secondItem="euh-Ky-JBx" secondAttribute="width" multiplier="0.95" id="cDI-wr-lmR"/>
-                                    <constraint firstAttribute="bottom" secondItem="qRA-bT-XV5" secondAttribute="bottom" constant="-1" id="kaT-yU-WIl"/>
                                     <constraint firstItem="j0M-4t-UbW" firstAttribute="top" secondItem="wtJ-pa-XMb" secondAttribute="bottom" constant="6" id="ozq-xD-cJL"/>
                                     <constraint firstAttribute="height" secondItem="euh-Ky-JBx" secondAttribute="width" multiplier="0.5" id="sFQ-It-HaJ"/>
                                     <constraint firstItem="bpL-9g-He4" firstAttribute="width" secondItem="euh-Ky-JBx" secondAttribute="width" multiplier="0.1" id="tG7-Vw-Yxi"/>
@@ -128,6 +118,7 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="FXW-hW-0vJ"/>
                                         <exclude reference="sFQ-It-HaJ"/>
                                         <exclude reference="Zkm-Js-xQV"/>
                                         <exclude reference="aLq-dp-gpa"/>
@@ -144,6 +135,7 @@
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular">
                                     <mask key="constraints">
+                                        <include reference="FXW-hW-0vJ"/>
                                         <include reference="aLq-dp-gpa"/>
                                         <include reference="tG7-Vw-Yxi"/>
                                     </mask>

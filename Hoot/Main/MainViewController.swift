@@ -56,7 +56,6 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var confirmSortButton: UIButton!
     
     
-    
     var ownItemSet: [OwnObservation] = []{
         
         willSet {
@@ -594,7 +593,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 notes = ""
             }
             else {
-                notes = "\(tempMsg)..."
+                notes = "\(tempMsg)"
             }
             
             cell.notes.text = notes

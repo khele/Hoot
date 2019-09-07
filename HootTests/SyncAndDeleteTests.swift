@@ -206,11 +206,11 @@ class SyncAndDeleteTests: XCTestCase {
         
         let fileExpectation = expectation(description: "wait for files to be saved locally")
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 6){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 8){
             fileExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 7, handler: nil)
+        waitForExpectations(timeout: 9, handler: nil)
         
         XCTAssert(sync.fileManager.fileExists(atPath: picturePath) && sync.fileManager.fileExists(atPath: soundPath) && sync.fileManager.fileExists(atPath: videoPath))
         

@@ -280,7 +280,7 @@ struct SyncObservations {
                         
                     }
                     
-                    pictureGroup.notify(queue: .main){
+                    pictureGroup.notify(queue: .global()){
                         
                         if success == false { return }
                         
@@ -316,7 +316,7 @@ struct SyncObservations {
                             
                         }
                         
-                        soundGroup.notify(queue: .main){
+                        soundGroup.notify(queue: .global()){
                             
                             if success == false { return }
                             
@@ -351,7 +351,7 @@ struct SyncObservations {
                                 
                             }
                             
-                            videoGroup.notify(queue: .main){
+                            videoGroup.notify(queue: .global()){
                                 
                                 if success == false { return }
                                 
@@ -441,7 +441,7 @@ struct SyncObservations {
                         
                     }
                     
-                    pictureGroup.notify(queue: .main){
+                    pictureGroup.notify(queue: .global()){
                         
                         if success == false { return }
                         
@@ -477,7 +477,7 @@ struct SyncObservations {
                             
                         }
                         
-                        soundGroup.notify(queue: .main){
+                        soundGroup.notify(queue: .global()){
                             
                             if success == false { return }
                             
@@ -559,7 +559,7 @@ struct SyncObservations {
                         
                     }
                     
-                    pictureGroup.notify(queue: .main){
+                    pictureGroup.notify(queue: .global()){
                         
                         if success == false { return }
                         
@@ -594,7 +594,7 @@ struct SyncObservations {
                             
                         }
                         
-                        videoGroup.notify(queue: .main){
+                        videoGroup.notify(queue: .global()){
                             
                             if success == false { return }
                             
@@ -673,7 +673,7 @@ struct SyncObservations {
                         
                     }
                     
-                    pictureGroup.notify(queue: .main){
+                    pictureGroup.notify(queue: .global()){
                         
                         if success == false { return }
                         
