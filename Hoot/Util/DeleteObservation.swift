@@ -84,6 +84,10 @@ struct DeleteObservation{
         
         if obs.uploaded == true {
             
+            if appDelegate.connected == false {
+                delegate?.deleteObservationDidRun(result: .networkNeeded); return
+            }
+            
             let objectId = obs.id!
             
             switch soundAndVideo{

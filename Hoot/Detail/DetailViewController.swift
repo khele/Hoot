@@ -343,6 +343,17 @@ class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObserv
             
         }
         
+        if result == .networkNeeded {
+            hideLoader()
+            
+            navigationItem.hidesBackButton = false
+            soundPlayButton.isUserInteractionEnabled = true
+            videoPlayButton.isUserInteractionEnabled = true
+            scrollView.isUserInteractionEnabled = true
+            
+            present(notice.deleteNetworkAlert, animated: true, completion: nil)
+        }
+        
     }
     
 }

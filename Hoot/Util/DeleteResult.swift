@@ -15,6 +15,8 @@ enum DeleteResult {
     
     case uploading
     
+    case networkNeeded
+    
     case failure
     
 }
