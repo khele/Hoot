@@ -93,11 +93,9 @@ struct DeleteObservation{
                 pictureFireRef.child("\(obs.id!).jpeg").delete(){ error in
                     if let error = error {
                         print("error deleting image: \(error)")
-                        self.delegate?.deleteObservationDidRun(result: .failure)
-                        return
                     } else {
                         print("image deleted successfully")
-                    
+                    }
                         self.soundFireRef.child("\(obs.id!).m4a").delete(){ error in
                             if let error = error {
                                 print("error deleting sound: \(error)")
@@ -113,11 +111,9 @@ struct DeleteObservation{
                                         self.observationRef.document(obs.id!).delete(){ err in
                                             if let err = err {
                                                 print("error deleting document: \(err)")
-                                                self.delegate?.deleteObservationDidRun(result: .failure)
-                                                return
                                             } else {
                                                 print("document deleted successfully")
-                                                
+                                            }
                                                 let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "OwnObservation")
                                                 fetchRequest.predicate = NSPredicate(format: "id = %@", obs.id!)
                                                 
@@ -146,13 +142,13 @@ struct DeleteObservation{
                                                 try? self.fileManager.removeItem(atPath: documentsPath.appendingPathComponent("\(objectId).m4a"))
                                                 try? self.fileManager.removeItem(atPath: documentsPath.appendingPathComponent("\(objectId).mp4"))
                                                 self.delegate?.deleteObservationDidRun(result: .success)
-                                            }
+                                            
                                         }
                                     
                                 }
                             
                         }
-                }
+                
                 }
                 
             case (true, false):
@@ -160,11 +156,9 @@ struct DeleteObservation{
                 pictureFireRef.child("\(obs.id!).jpeg").delete(){ error in
                     if let error = error {
                         print("error deleting image: \(error)")
-                        self.delegate?.deleteObservationDidRun(result: .failure)
-                        return
                     } else {
                         print("image deleted successfully")
-                        
+                    }
                         self.soundFireRef.child("\(obs.id!).m4a").delete(){ error in
                             if let error = error {
                                 print("error deleting sound: \(error)")
@@ -174,11 +168,9 @@ struct DeleteObservation{
                                 self.observationRef.document(obs.id!).delete(){ err in
                                     if let err = err {
                                         print("error deleting document: \(err)")
-                                        self.delegate?.deleteObservationDidRun(result: .failure)
-                                        return
                                     } else {
                                         print("document deleted successfully")
-                                        
+                                    }
                                         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "OwnObservation")
                                         fetchRequest.predicate = NSPredicate(format: "id = %@", obs.id!)
                                         
@@ -206,11 +198,11 @@ struct DeleteObservation{
                                         try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).jpeg"))
                                         try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).m4a"))
                                         self.delegate?.deleteObservationDidRun(result: .success)
-                                    }
+                                    
                                 }
                             
                         }
-                    }
+                    
                 }
                 
                 
@@ -220,11 +212,9 @@ struct DeleteObservation{
                 pictureFireRef.child("\(obs.id!).jpeg").delete(){ error in
                     if let error = error {
                         print("error deleting image: \(error)")
-                        self.delegate?.deleteObservationDidRun(result: .failure)
-                        return
                     } else {
                         print("image deleted successfully")
-                        
+                    }
                         self.videoFireRef.child("\(obs.id!).mp4").delete(){ error in
                             if let error = error {
                                 print("error deleting video: \(error)")
@@ -234,11 +224,9 @@ struct DeleteObservation{
                                 self.observationRef.document(obs.id!).delete(){ err in
                                     if let err = err {
                                         print("error deleting document: \(err)")
-                                        self.delegate?.deleteObservationDidRun(result: .failure)
-                                        return
                                     } else {
                                         print("document deleted successfully")
-                                        
+                                    }
                                         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "OwnObservation")
                                         fetchRequest.predicate = NSPredicate(format: "id = %@", obs.id!)
                                         
@@ -266,11 +254,11 @@ struct DeleteObservation{
                                         try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).jpeg"))
                                         try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).mp4"))
                                         self.delegate?.deleteObservationDidRun(result: .success)
-                                    }
+                                    
                                 }
                             
                         }
-                    }
+                    
                 }
                 
                 
@@ -279,19 +267,15 @@ struct DeleteObservation{
                 pictureFireRef.child("\(obs.id!).jpeg").delete(){ error in
                     if let error = error {
                         print("error deleting image: \(error)")
-                        self.delegate?.deleteObservationDidRun(result: .failure)
-                        return
                     } else {
                         print("image deleted successfully")
-                        
+                    }
                         self.observationRef.document(obs.id!).delete(){ err in
                             if let err = err {
                                 print("error deleting document: \(err)")
-                                self.delegate?.deleteObservationDidRun(result: .failure)
-                                return
                             } else {
                                 print("document deleted successfully")
-                                
+                            }
                                 let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "OwnObservation")
                                 fetchRequest.predicate = NSPredicate(format: "id = %@", obs.id!)
                                 
@@ -318,9 +302,9 @@ struct DeleteObservation{
                                 
                                 try? self.fileManager.removeItem(at: documentsUrl.appendingPathComponent("\(objectId).jpeg"))
                                 self.delegate?.deleteObservationDidRun(result: .success)
-                            }
+                            
                         }
-                    }
+                    
                 }
             }
         }
