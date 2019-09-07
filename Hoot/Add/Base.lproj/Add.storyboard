@@ -176,6 +176,7 @@
                                             </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstItem="bZw-Cq-byc" firstAttribute="width" secondItem="S1C-EP-uaG" secondAttribute="width" multiplier="0.5" id="1B8-io-NJQ"/>
                                             <constraint firstItem="wFF-5L-UWa" firstAttribute="height" secondItem="bZw-Cq-byc" secondAttribute="height" multiplier="0.15" id="8DE-2b-NSe"/>
@@ -226,6 +227,9 @@
                                                 <include reference="pcY-Ed-wq9"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="GNV-SZ-U54" appends="YES" id="vgD-5H-e1T"/>
+                                        </connections>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -273,6 +277,11 @@
                 <tapGestureRecognizer id="vhk-eZ-a6u">
                     <connections>
                         <action selector="addPicturePressed:" destination="d9d-xk-x1t" id="nZ2-am-aFD"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="GNV-SZ-U54">
+                    <connections>
+                        <action selector="canvasViewWasTapped:" destination="d9d-xk-x1t" id="2h1-Lk-OQI"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

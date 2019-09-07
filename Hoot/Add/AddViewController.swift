@@ -140,8 +140,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         speciesTextField.delegate = self
         notesTextField.delegate = self
         
-        hideKeyboard()
-        
         id = getId()
         
         locationManager.delegate = self;
@@ -220,7 +218,10 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         activeField = nil
     }
     
-    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return false
+    }
     
     
     
@@ -285,18 +286,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     }
     
     
-    func hideKeyboard() {
-        
-        unowned let _self = self
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-            target: _self,
-            action: #selector(dismissKeyboard))
-        
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
-    
     @objc func dismissKeyboard(){
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [unowned self] in
@@ -306,6 +295,11 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     }
     
     
+    @IBAction func canvasViewWasTapped(_ sender: Any) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [unowned self] in
+            self.view.endEditing(true)
+        }
+    }
     
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
