@@ -12,7 +12,9 @@ Set your preferred Team, Provisioning Profile & Signing certificate in the Hoot 
 If any problems with the pods, reinstall with the included podfile.
 
 **If running on simulator, toggle the hardware keyboard off and use the simulator’s software keyboard. ⇧⌘K ⌘K  
-Hardware keyboard in the simulator doesn't play together well with the keyboardnotifications.**
+Hardware keyboard in the simulator doesn't play together well with the keyboardnotifications.**  
+
+**Also, when running on simulator, audio recording is dependent on having an audio input device connected to the host machine.**
 
 
 Tests are recommened to be run on a simulator or a device which is not used to run the application.  
