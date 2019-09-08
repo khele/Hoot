@@ -197,11 +197,6 @@ struct SyncObservations {
                     let fetched = try managedContext.fetch(fetchRequest)
                     
                     let objectUpdate = fetched[0] as! NSManagedObject
-                    let checkObs: OwnObservation?
-                    checkObs = objectUpdate as? OwnObservation
-                    
-                    if checkObs?.uploading == true { return }
-                    
                     objectUpdate.setValue(true, forKey: "uploading")
                     
                     do{

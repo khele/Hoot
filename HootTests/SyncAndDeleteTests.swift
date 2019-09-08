@@ -192,7 +192,7 @@ class SyncAndDeleteTests: XCTestCase {
             loginExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 2, handler: nil)
+        waitForExpectations(timeout: 4, handler: nil)
         
         sync.sync()
         
