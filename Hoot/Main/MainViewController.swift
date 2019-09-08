@@ -409,9 +409,17 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     @objc func showFilterView(){
         
+        if sortViewTopConstraint.constant == 0
+        {
+            sortViewTopConstraint.constant = -500
+            
+            UIView.animate(withDuration: 0.3, animations:{ self.view.layoutIfNeeded() })
+        }
+        else{
         sortViewTopConstraint.constant = 0
-        
+            
         UIView.animate(withDuration: 0.3, animations:{ self.view.layoutIfNeeded() })
+        }
         
     }
     
@@ -422,9 +430,13 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         UIView.animate(withDuration: 0.3, animations:{ self.view.layoutIfNeeded() })
         
+        guard selectedSortTemp != selectedSort else { return }
+        
         selectedSort = selectedSortTemp
         
         UserDefaults.standard.set(selectedSort, forKey: "sort")
+        
+        guard !ownItemSet.isEmpty && !worldItemSet.isEmpty else { return }
         
         for l in listereners{
             l.remove()
