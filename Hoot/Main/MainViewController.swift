@@ -117,6 +117,8 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     var listereners: [ListenerRegistration] = []
     
+    var getObs: Query?
+    
     var categoryPickerList: [String] = ["Date: Newest first", "Date: Oldest first", "Alphabetically: Ascending", "Alphabetically: Descending", "Rarity: Extremely rare first", "Rarity: Common first"]
     
     var categoryPicker = UIPickerView()
@@ -424,6 +426,14 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         mainCollectionView.reloadData()
         
+        for l in listereners{
+            l.remove()
+        }
+        
+        lastSnapshot = []
+        
+        getWorldObservations()
+        
     }
     
     
@@ -450,9 +460,24 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func getWorldObservations(){
         
+        switch selectedSort{
+            
+        case "Date: Newest first": getObs = observationsRef.order(by: "created", descending: true)
+            
+        case "Date: Oldest first": getObs = observationsRef.order(by: "created")
+            
+        case "Alphabetically: Ascending": getObs = observationsRef.order(by: "species")
+            
+        case "Alphabetically: Descending": getObs = observationsRef.order(by: "species", descending: true)
+            
+        case "Rarity: Extremely rare first": getObs = observationsRef.order(by: "rarityNumber", descending: true)
+            
+        case "Rarity: Common first": getObs = observationsRef.order(by: "rarityNumber")
+            
+        default: break
+        }
         
-        
-        let listener = observationsRef.limit(to: 15).addSnapshotListener(){
+        let listener = getObs!.limit(to: 15).addSnapshotListener(){
             [unowned self] (querySnapshot, err) in
             self.lastSnapshot = []
             if let err = err{
@@ -581,13 +606,13 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
             
         case "Date: Oldest first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.created > $0.created })
             
-        case "Alphabetically: Ascending": mainItemSetSorted = mainItemSet.sorted(by:{ $0.species! > $1.species! })
+        case "Alphabetically: Ascending": mainItemSetSorted = mainItemSet.sorted(by:{ $1.species! > $0.species! })
             
-        case "Alphabetically: Descending": mainItemSetSorted = mainItemSet.sorted(by:{ $1.species! > $0.species! })
+        case "Alphabetically: Descending": mainItemSetSorted = mainItemSet.sorted(by:{ $0.species! > $1.species! })
             
-        case "Rarity: Extremely rare first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber })
+        case "Rarity: Extremely rare first": mainItemSetSorted = mainItemSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber })
             
-        case "Rarity: Common first": mainItemSetSorted = mainItemSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber })
+        case "Rarity: Common first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber })
             
         default: break
             
@@ -690,13 +715,13 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
             
         case "Date: Oldest first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.created > $0.created })
             
-        case "Alphabetically: Ascending": mainItemSetSorted = mainItemSet.sorted(by:{ $0.species! > $1.species! })
+        case "Alphabetically: Ascending": mainItemSetSorted = mainItemSet.sorted(by:{ $1.species! > $0.species! })
             
-        case "Alphabetically: Descending": mainItemSetSorted = mainItemSet.sorted(by:{ $1.species! > $0.species! })
+        case "Alphabetically: Descending": mainItemSetSorted = mainItemSet.sorted(by:{ $0.species! > $1.species! })
             
-        case "Rarity: Extremely rare first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber })
+        case "Rarity: Extremely rare first": mainItemSetSorted = mainItemSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber })
             
-        case "Rarity: Common first": mainItemSetSorted = mainItemSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber })
+        case "Rarity: Common first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber })
             
         default: break
             
@@ -728,7 +753,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         if indexPath.row == localMasterItemSet.count - 1 {
             
             
-                let observationRef = db.collection("observation").start(afterDocument: lastSnapshot[lastSnapshot.count - 1])
+                let observationRef = getObs!.start(afterDocument: lastSnapshot[lastSnapshot.count - 1])
                 
                 
                 let listener = observationRef.limit(to: 15).addSnapshotListener(){

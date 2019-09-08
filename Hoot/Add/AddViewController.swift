@@ -923,7 +923,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedRarity = categoryPickerList[row]
-        selectedRarityNumber = row + 1
+        selectedRarityNumber = row
         rarityTextField.text = NSLocalizedString(categoryPickerList[row], comment: "")
         controlOkButtonState()
         

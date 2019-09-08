@@ -321,7 +321,7 @@ class SyncAndDeleteTests: XCTestCase {
         }
         
         
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 14, handler: nil)
         
         
         var deleteObservation: DeleteObservation!
