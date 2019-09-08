@@ -430,13 +430,13 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         UIView.animate(withDuration: 0.3, animations:{ self.view.layoutIfNeeded() })
         
-        guard selectedSortTemp != selectedSort else { return }
+        guard selectedSortTemp != selectedSort else { print("yes");view.endEditing(true);return }
         
         selectedSort = selectedSortTemp
         
         UserDefaults.standard.set(selectedSort, forKey: "sort")
         
-        guard !ownItemSet.isEmpty && !worldItemSet.isEmpty else { return }
+        if ownItemSet.isEmpty && worldItemSet.isEmpty { print("yes");view.endEditing(true);return }
         
         for l in listereners{
             l.remove()
