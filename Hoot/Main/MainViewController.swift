@@ -800,10 +800,30 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if traitCollection.horizontalSizeClass == .regular{
-            return CGSize(width: view.frame.width, height: view.frame.width * 1.5)
+            switch view.frame.width{
+                
+            case 0...800: return CGSize(width: view.frame.width, height: view.frame.width * 1.48)
+                
+            case 800...1000: return CGSize(width: view.frame.width, height: view.frame.width * 1.451)
+                
+            case 1000...2000: return CGSize(width: view.frame.width, height: view.frame.width * 1.399)
+                
+            default: return CGSize(width: view.frame.width, height: view.frame.width * 1.48)
+            }
+           
         }
         else {
-        return CGSize(width: view.frame.width, height: view.frame.width * 1.9)
+            switch view.frame.width{
+                
+            case 1...350: return CGSize(width: view.frame.width, height: view.frame.width * 1.9)
+                
+            case 350...400: return CGSize(width: view.frame.width, height: view.frame.width * 1.8)
+                
+            case 400...450: return CGSize(width: view.frame.width, height: view.frame.width * 1.735)
+            
+            default: return CGSize(width: view.frame.width, height: view.frame.width * 1.8)
+            }
+            
         }
     }
     
