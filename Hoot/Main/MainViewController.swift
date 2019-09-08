@@ -151,6 +151,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     emptyImage.alpha = 1
                     emptyLabel.alpha = 1
                 }
+                else { mainCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true) }
             }
             if newValue == true {
                 if OnlyOwn == false { ownSwitch.isOn = false; mainCollectionView.reloadData()
@@ -158,6 +159,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                         mainCollectionView.alpha = 1
                         emptyImage.alpha = 0
                         emptyLabel.alpha = 0
+                        mainCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
                     }
                 }
                 ownSwitch.isUserInteractionEnabled = true
@@ -424,16 +426,23 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         UserDefaults.standard.set(selectedSort, forKey: "sort")
         
-        mainCollectionView.reloadData()
-        
         for l in listereners{
             l.remove()
         }
         
+        itemSetNumber = 1
+        
+        refComplete = false
+        
         lastSnapshot = []
+        
+        worldItemSet = []
         
         getWorldObservations()
         
+        view.endEditing(true)
+        
+        mainCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
     }
     
     
@@ -477,7 +486,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         default: break
         }
         
-        let listener = getObs!.limit(to: 15).addSnapshotListener(){
+        let listener = getObs!.limit(to: 3).addSnapshotListener(){
             [unowned self] (querySnapshot, err) in
             self.lastSnapshot = []
             if let err = err{
@@ -486,7 +495,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
             else {
                 var localItemSet: [Observation] = []
                 if let querySnapshot = querySnapshot{
-                    if querySnapshot.documents.count < 15 {self.refComplete = true}
+                    if querySnapshot.documents.count < 3 {self.refComplete = true}
                     for document in querySnapshot.documents{
                         let data = document.data()
                         if data["uid"] as! String != self.uid! {
@@ -505,7 +514,6 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     }
                 }
             }
-            self.mainCollectionView.reloadData()
         }
         self.listereners.append(listener)
         
@@ -534,6 +542,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
             emptyImage.alpha = 1
             emptyLabel.alpha = 1
             }
+            else { mainCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true) }
         }
         else{
             OnlyOwn = false
@@ -542,6 +551,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 mainCollectionView.alpha = 1
                 emptyImage.alpha = 0
                 emptyLabel.alpha = 0
+                mainCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             }
         }
     }
@@ -553,21 +563,134 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        var itemSet: [MainItem] = []
-        
-        for item in ownItemSet{
-            itemSet.append(item)
-        }
+        var mainItemSet: [MainItem] = []
         
         if ownSwitch.isOn == false{
-        for item in worldItemSet{
-            for observation in item {
-            itemSet.append(observation)
+            for item in ownItemSet{
+                mainItemSet.append(item)
+            }
+            
+            for item in worldItemSet{
+                for observation in item {
+                    mainItemSet.append(observation)
+                }
             }
         }
+            
+        else {
+            for item in ownItemSet{
+                mainItemSet.append(item)
+            }
         }
         
-        return itemSet.count
+        var mainItemSetSorted = mainItemSet.sorted(by:{ $0.created > $1.created })
+        
+        switch selectedSort {
+            
+        case "Date: Newest first":
+            
+            if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty{
+                let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+                var tempEdgeSet: [Int64] = []
+                for i in tempSet{
+                    tempEdgeSet.append(i.created)
+                }
+                let edge = tempEdgeSet.min()
+                let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.created >= edge! })
+                
+                mainItemSetSorted = filterSet.sorted(by:{ $0.created > $1.created })
+            }
+                
+            else { mainItemSetSorted = mainItemSet.sorted(by:{ $0.created > $1.created }) }
+            
+            
+        case "Date: Oldest first":
+            
+            if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+                let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+                var tempEdgeSet: [Int64] = []
+                for i in tempSet{
+                    tempEdgeSet.append(i.created)
+                }
+                let edge = tempEdgeSet.max()
+                let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.created <= edge! })
+                
+                mainItemSetSorted = filterSet.sorted(by:{ $1.created > $0.created })
+            }
+                
+            else { mainItemSetSorted = mainItemSet.sorted(by:{ $1.created > $0.created }) }
+            
+        case "Alphabetically: Ascending":
+            
+            if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+                let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+                var tempEdgeSet: [String] = []
+                for i in tempSet{
+                    tempEdgeSet.append(i.species!)
+                }
+                let edge = tempEdgeSet.max()
+                let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.species! <= edge! })
+                
+                mainItemSetSorted = filterSet.sorted(by:{ $1.species! > $0.species! })
+            }
+                
+            else { mainItemSetSorted = mainItemSet.sorted(by:{ $1.species! > $0.species! }) }
+            
+        case "Alphabetically: Descending":
+            
+            if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+                let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+                var tempEdgeSet: [String] = []
+                for i in tempSet{
+                    tempEdgeSet.append(i.species!)
+                }
+                let edge = tempEdgeSet.min()
+                let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.species! >= edge! })
+                
+                mainItemSetSorted = filterSet.sorted(by:{ $0.species! > $1.species! })
+            }
+                
+            else { mainItemSetSorted = mainItemSet.sorted(by:{ $0.species! > $1.species! }) }
+            
+            
+        case "Rarity: Extremely rare first": mainItemSetSorted = mainItemSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber })
+        
+        if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+            let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+            var tempEdgeSet: [Int64] = []
+            for i in tempSet{
+                tempEdgeSet.append(i.rarityNumber)
+            }
+            let edge = tempEdgeSet.min()
+            let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.rarityNumber >= edge! })
+            
+            mainItemSetSorted = filterSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber })
+        }
+            
+        else { mainItemSetSorted = mainItemSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber }) }
+            
+            
+        case "Rarity: Common first":
+            
+            if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+                let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+                var tempEdgeSet: [Int64] = []
+                for i in tempSet{
+                    tempEdgeSet.append(i.rarityNumber)
+                }
+                let edge = tempEdgeSet.max()
+                let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.rarityNumber <= edge! })
+                
+                mainItemSetSorted = filterSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber })
+            }
+                
+            else { mainItemSetSorted = mainItemSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber }) }
+            
+        default: break
+            
+        }
+        
+        return mainItemSetSorted.count
     }
     
     
@@ -602,17 +725,104 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         switch selectedSort {
             
-        case "Date: Newest first": mainItemSetSorted = mainItemSet.sorted(by:{ $0.created > $1.created })
+        case "Date: Newest first":
+        
+        if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+            let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+        var tempEdgeSet: [Int64] = []
+        for i in tempSet{
+            tempEdgeSet.append(i.created)
+            }
+            let edge = tempEdgeSet.min()
+        let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.created >= edge! })
             
-        case "Date: Oldest first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.created > $0.created })
+            mainItemSetSorted = filterSet.sorted(by:{ $0.created > $1.created })
+            }
             
-        case "Alphabetically: Ascending": mainItemSetSorted = mainItemSet.sorted(by:{ $1.species! > $0.species! })
+        else { mainItemSetSorted = mainItemSet.sorted(by:{ $0.created > $1.created }) }
             
-        case "Alphabetically: Descending": mainItemSetSorted = mainItemSet.sorted(by:{ $0.species! > $1.species! })
+            
+        case "Date: Oldest first":
+            
+        if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+            let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+            var tempEdgeSet: [Int64] = []
+            for i in tempSet{
+                tempEdgeSet.append(i.created)
+            }
+            let edge = tempEdgeSet.max()
+            let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.created <= edge! })
+            
+            mainItemSetSorted = filterSet.sorted(by:{ $1.created > $0.created })
+            }
+            
+        else { mainItemSetSorted = mainItemSet.sorted(by:{ $1.created > $0.created }) }
+            
+        case "Alphabetically: Ascending":
+            
+        if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+            let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+            var tempEdgeSet: [String] = []
+            for i in tempSet{
+                tempEdgeSet.append(i.species!)
+            }
+            let edge = tempEdgeSet.max()
+            let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.species! <= edge! })
+            
+            mainItemSetSorted = filterSet.sorted(by:{ $1.species! > $0.species! })
+            }
+            
+        else { mainItemSetSorted = mainItemSet.sorted(by:{ $1.species! > $0.species! }) }
+            
+        case "Alphabetically: Descending":
+            
+        if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+            let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+            var tempEdgeSet: [String] = []
+            for i in tempSet{
+                tempEdgeSet.append(i.species!)
+            }
+            let edge = tempEdgeSet.min()
+            let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.species! >= edge! })
+            
+            mainItemSetSorted = filterSet.sorted(by:{ $0.species! > $1.species! })
+        }
+            
+        else { mainItemSetSorted = mainItemSet.sorted(by:{ $0.species! > $1.species! }) }
+            
             
         case "Rarity: Extremely rare first": mainItemSetSorted = mainItemSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber })
             
-        case "Rarity: Common first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber })
+        if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+            let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+            var tempEdgeSet: [Int64] = []
+            for i in tempSet{
+                tempEdgeSet.append(i.rarityNumber)
+            }
+            let edge = tempEdgeSet.min()
+            let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.rarityNumber >= edge! })
+            
+            mainItemSetSorted = filterSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber })
+        }
+            
+        else { mainItemSetSorted = mainItemSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber }) }
+            
+            
+        case "Rarity: Common first":
+            
+        if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+            let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+            var tempEdgeSet: [Int64] = []
+            for i in tempSet{
+                tempEdgeSet.append(i.rarityNumber)
+            }
+            let edge = tempEdgeSet.max()
+            let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.rarityNumber <= edge! })
+            
+            mainItemSetSorted = filterSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber })
+        }
+            
+        else { mainItemSetSorted = mainItemSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber }) }
             
         default: break
             
@@ -711,17 +921,104 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         switch selectedSort {
             
-        case "Date: Newest first": mainItemSetSorted = mainItemSet.sorted(by:{ $0.created > $1.created })
+        case "Date: Newest first":
             
-        case "Date: Oldest first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.created > $0.created })
+            if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+                let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+                var tempEdgeSet: [Int64] = []
+                for i in tempSet{
+                    tempEdgeSet.append(i.created)
+                }
+                let edge = tempEdgeSet.min()
+                let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.created >= edge! })
+                
+                mainItemSetSorted = filterSet.sorted(by:{ $0.created > $1.created })
+            }
+                
+            else { mainItemSetSorted = mainItemSet.sorted(by:{ $0.created > $1.created }) }
             
-        case "Alphabetically: Ascending": mainItemSetSorted = mainItemSet.sorted(by:{ $1.species! > $0.species! })
             
-        case "Alphabetically: Descending": mainItemSetSorted = mainItemSet.sorted(by:{ $0.species! > $1.species! })
+        case "Date: Oldest first":
+            
+            if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+                let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+                var tempEdgeSet: [Int64] = []
+                for i in tempSet{
+                    tempEdgeSet.append(i.created)
+                }
+                let edge = tempEdgeSet.max()
+                let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.created <= edge! })
+                
+                mainItemSetSorted = filterSet.sorted(by:{ $1.created > $0.created })
+            }
+                
+            else { mainItemSetSorted = mainItemSet.sorted(by:{ $1.created > $0.created }) }
+            
+        case "Alphabetically: Ascending":
+            
+            if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+                let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+                var tempEdgeSet: [String] = []
+                for i in tempSet{
+                    tempEdgeSet.append(i.species!)
+                }
+                let edge = tempEdgeSet.max()
+                let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.species! <= edge! })
+                
+                mainItemSetSorted = filterSet.sorted(by:{ $1.species! > $0.species! })
+            }
+                
+            else { mainItemSetSorted = mainItemSet.sorted(by:{ $1.species! > $0.species! }) }
+            
+        case "Alphabetically: Descending":
+            
+            if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+                let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+                var tempEdgeSet: [String] = []
+                for i in tempSet{
+                    tempEdgeSet.append(i.species!)
+                }
+                let edge = tempEdgeSet.min()
+                let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.species! >= edge! })
+                
+                mainItemSetSorted = filterSet.sorted(by:{ $0.species! > $1.species! })
+            }
+                
+            else { mainItemSetSorted = mainItemSet.sorted(by:{ $0.species! > $1.species! }) }
+            
             
         case "Rarity: Extremely rare first": mainItemSetSorted = mainItemSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber })
+        
+        if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+            let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+            var tempEdgeSet: [Int64] = []
+            for i in tempSet{
+                tempEdgeSet.append(i.rarityNumber)
+            }
+            let edge = tempEdgeSet.min()
+            let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.rarityNumber >= edge! })
             
-        case "Rarity: Common first": mainItemSetSorted = mainItemSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber })
+            mainItemSetSorted = filterSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber })
+        }
+            
+        else { mainItemSetSorted = mainItemSet.sorted(by:{ $0.rarityNumber > $1.rarityNumber }) }
+            
+            
+        case "Rarity: Common first":
+            
+            if refComplete == false && ownSwitch.isOn == false && !worldItemSet.isEmpty {
+                let tempSet = mainItemSetSorted.filter({$0.uid != uid!})
+                var tempEdgeSet: [Int64] = []
+                for i in tempSet{
+                    tempEdgeSet.append(i.rarityNumber)
+                }
+                let edge = tempEdgeSet.max()
+                let filterSet = mainItemSetSorted.filter({ $0.uid != uid || $0.uid == uid! && $0.rarityNumber <= edge! })
+                
+                mainItemSetSorted = filterSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber })
+            }
+                
+            else { mainItemSetSorted = mainItemSet.sorted(by:{ $1.rarityNumber > $0.rarityNumber }) }
             
         default: break
             
@@ -756,7 +1053,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 let observationRef = getObs!.start(afterDocument: lastSnapshot[lastSnapshot.count - 1])
                 
                 
-                let listener = observationRef.limit(to: 15).addSnapshotListener(){
+                let listener = observationRef.limit(to: 3).addSnapshotListener(){
                     [unowned self] (querySnapshot, err) in
                     if let err = err{
                         print("error getting documents: \(err)")
@@ -765,7 +1062,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     else {
                         var localItemSet: [Observation] = []
                         if let querySnapshot = querySnapshot{
-                            if querySnapshot.documents.count < 15 {self.refComplete = true}
+                            if querySnapshot.documents.count < 3 {self.refComplete = true}
                             for document in querySnapshot.documents{
                                 let data = document.data()
                                 if data["uid"] as! String != self.uid! {
@@ -790,7 +1087,6 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                         }
                         self.itemSetNumber += 1
                     }
-                    self.mainCollectionView.reloadData()
                 }
                 self.listereners.append(listener)
         }
