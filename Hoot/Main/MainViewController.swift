@@ -430,7 +430,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         UIView.animate(withDuration: 0.3, animations:{ self.view.layoutIfNeeded() })
         
-        guard selectedSortTemp != selectedSort else { print("yes");view.endEditing(true);return }
+        guard selectedSortTemp != selectedSort else { view.endEditing(true);return }
         
         selectedSort = selectedSortTemp
         
