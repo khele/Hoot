@@ -436,8 +436,6 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         UserDefaults.standard.set(selectedSort, forKey: "sort")
         
-        if ownItemSet.isEmpty && worldItemSet.isEmpty { print("yes");view.endEditing(true);return }
-        
         for l in listereners{
             l.remove()
         }
@@ -453,6 +451,8 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         getWorldObservations()
         
         view.endEditing(true)
+        
+        if ownItemSet.isEmpty && worldItemSet.isEmpty { return }
         
         mainCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
     }
