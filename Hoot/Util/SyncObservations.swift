@@ -144,7 +144,7 @@ struct SyncObservations {
                                     
                                     let nvc = self.appDelegate.window?.rootViewController as! UINavigationController
                                     let vc = nvc.viewControllers[0] as! MainViewController
-                                    vc.getOwnObservations()
+                                    vc.viewModel.getOwnObservations()
                                     }
                                 }
                                 

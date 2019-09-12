@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		241DCC8FC467345259D95C5F /* Pods_Hoot_HootTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEB865F715D84EADC8300F4 /* Pods_Hoot_HootTests.framework */; };
 		39AA38E91F495C37043AF27C /* Pods_Hoot_HootUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 040C446301DC9047A6F9D31C /* Pods_Hoot_HootUITests.framework */; };
+		480D0CCB2327BE010096DDE7 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480D0CCA2327BE010096DDE7 /* MainViewModel.swift */; };
+		480D0CCF2327DD770096DDE7 /* MainViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480D0CCE2327DD770096DDE7 /* MainViewModelDelegate.swift */; };
 		486C94FE231AC3BA0071B94F /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C94FD231AC3BA0071B94F /* Notice.swift */; };
 		486C9509231AC79E0071B94F /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486C9508231AC79E0071B94F /* Observation.swift */; };
 		487166062322884F00D63E4D /* Add.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 487166082322884F00D63E4D /* Add.storyboard */; };
@@ -64,6 +66,8 @@
 /* Begin PBXFileReference section */
 		040C446301DC9047A6F9D31C /* Pods_Hoot_HootUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hoot_HootUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E9E02D0D015E00209DCBA5 /* Pods-Hoot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hoot.release.xcconfig"; path = "Target Support Files/Pods-Hoot/Pods-Hoot.release.xcconfig"; sourceTree = "<group>"; };
+		480D0CCA2327BE010096DDE7 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		480D0CCE2327DD770096DDE7 /* MainViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModelDelegate.swift; sourceTree = "<group>"; };
 		486C94FD231AC3BA0071B94F /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		486C9508231AC79E0071B94F /* Observation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observation.swift; sourceTree = "<group>"; };
 		487166072322884F00D63E4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Add.storyboard; sourceTree = "<group>"; };
@@ -242,7 +246,9 @@
 			children = (
 				48BC852A231AAD91002F6543 /* Main.storyboard */,
 				48E21560231AB45D00A36A6B /* MainViewController.swift */,
+				480D0CCA2327BE010096DDE7 /* MainViewModel.swift */,
 				48BEBC6C231ACEF000ABF780 /* MainCell.swift */,
+				480D0CCE2327DD770096DDE7 /* MainViewModelDelegate.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -625,10 +631,12 @@
 				488CCC6323237FDC00540799 /* DeleteObservation.swift in Sources */,
 				486C94FE231AC3BA0071B94F /* Notice.swift in Sources */,
 				48BEBC77231ADBF500ABF780 /* MainItem.swift in Sources */,
+				480D0CCF2327DD770096DDE7 /* MainViewModelDelegate.swift in Sources */,
 				48E21573231AB5C200A36A6B /* LoginViewController.swift in Sources */,
 				48AA58CF231EDF0900D8A26B /* OwnObservation+CoreDataProperties.swift in Sources */,
 				48BC8527231AAD91002F6543 /* AppDelegate.swift in Sources */,
 				48BEBC6D231ACEF000ABF780 /* MainCell.swift in Sources */,
+				480D0CCB2327BE010096DDE7 /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -844,7 +852,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7L9D446N7H;
 				INFOPLIST_FILE = Hoot/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -866,7 +874,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7L9D446N7H;
 				INFOPLIST_FILE = Hoot/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (

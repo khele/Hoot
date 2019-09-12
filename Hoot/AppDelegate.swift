@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if self.window?.rootViewController?.restorationIdentifier == "mainNavigationController"{
                     unowned let nvc = self.window?.rootViewController as! UINavigationController
                     unowned let vc = nvc.viewControllers[0] as! MainViewController
-                    vc.connected = true
+                    vc.viewModel.connected = true
                 }
                 }
                     
@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if self.window?.rootViewController?.restorationIdentifier == "mainNavigationController"{
                     unowned let nvc = self.window?.rootViewController as! UINavigationController
                     unowned let vc = nvc.viewControllers[0] as! MainViewController
-                    vc.connected = false
+                    vc.viewModel.connected = false
                 }
                 }
             }
