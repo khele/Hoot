@@ -34,6 +34,10 @@
 		48BC854A231AAD93002F6543 /* HootUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BC8549231AAD93002F6543 /* HootUITests.swift */; };
 		48BEBC6D231ACEF000ABF780 /* MainCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BEBC6C231ACEF000ABF780 /* MainCell.swift */; };
 		48BEBC77231ADBF500ABF780 /* MainItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BEBC76231ADBF500ABF780 /* MainItem.swift */; };
+		48CA2F75232A75550076441E /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CA2F74232A75550076441E /* DetailViewModel.swift */; };
+		48CA2F79232A79F20076441E /* DetailViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CA2F78232A79F20076441E /* DetailViewModelDelegate.swift */; };
+		48CA2F7B232AAB0D0076441E /* AddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CA2F7A232AAB0D0076441E /* AddViewModel.swift */; };
+		48CA2F7D232AAB1F0076441E /* AddViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CA2F7C232AAB1F0076441E /* AddViewModelDelegate.swift */; };
 		48CBD17B2320EA5500F4D681 /* AddTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CBD17A2320EA5500F4D681 /* AddTests.swift */; };
 		48CBD1802320F8DF00F4D681 /* MainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48CBD17F2320F8DF00F4D681 /* MainTests.swift */; };
 		48E2155F231AB3F100A36A6B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48E2155E231AB3F100A36A6B /* MapKit.framework */; };
@@ -101,6 +105,10 @@
 		48BC854B231AAD93002F6543 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		48BEBC6C231ACEF000ABF780 /* MainCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCell.swift; sourceTree = "<group>"; };
 		48BEBC76231ADBF500ABF780 /* MainItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainItem.swift; sourceTree = "<group>"; };
+		48CA2F74232A75550076441E /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		48CA2F78232A79F20076441E /* DetailViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModelDelegate.swift; sourceTree = "<group>"; };
+		48CA2F7A232AAB0D0076441E /* AddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewModel.swift; sourceTree = "<group>"; };
+		48CA2F7C232AAB1F0076441E /* AddViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewModelDelegate.swift; sourceTree = "<group>"; };
 		48CBD17A2320EA5500F4D681 /* AddTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTests.swift; sourceTree = "<group>"; };
 		48CBD17F2320F8DF00F4D681 /* MainTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTests.swift; sourceTree = "<group>"; };
 		48E2155E231AB3F100A36A6B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -176,6 +184,8 @@
 			children = (
 				4871660D2322886C00D63E4D /* Detail.storyboard */,
 				48B37E97231D4DFE00BA5387 /* DetailViewController.swift */,
+				48CA2F74232A75550076441E /* DetailViewModel.swift */,
+				48CA2F78232A79F20076441E /* DetailViewModelDelegate.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -267,6 +277,8 @@
 			children = (
 				487166082322884F00D63E4D /* Add.storyboard */,
 				48E2156A231AB5A200A36A6B /* AddViewController.swift */,
+				48CA2F7A232AAB0D0076441E /* AddViewModel.swift */,
+				48CA2F7C232AAB1F0076441E /* AddViewModelDelegate.swift */,
 			);
 			path = Add;
 			sourceTree = "<group>";
@@ -618,10 +630,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48CA2F7B232AAB0D0076441E /* AddViewModel.swift in Sources */,
 				488CCC672323838100540799 /* DeleteResult.swift in Sources */,
 				486C9509231AC79E0071B94F /* Observation.swift in Sources */,
+				48CA2F7D232AAB1F0076441E /* AddViewModelDelegate.swift in Sources */,
 				48AA58C7231EC50B00D8A26B /* OwnObservationExtension.swift in Sources */,
+				48CA2F75232A75550076441E /* DetailViewModel.swift in Sources */,
 				48B37E9C231D89ED00BA5387 /* SyncObservations.swift in Sources */,
+				48CA2F79232A79F20076441E /* DetailViewModelDelegate.swift in Sources */,
 				48AA58CC231EDF0900D8A26B /* OwnObservation+CoreDataClass.swift in Sources */,
 				488CCC6523237FFA00540799 /* DeleteObservationDelegate.swift in Sources */,
 				48E21561231AB45D00A36A6B /* MainViewController.swift in Sources */,

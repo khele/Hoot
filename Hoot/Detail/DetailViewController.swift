@@ -14,68 +14,45 @@ import AVKit
 import CoreData
 
 
-class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObservationDelegate {
-
+class DetailViewController: UIViewController, UIScrollViewDelegate, DetailViewModelDelegate {
+   
+    
+    
     // Firebase
     
     var uid = Auth.auth().currentUser?.uid
     
     
-    
-    
     // IB vars
     
     @IBOutlet weak var scrollView: UIScrollView!
-    
     @IBOutlet weak var canvasView: UIView!
     
     @IBOutlet weak var pictureView: UIImageView!
     
     @IBOutlet weak var speciesIndicatorLabel: UILabel!
-    
     @IBOutlet weak var speciesLabel: UILabel!
     
     @IBOutlet weak var rarityIndicatorLabel: UILabel!
-    
     @IBOutlet weak var rarityLabel: UILabel!
     
     @IBOutlet weak var notesIndicatorLabel: UILabel!
-    
     @IBOutlet weak var notesLabel: UILabel!
     
     @IBOutlet weak var locationIndicatorLabel: UILabel!
-    
     @IBOutlet weak var latLabel: UILabel!
-    
     @IBOutlet weak var longLabel: UILabel!
     
     @IBOutlet weak var timeIndicatorLabel: UILabel!
-    
     @IBOutlet weak var timeLabel: UILabel!
     
     @IBOutlet weak var soundImage: UIImageView!
-    
     @IBOutlet weak var videoImage: UIImageView!
     
     @IBOutlet weak var soundPlayButton: UIButton!
-    
     @IBOutlet weak var videoPlayButton: UIButton!
     
-    
-    
-    var deleteObservation: DeleteObservation!
-    
-    var soundUrl: String = ""
-    
-    var videoUrl: String = ""
-    
-    var observation: MainItem!
-    
-    var soundPlayer: AVAudioPlayer?
-    
-    let fileManager = FileManager.default
-    
-    let notice = Notice()
+    var viewModel: DetailViewModel!
     
     var spinner: UIActivityIndicatorView!
     
@@ -83,12 +60,15 @@ class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObserv
     
     var loaderView: UIView!
     
-    unowned let appDelegate = UIApplication.shared.delegate as! AppDelegate
+   
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        viewModel.delegate = self
+        viewModel.viewDidLoadWasCalled()
+        
        setupLayout()
        scrollView.delegate = self
         
@@ -102,7 +82,7 @@ class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObserv
         
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 1, alpha: 1)
         
-        if observation.uid! == uid! {
+        if viewModel.observation.uid! == uid! {
         let trashButton = UIBarButtonItem(image: #imageLiteral(resourceName: "trash"), style: .plain, target: self, action: #selector(showConfirmAlert))
         navigationItem.rightBarButtonItem = nil
         navigationItem.rightBarButtonItem = trashButton
@@ -114,8 +94,8 @@ class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObserv
         hootIcon.contentMode = .scaleAspectFit
         navigationItem.titleView = hootIcon
         
-        speciesLabel.text = observation.species!
-        rarityLabel.text = observation.rarity!
+        speciesLabel.text = viewModel.observation.species!
+        rarityLabel.text = viewModel.observation.rarity!
         
         notesLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         notesLabel.numberOfLines = 0
@@ -126,12 +106,12 @@ class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObserv
         
         let attributes : [NSAttributedString.Key  : AnyObject] = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16), NSAttributedString.Key.paragraphStyle: paragraphStyle]
         
-        let attributedText = NSAttributedString.init(string: observation.notes!, attributes: attributes)
+        let attributedText = NSAttributedString.init(string: viewModel.observation.notes!, attributes: attributes)
         notesLabel.attributedText = attributedText
         
-        if observation.uid != uid! {
+        if viewModel.observation.uid != uid! {
             
-            let pictureUrl = URL(string: observation.pictureUrl!)
+            let pictureUrl = URL(string: viewModel.observation.pictureUrl!)
             
             pictureView.kf.setImage(with: pictureUrl, options: [.cacheSerializer(FormatIndicatedCacheSerializer.png)])
             
@@ -139,96 +119,52 @@ class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObserv
             
         else {
             
-            let picturePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(observation.pictureUrl!)
+            let picturePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(viewModel.observation.pictureUrl!)
             
             pictureView.image = UIImage(contentsOfFile: picturePath)
             
         }
         
-        latLabel.text = "\(observation.lat)"
-        longLabel.text = "\(observation.long)"
+        latLabel.text = "\(viewModel.observation.lat)"
+        longLabel.text = "\(viewModel.observation.long)"
         
-        timeLabel.text = DateFormatter.localizedString(from: Date(timeIntervalSince1970: Double(observation.created)), dateStyle: .short, timeStyle: .short)
+        timeLabel.text = DateFormatter.localizedString(from: Date(timeIntervalSince1970: Double(viewModel.observation.created)), dateStyle: .short, timeStyle: .short)
         
-        soundUrl = observation.soundUrl!
-        videoUrl = observation.videoUrl!
         
-        if soundUrl == "" { soundPlayButton.alpha = 0.5; soundPlayButton.isUserInteractionEnabled = false }
-        if videoUrl == "" { videoPlayButton.alpha = 0.5; videoPlayButton.isUserInteractionEnabled = false }
+        if viewModel.soundUrl == "" { soundPlayButton.alpha = 0.5; soundPlayButton.isUserInteractionEnabled = false }
+        if viewModel.videoUrl == "" { videoPlayButton.alpha = 0.5; videoPlayButton.isUserInteractionEnabled = false }
         
     }
     
     
+    @objc func showConfirmAlert(){
+        
+        viewModel.showConfirmAlert()
+    }
+    
+    
+    func presentAlertWasCalled(alert: UIAlertController){
+        present(alert, animated: true, completion: nil)
+    }
+    
+    
+    func presentViewControllerWasCalled(vc: UIViewController){
+        
+        present(vc, animated: true, completion: nil)
+    }
     
     @IBAction func soundPlayButtonPressed(_ sender: Any) {
         
-        if observation.uid! == uid! {
-        
-        let session = AVAudioSession.sharedInstance()
-        try! session.setCategory(AVAudioSession.Category.playback)
-        
-        let soundFile = FileManager.default.urls(for: .documentDirectory, in:.userDomainMask)[0].appendingPathComponent(soundUrl)
-        
-        soundPlayer = try!(AVAudioPlayer(contentsOf: soundFile))
-        soundPlayer?.play()
-        
-        }
-        
-        else {
-            
-            let session = AVAudioSession.sharedInstance()
-            try! session.setCategory(AVAudioSession.Category.playback)
-            
-            let soundFile = URL(string: soundUrl)!
-            
-            do{
-             self.soundPlayer =  try AVAudioPlayer(data: Data(contentsOf: soundFile))
-                
-            }
-            catch{
-                print(error)
-            }
-            
-            
-            
-            self.soundPlayer?.play()
-            
-        }
-        
+        viewModel.soundPlayButtonWasPressed()
     }
     
 
     @IBAction func videoPlayButtonPressed(_ sender: Any) {
         
-        if observation.uid! == uid! {
-        
-        let videoFile = FileManager.default.urls(for: .documentDirectory, in:.userDomainMask)[0].appendingPathComponent(videoUrl)
-        
-        let video = AVPlayer(url: videoFile)
-        
-        let videoPlayer = AVPlayerViewController()
-        videoPlayer.player = video
-        
-        present(videoPlayer, animated: true, completion: nil)
-        
-        video.play()
-        
+       viewModel.videoPlayButtonWasPressed()
     }
-        
-        else {
-            
-            let video = AVPlayer(url: URL(string: videoUrl)!)
-            
-            let videoPlayer = AVPlayerViewController()
-            videoPlayer.player = video
-            
-            present(videoPlayer, animated: true, completion: nil)
-            
-            video.play()
-            
-        }
-        
-    }
+    
+    
     
     func showLoader() {
         DispatchQueue.main.async() { [unowned self] in
@@ -269,91 +205,41 @@ class DetailViewController: UIViewController, UIScrollViewDelegate, DeleteObserv
         }
     }
     
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
       scrollOffset = scrollView.contentOffset.y
     }
     
     
-    @objc func showConfirmAlert(){
+    func setUIInterActionStateWasCalled(enable: Bool){
         
-        let titleString = NSLocalizedString("Are you sure you want to remove this observation?", comment: "Confirmation to remove item")
-        
-        let confirmString = NSLocalizedString("Confirm", comment: "Confirm")
-        
-        let cancelString = NSLocalizedString("Cancel", comment: "Cancel")
-        
-        let alert = UIAlertController(title: titleString, message: "", preferredStyle: .alert)
-        
-        let confirmOption = UIAlertAction(title: confirmString, style: .default, handler: {(UIAlertAction) in
-            
-            let obs = self.observation as! OwnObservation
-            
-            self.deleteObservation = DeleteObservation(observationToDelete: obs)
-            self.deleteObservation.delegate = self
-            
+        if enable == true {
+            navigationItem.hidesBackButton = false
+            soundPlayButton.isUserInteractionEnabled = true
+            videoPlayButton.isUserInteractionEnabled = true
+            scrollView.isUserInteractionEnabled = true
+        }
+        else{
             self.navigationItem.hidesBackButton = true
             self.soundPlayButton.isUserInteractionEnabled = false
             self.videoPlayButton.isUserInteractionEnabled = false
             self.scrollView.isUserInteractionEnabled = false
-            
-            self.showLoader()
-            
-            self.deleteObservation.deleteObservation()
-        })
-        
-        let cancelOption = UIAlertAction(title: cancelString, style: .cancel, handler: nil)
-        
-        alert.addAction(cancelOption)
-        alert.addAction(confirmOption)
-        
-        present(alert, animated: true, completion: nil)
-        
+        }
     }
     
-    
-    func deleteObservationDidRun(result: DeleteResult) {
+    func setLoaderStateWasCalled(show: Bool){
         
-        if result == .success{
-            hideLoader()
-            navigationController?.popViewController(animated: true)
+        if show == true{
+            showLoader()
         }
-        
-        if result == .uploading{
+        else{
             hideLoader()
-            
-            navigationItem.hidesBackButton = false
-            soundPlayButton.isUserInteractionEnabled = true
-            videoPlayButton.isUserInteractionEnabled = true
-            scrollView.isUserInteractionEnabled = true
-            
-            present(notice.syncAlert, animated: true, completion: nil)
-            
         }
-        
-        if result == .failure{
-            
-            hideLoader()
-            
-            navigationItem.hidesBackButton = false
-            soundPlayButton.isUserInteractionEnabled = true
-            videoPlayButton.isUserInteractionEnabled = true
-            scrollView.isUserInteractionEnabled = true
-            
-            present(notice.generalAlert, animated: true, completion: nil)
-            
-        }
-        
-        if result == .networkNeeded {
-            hideLoader()
-            
-            navigationItem.hidesBackButton = false
-            soundPlayButton.isUserInteractionEnabled = true
-            videoPlayButton.isUserInteractionEnabled = true
-            scrollView.isUserInteractionEnabled = true
-            
-            present(notice.deleteNetworkAlert, animated: true, completion: nil)
-        }
-        
     }
+    
+    func popViewControllerWasCalled(){
+        navigationController?.popViewController(animated: true)
+    }
+   
     
 }

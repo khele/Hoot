@@ -341,7 +341,8 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let vc = UIStoryboard(name: "Detail", bundle: nil).instantiateViewController(withIdentifier: "detailViewController") as! DetailViewController
-        vc.observation = viewModel.mainItemSetSorted[indexPath.row]
+        vc.viewModel = DetailViewModel()
+        vc.viewModel.observation = viewModel.mainItemSetSorted[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
         
     }

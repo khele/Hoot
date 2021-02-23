@@ -59,6 +59,7 @@ struct SyncObservations {
         }
         catch {
             print("own data retrieve failed")
+            return
         }
         
         if itemSet.isEmpty {
@@ -714,6 +715,86 @@ struct SyncObservations {
             }
         
         }
+    
+    
+    func checkLocalValidity(){
+        
+        let remoteGroup = DispatchGroup()
+        
+         var remoteItemSet: [Observation] = []
+        
+         var itemSet: [OwnObservation] = []
+              
+        remoteGroup.enter()
+        
+        observationRef.whereField("uid", isEqualTo: uid!).getDocuments(){
+            (querySnapShot, err) in
+            if let err = err{
+                print(err)
+                return
+            }
+            else{
+                if let querySnapShot = querySnapShot{
+                for document in querySnapShot.documents{
+                    let data = document.data()
+                    remoteItemSet.append(Observation(data))
+                    }
+                    
+                }
+            }
+            remoteGroup.leave()
+        }
+        
+        remoteGroup.notify(queue: .global()){
+        
+            let managedContext = self.appDelegate.persistentContainer.viewContext
+               
+               let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "OwnObservation")
+            fetchRequest.predicate = NSPredicate(format: "uid = %@", self.uid!)
+               
+               do{
+                   let result = try managedContext.fetch(fetchRequest)
+                   for data in result as! [OwnObservation] {
+                       itemSet.append(data)
+                   }
+               }
+               catch {
+                   print("own data retrieve failed")
+                return
+               }
+        
+            let remoteIdSet: [String] = remoteItemSet.map({ $0.id! })
+        
+        for item in itemSet{
+            
+            if !remoteIdSet.contains(item.id!) && item.uploaded == true{
+                
+                let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "OwnObservation")
+                fetchRequest.predicate = NSPredicate(format: "id = %@", item.id!)
+                
+                do{
+                    let fetched = try managedContext.fetch(fetchRequest)
+                    
+                    let objectToDelete = fetched[0] as! NSManagedObject
+                    managedContext.delete(objectToDelete)
+                    
+                    do{
+                        try managedContext.save()
+                    }
+                    catch {
+                        print(error)
+                        return
+                    }
+                }
+                catch {
+                    print(error)
+                    return
+                }
+                
+            }
+        }
+        }
+    }
     
     
     }

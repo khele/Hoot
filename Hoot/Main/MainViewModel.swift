@@ -49,7 +49,6 @@ class MainViewModel: NSObject, UIPickerViewDataSource, UIPickerViewDelegate{
         
         didSet{
             setMainItemSetSorted()
-            delegate?.collectionViewReloadDataWasCalled()
         }
         
     }
@@ -69,8 +68,8 @@ class MainViewModel: NSObject, UIPickerViewDataSource, UIPickerViewDelegate{
         }
         
         didSet{
+            print("IT RAN")
             setMainItemSetSorted()
-            delegate?.collectionViewReloadDataWasCalled()
         }
     }
     
@@ -128,14 +127,13 @@ class MainViewModel: NSObject, UIPickerViewDataSource, UIPickerViewDelegate{
                 ownSwitchIsOn = true
                 delegate?.offlineLabelStateChangeWasRequested(alpha: 1)
                 setMainItemSetSorted()
-                delegate?.collectionViewReloadDataWasCalled()
                 if ownItemSet.isEmpty{
                     delegate?.updateEmptyElementsWasCalled(empty: true)
                 }
                 else { delegate?.collectionViewScrollToTopWasCalled() }
             }
             if newValue == true {
-                if OnlyOwn == false { delegate?.ownSwitchStateChangeWasRequested(isOn: false, userActionEnabled: nil); ownSwitchIsOn = false; setMainItemSetSorted(); delegate?.collectionViewReloadDataWasCalled()
+                if OnlyOwn == false { delegate?.ownSwitchStateChangeWasRequested(isOn: false, userActionEnabled: nil); ownSwitchIsOn = false; setMainItemSetSorted()
                     if !worldItemSet.isEmpty {
                         delegate?.updateEmptyElementsWasCalled(empty: false)
                         delegate?.collectionViewScrollToTopWasCalled()
@@ -163,6 +161,7 @@ class MainViewModel: NSObject, UIPickerViewDataSource, UIPickerViewDelegate{
         
         DispatchQueue.global().async {
             self.sync.sync()
+            self.sync.checkLocalValidity()
         }
     }
 
@@ -337,7 +336,7 @@ class MainViewModel: NSObject, UIPickerViewDataSource, UIPickerViewDelegate{
         default: break
             
         }
-        
+        delegate?.collectionViewReloadDataWasCalled()
         
     }
     
@@ -415,6 +414,7 @@ class MainViewModel: NSObject, UIPickerViewDataSource, UIPickerViewDelegate{
         if UserDefaults.standard.object(forKey: "sort") != nil {
             selectedSort = UserDefaults.standard.object(forKey: "sort") as! String
             selectedSortTemp = UserDefaults.standard.object(forKey: "sort") as! String
+            delegate?.sortTextWasSet(text: UserDefaults.standard.object(forKey: "sort") as! String)
         }
         
     }
@@ -457,7 +457,7 @@ class MainViewModel: NSObject, UIPickerViewDataSource, UIPickerViewDelegate{
         if ownSwitchIsOn == true {
             OnlyOwn = true
             setMainItemSetSorted()
-            delegate?.collectionViewReloadDataWasCalled()
+           
             
             if ownItemSet.isEmpty{
                 delegate?.updateEmptyElementsWasCalled(empty: true)
@@ -467,11 +467,9 @@ class MainViewModel: NSObject, UIPickerViewDataSource, UIPickerViewDelegate{
         else{
             OnlyOwn = false
             setMainItemSetSorted()
-            delegate?.collectionViewReloadDataWasCalled()
             if !worldItemSet.isEmpty {
                delegate?.updateEmptyElementsWasCalled(empty: false)
                 setMainItemSetSorted()
-                delegate?.collectionViewReloadDataWasCalled()
             }
         }
         
@@ -563,7 +561,6 @@ class MainViewModel: NSObject, UIPickerViewDataSource, UIPickerViewDelegate{
     func showLogOutNotice(){
         
         let titleString = NSLocalizedString("Logged out", comment: "Message to confirm that user has been logged out")
-        
         let okString = NSLocalizedString("Ok", comment: "Ok")
         
         let alert = UIAlertController(title: titleString, message: "", preferredStyle: .alert)

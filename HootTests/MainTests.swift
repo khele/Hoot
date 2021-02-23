@@ -21,13 +21,11 @@ class MainTests: XCTestCase {
        
             
             
-            let vc = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "mainViewController") as! MainViewController
+            let vm = MainViewModel()
             
-            vc.uid = "test"
+            vm.uid = "test"
             
-            let _ = vc.view
-            
-            vc.setupUserDefaults()
+            vm.setupUserDefaults()
             
             XCTAssert(UserDefaults.standard.object(forKey: "sort") == nil)
             
@@ -35,15 +33,15 @@ class MainTests: XCTestCase {
             
             UserDefaults.standard.removeObject(forKey: "uid")
             
-            vc.setupUserDefaults()
+            vm.setupUserDefaults()
             
             XCTAssert(UserDefaults.standard.object(forKey: "sort") == nil)
             
             UserDefaults.standard.set("testSort", forKey: "sort")
             
-            vc.setupUserDefaults()
+            vm.setupUserDefaults()
             
-            XCTAssert(vc.selectedSort == "testSort" && vc.selectedSortTemp == "testSort" && vc.sortTextField.text == "testSort")
+            XCTAssert(vm.selectedSort == "testSort" && vm.selectedSortTemp == "testSort")
             
             UserDefaults.standard.removeObject(forKey: "uid")
             UserDefaults.standard.removeObject(forKey: "sort")
@@ -55,18 +53,16 @@ class MainTests: XCTestCase {
     func testGetOwnObs(){
         
         
-        let vc = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "mainViewController") as! MainViewController
+        let vm = MainViewModel()
         
-        vc.uid = "test"
+        vm.uid = "test"
         
-        let _ = vc.view
+        let managedContext = vm.appDelegate.persistentContainer.viewContext
         
-        let managedContext = vc.appDelegate.persistentContainer.viewContext
-        
-        vc.getOwnObservations()
+        vm.getOwnObservations()
         
         
-        XCTAssert(vc.ownItemSet.count == 0)
+        XCTAssert(vm.ownItemSet.count == 0)
         
         
         let observationEntity = NSEntityDescription.entity(forEntityName: "OwnObservation", in: managedContext)
@@ -82,8 +78,8 @@ class MainTests: XCTestCase {
             print("Error occurred: \(error)")
         }
         
-        vc.getOwnObservations()
-        print(vc.ownItemSet.count)
+        vm.getOwnObservations()
+        print(vm.ownItemSet.count)
         
         let e = expectation(description: "wait for core data")
         
@@ -92,7 +88,7 @@ class MainTests: XCTestCase {
         }
         
         waitForExpectations(timeout: 2, handler: nil)
-        XCTAssert(vc.ownItemSet.count == 1)
+        XCTAssert(vm.ownItemSet.count == 1)
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "OwnObservation")
         
@@ -123,11 +119,11 @@ class MainTests: XCTestCase {
         
         
         
-        let vc = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "mainViewController") as! MainViewController
+        let vm = MainViewModel()
         
         let loginExpectation = expectation(description: "Wait for login")
         
-        vc.auth.signIn(withEmail: "stagelife2@hotmail.com", password: "password") {  user, error in
+        vm.auth.signIn(withEmail: "stagelife2@hotmail.com", password: "password") {  user, error in
             
             XCTAssert(user != nil)
             
@@ -137,12 +133,9 @@ class MainTests: XCTestCase {
         
         waitForExpectations(timeout: 2, handler: nil)
         
-        vc.uid = "testOther"
+        vm.uid = "testOther"
         
-        vc.observationsRef = vc.db.collection("test")
-        
-        let _ = vc.view
-        
+        vm.observationsRef = vm.db.collection("test")
         
         let docExpectation = expectation(description: "Wait for doc download")
       
@@ -150,11 +143,11 @@ class MainTests: XCTestCase {
             docExpectation.fulfill()
         }
         
-        vc.getWorldObservations()
+        vm.getWorldObservations()
         
         
         self.waitForExpectations(timeout: 2, handler: nil)
-        XCTAssert(vc.worldItemSet.count > 0)
+        XCTAssert(vm.worldItemSet.count > 0)
         
         let anotherDocexpectation = expectation(description: "Wait for doc download")
         
@@ -162,14 +155,14 @@ class MainTests: XCTestCase {
             anotherDocexpectation.fulfill()
         }
         
-        vc.getOwnObservations()
+        vm.getOwnObservations()
         
         waitForExpectations(timeout: 2, handler: nil)
-        XCTAssert(vc.worldItemSet.count == 1)
+        XCTAssert(vm.worldItemSet.count == 1)
         
         
         do {
-            try vc.auth.signOut()
+            try vm.auth.signOut()
         } catch let signOutError as NSError {
             print ("Error signing out: %@", signOutError)
         }

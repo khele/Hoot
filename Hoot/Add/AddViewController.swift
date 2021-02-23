@@ -17,24 +17,10 @@ import CoreData
 import CoreLocation
 import Photos
 
-class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CropViewControllerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate, CLLocationManagerDelegate {
+class AddViewController: UIViewController, UITextFieldDelegate, AddViewModelDelegate {
     
     
-    // Firebase Storage itemImage ref
     
-    let itemImageFireRef = Storage.storage().reference().child("itemImages")
-    
-    
-    // Firebase Firestore db ref
-    
-    let db = Firestore.firestore()
-    
-    
-    // User refs
-    
-    let uid = Auth.auth().currentUser?.uid
-    
-    let dname = Auth.auth().currentUser?.displayName
 
     // IB vars
     
@@ -73,53 +59,16 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     @IBOutlet weak var videoButtonStackView: UIStackView!
     
     
-    
-    unowned let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    
-    var id = ""
-    
     var activeField: UITextField?
-    
-    var selectedRarity = ""
-    
-    var selectedRarityNumber = 1
-    
-    let notice = Notice()
-    
-    var categoryPickerList: [String] = ["-- Select rarity --", "Common", "Rare", "Extremely rare"]
-    
-    var categoryPicker = UIPickerView()
     
     var spinner: UIActivityIndicatorView!
     
-    var soundRecorded = false
-    
-    var videoRecorded = false
-    
-    var isRecordingSound = false
-    
-    var soundUrl: URL?
-    
-    var videoUrl: URL?
-    
-    let fileManager = FileManager.default
-    
-    var soundRecorder: AVAudioRecorder?
-    
-    var soundPlayer: AVAudioPlayer?
-    
     var deleteSoundButton: UIButton?
-    
     var deleteVideoButton: UIButton?
     
-    let locationManager = CLLocationManager()
+    var categoryPicker = UIPickerView()
     
-    var lat: Double?
-    
-    var long: Double?
-    
-    let session = AVAudioSession.sharedInstance()
-    
+    var viewModel: AddViewModel!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -132,28 +81,18 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel = AddViewModel()
+        viewModel.delegate = self
+        viewModel.viewDidLoadWasCalled()
         setupLayout()
        
-        setupCategoryPicker()
-        createCategoryPickerToolBar()
-        
         speciesTextField.delegate = self
         notesTextField.delegate = self
         
-        id = getId()
-        
-        locationManager.delegate = self;
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-        
-        session.requestRecordPermission() {result in print(result)}
-        
-        AVCaptureDevice.requestAccess(for: AVMediaType.video) { result in print(result) }
-        
-        PHPhotoLibrary.requestAuthorization(){ result in print(result) }
-        
+        rarityTextField.inputView = viewModel.setupCategoryPicker()
+        rarityTextField.inputAccessoryView = viewModel.createCategoryPickerToolBar()
     }
+    
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -162,7 +101,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         
     }
     
-    
+
     func setupLayout(){
         
         canvasView.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 1, alpha: 1)
@@ -187,7 +126,7 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         confirmButton.layer.shadowColor = UIColor.lightGray.cgColor
         confirmButton.layer.shadowOffset = CGSize(width: 0, height: 4)
         confirmButton.layer.shadowOpacity = 0.4
-        
+    
         confirmButton.alpha = 0.5
         confirmButton.isUserInteractionEnabled = false
         
@@ -199,19 +138,168 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     }
     
     
-    func getId() -> String {
+    func controlOkButtonStateWasCalled(){
+        controlOkButtonState()
+    }
+    
+    func setImageWasCalled(image: UIImage){
+        pictureView.image = image
+    }
+    
+    func setRarityTextFieldTextWasCalled(text: String){
+        rarityTextField.text = text
+    }
+
+    func setUIInteractionStateWasCalled(enabled: Bool){
         
-        let idRef = db.collection("observation").document()
-        
-        let documentId = idRef.documentID
-        
-        return documentId
-        
+        if enabled == true{
+            cancelButton.isUserInteractionEnabled = true
+            addSoundButton.isUserInteractionEnabled = true
+            addVideoButton.isUserInteractionEnabled = true
+            deleteSoundButton?.isUserInteractionEnabled = true
+            deleteVideoButton?.isUserInteractionEnabled = true
+        }
+        else{
+            cancelButton.isUserInteractionEnabled = false
+            addSoundButton.isUserInteractionEnabled = false
+            addVideoButton.isUserInteractionEnabled = false
+            deleteSoundButton?.isUserInteractionEnabled = false
+            deleteVideoButton?.isUserInteractionEnabled = false
+        }
+    }
+    
+    func setLoaderStateWasCalled(show: Bool){
+        if show == true{
+            showLoader()
+        }
+        else{
+            hideLoader()
+        }
+    }
+    
+    func getObservationContentWasCalled(){
+        viewModel.picture = pictureView.image!
+        viewModel.speciesText = speciesTextField.text!
+        viewModel.notesText = notesTextField.text!
     }
     
     
     
+    func presentAlertControllerWasCalled(alert: UIAlertController) {
+        present(alert, animated: true, completion: nil)
+    }
     
+    func presentViewControllerWasCalled(vc: UIViewController, animated: Bool) {
+        present(vc, animated: animated, completion: nil)
+    }
+    
+    
+    func presentActionSheetWasCalled(ac: UIAlertController){
+        
+        if let popoverController = ac.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        present(ac, animated: true, completion: nil)
+    }
+    
+    
+    func dismissViewControllerWasCalled(vc: UIViewController, animated: Bool){
+        vc.dismiss(animated: animated, completion: nil)
+    }
+    
+    func popViewControllerWasCalled(){
+        navigationController?.popViewController(animated: true)
+    }
+    
+    
+    
+    func setupStopSoundButtonWasCalled(){
+        
+        addSoundButton.setBackgroundImage(#imageLiteral(resourceName: "stopButton"), for: .normal)
+        addSoundLabel.text = NSLocalizedString("Recording", comment: "")
+        addSoundLabel.textColor = UIColor.red
+    }
+    
+    
+    
+    func setupDeleteSoundButtonWasCalled() {
+        
+        addSoundButton.setBackgroundImage(#imageLiteral(resourceName: "playButton"), for: .normal)
+        
+        deleteSoundButton = UIButton(type: .system)
+        deleteSoundButton!.setBackgroundImage(#imageLiteral(resourceName: "cancelButton"), for: .normal)
+        deleteSoundButton!.addTarget(self, action: #selector(deleteSoundButtonPressed), for: .touchUpInside)
+        deleteSoundButton!.translatesAutoresizingMaskIntoConstraints = false
+        
+        soundButtonStackView.addArrangedSubview(deleteSoundButton!)
+        
+        if traitCollection.horizontalSizeClass == .regular{
+            deleteSoundButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.1).isActive = true
+        }
+        else{
+            deleteSoundButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.17).isActive = true
+        }
+        deleteSoundButton!.heightAnchor.constraint(equalTo: deleteSoundButton!.widthAnchor, multiplier: 1).isActive = true
+        
+        addSoundLabel.text = NSLocalizedString("Add sound (optional)", comment: "")
+        addSoundLabel.textColor = UIColor.darkGray
+        
+    }
+    
+    
+    func setupDeleteVideoButtonWasCalled(){
+        
+        deleteVideoButton = UIButton(type: .system)
+        deleteVideoButton!.setBackgroundImage(#imageLiteral(resourceName: "cancelButton"), for: .normal)
+        deleteVideoButton!.addTarget(self, action: #selector(deleteVideoButtonPressed), for: .touchUpInside)
+        deleteVideoButton!.translatesAutoresizingMaskIntoConstraints = false
+        
+        videoButtonStackView.addArrangedSubview(deleteVideoButton!)
+        
+        if traitCollection.horizontalSizeClass == .regular{
+            deleteVideoButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.1).isActive = true
+        }
+        else{
+            deleteVideoButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.17).isActive = true
+        }
+        deleteVideoButton!.heightAnchor.constraint(equalTo: deleteVideoButton!.widthAnchor, multiplier: 1).isActive = true
+        
+        addVideoButton.setBackgroundImage(#imageLiteral(resourceName: "playButton"), for: .normal)
+        
+    }
+    
+    
+    @objc func deleteSoundButtonPressed(){
+        viewModel.deleteSoundButtonPressed()
+    }
+    
+    @objc func deleteVideoButtonPressed(){
+        viewModel.deleteVideoButtonPressed()
+    }
+    
+    
+    
+    func removeDeleteSoundButtonWasCalled() {
+        
+        deleteSoundButton?.removeFromSuperview()
+        addSoundButton.setBackgroundImage(#imageLiteral(resourceName: "addSoundButton"), for: .normal)
+        deleteSoundButton = nil
+    }
+    
+    func removeDeleteVideoButtonWasCalled() {
+        
+        deleteVideoButton?.removeFromSuperview()
+        addVideoButton.setBackgroundImage(#imageLiteral(resourceName: "addVideoButton"), for: .normal)
+        deleteVideoButton = nil
+    }
+    
+    func keyboardDismissWasCalled(){
+        self.view.endEditing(true)
+    }
+    
+   
     func textFieldDidBeginEditing(_ textField: UITextField) {
         activeField = textField
     }
@@ -229,7 +317,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     func registerForKeyboardNotifications(){
        
-        
         unowned let _self = self
         
         NotificationCenter.default.addObserver(_self, selector: #selector(keyboardWasShown(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -239,7 +326,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     func deregisterFromKeyboardNotifications(){
       
-        
         unowned let _self = self
         
         NotificationCenter.default.removeObserver(_self, name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -287,14 +373,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
         scrollView.isScrollEnabled = false
     }
     
-    
-    @objc func dismissKeyboard(){
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [unowned self] in
-            self.view.endEditing(true)
-        }
-        
-    }
     
     
     @IBAction func canvasViewWasTapped(_ sender: Any) {
@@ -360,40 +438,6 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     
     
-    
-    
-    func setupCategoryPicker(){
-        
-        categoryPicker.delegate = self
-        
-        rarityTextField.inputView = categoryPicker
-    }
-    
-    
-    
-  
-    
-    func createCategoryPickerToolBar(){
-        
-        let doneString = NSLocalizedString("Done", comment: "Done")
-        
-        unowned let _self = self
-        
-        let categoryPickerToolBar = UIToolbar()
-        categoryPickerToolBar.sizeToFit()
-        
-        let doneButton = UIBarButtonItem(title: doneString, style: .plain, target: _self, action: #selector(AddViewController.dismissKeyboard))
-        
-        categoryPickerToolBar.setItems([doneButton], animated: false)
-        categoryPickerToolBar.isUserInteractionEnabled = true
-        
-        rarityTextField.inputAccessoryView = categoryPickerToolBar
-    }
-    
-    
-    
-    
-    
     func showLoader() {
         DispatchQueue.main.async() { [unowned self] in
             
@@ -418,523 +462,18 @@ class AddViewController: UIViewController, UITextFieldDelegate, UIPickerViewDele
     
     
     
-    
-    
-    
+  
     @IBAction func addPicturePressed(_ sender: Any) {
-        
-      
-        
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        
-       
-        
-        let titleString = NSLocalizedString("Choose from gallery or use camera?", comment: "Ask user whether to choose from image gallery or camera")
-        
-        let photoString = NSLocalizedString("Photo library", comment: "")
-        
-        let cameraString = NSLocalizedString("Camera", comment: "")
-        
-        let cancelString = NSLocalizedString("Cancel", comment: "")
-        
-        let actionSheet = UIAlertController(title: titleString, message: "", preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: photoString, style: .default, handler: {[unowned self] (action: UIAlertAction) in
-            
-            guard PHPhotoLibrary.authorizationStatus() == .authorized else { self.present(self.notice.photoAlert, animated: true, completion: nil); return }
-            
-            imagePicker.sourceType = .photoLibrary
-            imagePicker.mediaTypes = [kUTTypeImage as String]
-            self.present(imagePicker, animated: true, completion: nil)
-        }))
-        
-        actionSheet.addAction(UIAlertAction(title: cameraString, style: .default, handler: {[unowned self] (action: UIAlertAction) in
-            
-            guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else { self.present(self.notice.cameraAlert, animated: true, completion: nil); return }
-            
-            if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                imagePicker.sourceType = .camera
-                
-                self.present(imagePicker, animated: true, completion: nil)
-            }
-            else {
-                print("Camera not available")
-            }
-            
-        }))
-        
-        actionSheet.addAction(UIAlertAction(title: cancelString, style: .cancel, handler: nil))
-        
-        if let popoverController = actionSheet.popoverPresentationController {
-            popoverController.sourceView = self.view
-            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
-            popoverController.permittedArrowDirections = []
-        }
-        
-        present(actionSheet, animated: true, completion: nil)
+        viewModel.addPictureWasPressed()
     }
     
-    
-    
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        let mediaType = info[UIImagePickerController.InfoKey.mediaType] as! String
-        
-        if mediaType == (kUTTypeImage as String) {
-        
-            let img = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-        
-            let image = imageOrientation(img)
-        
-            let cropViewController = CropViewController(croppingStyle: .default, image: image)
-            cropViewController.delegate = self
-            cropViewController.aspectRatioPreset = .presetSquare
-            cropViewController.aspectRatioLockEnabled = true
-            cropViewController.resetAspectRatioEnabled = false
-            picker.dismiss(animated: true, completion: nil)
-            present(cropViewController, animated: false, completion: nil)
-            }
-        
-        
-        if mediaType == (kUTTypeMovie as String) {
-            
-            
-            
-            let url = info[UIImagePickerController.InfoKey.mediaURL] as! URL
-            
-            let asset = AVURLAsset(url: url)
-            
-            guard asset.duration.seconds < 15 else { picker.dismiss(animated: true, completion: nil); present(notice.videoAlert, animated: true, completion: nil); return }
-            
-            deleteVideoButton = UIButton(type: .system)
-            deleteVideoButton!.setBackgroundImage(#imageLiteral(resourceName: "cancelButton"), for: .normal)
-            deleteVideoButton!.addTarget(self, action: #selector(deleteVideoButtonPressed), for: .touchUpInside)
-            deleteVideoButton!.translatesAutoresizingMaskIntoConstraints = false
-            
-            videoButtonStackView.addArrangedSubview(deleteVideoButton!)
-            
-            if traitCollection.horizontalSizeClass == .regular{
-                deleteVideoButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.1).isActive = true
-            }
-            else{
-            deleteVideoButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.17).isActive = true
-            }
-            deleteVideoButton!.heightAnchor.constraint(equalTo: deleteVideoButton!.widthAnchor, multiplier: 1).isActive = true
-            
-            videoRecorded = true
-            
-            addVideoButton.setBackgroundImage(#imageLiteral(resourceName: "playButton"), for: .normal)
-            
-            picker.dismiss(animated: true, completion: nil)
-            
-            let path = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(id).mp4")
-            
-            fileManager.createFile(atPath: path, contents: try!(Data(contentsOf: url)), attributes: nil)
-            
-            videoUrl = FileManager.default.urls(for: .documentDirectory, in:.userDomainMask)[0].appendingPathComponent("\(id).mp4")
-            
-            
-        }
-        
+     @IBAction func confirmButtonPressed(_ sender: Any) {
+     viewModel.confirmButtonPressed()
     }
-    
-    
-    // Orientate image correctly by EXIF
-    
-    func imageOrientation(_ src:UIImage)->UIImage {
-        print(src.imageOrientation.rawValue)
-        print(src.imageOrientation.hashValue)
-        if src.imageOrientation == UIImage.Orientation.up {
-            return src
-        }
-        
-        var transform: CGAffineTransform = CGAffineTransform.identity
-        switch src.imageOrientation {
-        case UIImageOrientation.up, UIImageOrientation.upMirrored:
-            transform = transform.translatedBy(x: src.size.width, y: src.size.height)
-            transform = transform.rotated(by: CGFloat(Double.pi))
-            break
-        case UIImageOrientation.down, UIImageOrientation.downMirrored:
-            transform = transform.translatedBy(x: src.size.width, y: src.size.height)
-            transform = transform.rotated(by: CGFloat(Double.pi))
-            break
-        case UIImageOrientation.left, UIImageOrientation.leftMirrored:
-            transform = transform.translatedBy(x: src.size.width, y: 0)
-            transform = transform.rotated(by: CGFloat(Double.pi / 2))
-            break
-        case UIImageOrientation.right, UIImageOrientation.rightMirrored:
-            transform = transform.translatedBy(x: 0, y: src.size.height)
-            transform = transform.rotated(by: CGFloat(-Double.pi / 2))
-            break
-            
-        @unknown default:
-            fatalError()
-        }
-        
-        switch src.imageOrientation {
-        case UIImageOrientation.upMirrored, UIImageOrientation.downMirrored:
-            transform.translatedBy(x: src.size.width, y: 0)
-            transform.scaledBy(x: -1, y: 1)
-            break
-        case UIImageOrientation.leftMirrored, UIImageOrientation.rightMirrored:
-            transform.translatedBy(x: src.size.height, y: 0)
-            transform.scaledBy(x: -1, y: 1)
-        case UIImageOrientation.up, UIImageOrientation.down, UIImageOrientation.left, UIImageOrientation.right:
-            break
-        @unknown default:
-            fatalError()
-        }
-        
-        let ctx:CGContext = CGContext(data: nil, width: Int(src.size.width), height: Int(src.size.height), bitsPerComponent: (src.cgImage)!.bitsPerComponent, bytesPerRow: 0, space: (src.cgImage)!.colorSpace!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
-        
-        ctx.concatenate(transform)
-        
-        switch src.imageOrientation {
-        case UIImageOrientation.left, UIImageOrientation.leftMirrored, UIImageOrientation.right, UIImageOrientation.rightMirrored:
-            ctx.draw(src.cgImage!, in: CGRect(x: 0, y: 0, width: src.size.height, height: src.size.width))
-            break
-        default:
-            ctx.draw(src.cgImage!, in: CGRect(x: 0, y: 0, width: src.size.width, height: src.size.height))
-            break
-        }
-        
-        let cgimg:CGImage = ctx.makeImage()!
-        let img:UIImage = UIImage(cgImage: cgimg)
-        
-        return img
-    }
-    
-    
-    
-    
-    
-    func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
-        
-        pictureView.image = image
-        
-        
-        guard pictureView.image != #imageLiteral(resourceName: "addImage") && speciesTextField.text?.isEmpty != true && rarityTextField.text?.isEmpty != true && rarityTextField.text != "-- Select rarity --" && notesTextField.text?.isEmpty != true
-            else {
-                confirmButton.alpha = 0.5
-                confirmButton.isUserInteractionEnabled = false
-                cropViewController.dismiss(animated: false, completion: nil)
-                return }
-        
-        confirmButton.alpha = 1
-        confirmButton.isUserInteractionEnabled = true
-        
-        cropViewController.dismiss(animated: false, completion: nil)
-    }
-    
-    
-    
-    
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-        
-    }
-    
-    
-    
-    
-    
-    
-    @objc func deleteSoundButtonPressed(){
-        
-        try!(fileManager.removeItem(at: soundUrl!))
-        
-        deleteSoundButton?.removeFromSuperview()
-        
-        soundRecorded = false
-        
-        addSoundButton.setBackgroundImage(#imageLiteral(resourceName: "addSoundButton"), for: .normal)
-        
-        deleteSoundButton = nil
-        
-        soundUrl = nil
-        
-        soundRecorder = nil
-        
-        soundPlayer = nil
-        
-    }
-    
-    
-    @objc func deleteVideoButtonPressed(){
-        
-        try!(fileManager.removeItem(at: videoUrl!))
-        
-        deleteVideoButton?.removeFromSuperview()
-        
-        videoRecorded = false
-        
-        addVideoButton.setBackgroundImage(#imageLiteral(resourceName: "addVideoButton"), for: .normal)
-        
-        deleteVideoButton = nil
-        
-        videoUrl = nil
-        
-    }
-    
-   
-    
-    
-    
-    
-    @IBAction func addSoundButtonPressed(_ sender: Any) {
-        
-        if isRecordingSound == true {
-            
-            soundRecorder!.stop()
-            isRecordingSound = false
-            soundRecorded = true
-            
-            addSoundButton.setBackgroundImage(#imageLiteral(resourceName: "playButton"), for: .normal)
-            
-            deleteSoundButton = UIButton(type: .system)
-            deleteSoundButton!.setBackgroundImage(#imageLiteral(resourceName: "cancelButton"), for: .normal)
-            deleteSoundButton!.addTarget(self, action: #selector(deleteSoundButtonPressed), for: .touchUpInside)
-            deleteSoundButton!.translatesAutoresizingMaskIntoConstraints = false
-            
-            soundButtonStackView.addArrangedSubview(deleteSoundButton!)
-            
-            if traitCollection.horizontalSizeClass == .regular{
-                deleteSoundButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.1).isActive = true
-            }
-            else{
-            deleteSoundButton!.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.17).isActive = true
-            }
-            deleteSoundButton!.heightAnchor.constraint(equalTo: deleteSoundButton!.widthAnchor, multiplier: 1).isActive = true
-            
-            addSoundLabel.text = NSLocalizedString("Add sound (optional)", comment: "")
-            addSoundLabel.textColor = UIColor.darkGray
-            
-        }
-        
-            
-        else if isRecordingSound == false && soundRecorded == false {
-      
-            guard session.recordPermission == .granted else { present(notice.microphoneAlert, animated: true, completion: nil); return}
-            
-            try! session.setCategory(AVAudioSession.Category.playAndRecord)
-           
-        soundUrl = FileManager.default.urls(for: .documentDirectory, in:.userDomainMask)[0].appendingPathComponent("\(id).m4a")
-        
-        let recordingSettings: [String: Any] = [AVFormatIDKey: kAudioFormatAppleLossless,
-                                   AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue, AVEncoderBitRateKey: 320000,
-                                   AVNumberOfChannelsKey: 2, AVSampleRateKey: 44100.2]
-        
-        soundRecorder = try!(AVAudioRecorder(url: soundUrl!, settings: recordingSettings))
-        soundRecorder!.delegate = self
-        soundRecorder!.isMeteringEnabled = true
-        soundRecorder!.prepareToRecord()
-        soundRecorder!.record()
-    
-        isRecordingSound = true
-        addSoundButton.setBackgroundImage(#imageLiteral(resourceName: "stopButton"), for: .normal)
-        addSoundLabel.text = NSLocalizedString("Recording", comment: "")
-        addSoundLabel.textColor = UIColor.red
-            
-            
-        }
-        
-        else {
-            
-            let session = AVAudioSession.sharedInstance()
-            try! session.setCategory(AVAudioSession.Category.playback)
-            do{
-            soundPlayer = try AVAudioPlayer(contentsOf: soundUrl!)
-            }
-            catch{
-                print(error)
-            }
-            soundPlayer?.play()
-        }
-        
-    }
-    
-    
-    
-    
-    
-    
-    
-    @IBAction func addVideoButtonPressed(_ sender: Any) {
-        
-        if videoRecorded == false {
-            
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        
-        let titleString = NSLocalizedString("Choose from gallery or use camera? ", comment: "Ask user whether to choose from image gallery or camera")
-        
-        let messageString = NSLocalizedString("Video length limit is 15 seconds!", comment: "")
-            
-        let photoString = NSLocalizedString("Photo library", comment: "")
-        
-        let cameraString = NSLocalizedString("Camera", comment: "")
-        
-        let cancelString = NSLocalizedString("Cancel", comment: "")
-        
-        let actionSheet = UIAlertController(title: titleString, message: messageString, preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: photoString, style: .default, handler: {[unowned self] (action: UIAlertAction) in
-            
-            guard PHPhotoLibrary.authorizationStatus() == .authorized else { self.present(self.notice.photoAlert, animated: true, completion: nil); return }
-            
-            imagePicker.sourceType = .photoLibrary
-            imagePicker.mediaTypes = [kUTTypeMovie as String]
-            imagePicker.videoMaximumDuration = 0.1
-            imagePicker.videoQuality = .type640x480
-            
-            self.present(imagePicker, animated: true, completion: nil)
-            
-        }))
-        
-        actionSheet.addAction(UIAlertAction(title: cameraString, style: .default, handler: {[unowned self] (action: UIAlertAction) in
-            
-            guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else { self.present(self.notice.cameraAlert, animated: true, completion: nil); return }
-            
-            if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                imagePicker.sourceType = .camera
-                imagePicker.mediaTypes = [kUTTypeMovie as String]
-                
-                self.present(imagePicker, animated: true, completion: nil)
-            }
-            else {
-                print("Camera not available")
-            }
-            
-        }))
-        
-        actionSheet.addAction(UIAlertAction(title: cancelString, style: .cancel, handler: nil))
-        
-            if let popoverController = actionSheet.popoverPresentationController {
-                popoverController.sourceView = self.view
-                popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
-                popoverController.permittedArrowDirections = []
-            }
-        
-        present(actionSheet, animated: true, completion: nil)
-        
-        }
-        
-        else {
-            
-            let video = AVPlayer(url: videoUrl!)
-            
-            let videoPlayer = AVPlayerViewController()
-            videoPlayer.player = video
-            
-            present(videoPlayer, animated: true, completion: nil)
-            
-            video.play()
-            
-        }
-            
-    }
-    
-    
-    
-    
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
-        
-        if videoUrl != nil {  try? fileManager.removeItem(at: videoUrl!) }
-        
-        if soundUrl != nil { try? fileManager.removeItem(at: soundUrl!) }
-        
-        navigationController?.popViewController(animated: true)
-        
+      viewModel.cancelButtonPressed()
     }
     
-    
-    
-    
-    @IBAction func confirmButtonPressed(_ sender: Any) {
-        
-        guard lat != nil && long != nil else { present(notice.locationAlert, animated: true, completion: nil); return }
-        
-        cancelButton.isUserInteractionEnabled = false
-        addSoundButton.isUserInteractionEnabled = false
-        addVideoButton.isUserInteractionEnabled = false
-        deleteSoundButton?.isUserInteractionEnabled = false
-        deleteVideoButton?.isUserInteractionEnabled = false
-        
-        showLoader()
-        
-        let pictureJpeg = pictureView.image?.jpegData(compressionQuality: 0.05)
-        
-        let picturePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent("\(id).jpeg")
-       
-        fileManager.createFile(atPath: picturePath, contents: pictureJpeg, attributes: nil)
-       
-        
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
-        let observationEntity = NSEntityDescription.entity(forEntityName: "OwnObservation", in: managedContext)
-        
-        let observation = NSManagedObject(entity: observationEntity!, insertInto: managedContext)
-       
-        var soundU = ""
-        
-        var videoU = ""
-        
-        if soundUrl != nil { soundU = "\(id).m4a" }
-        
-        if videoUrl != nil { videoU = "\(id).mp4" }
-        
-        observation.setValuesForKeys(["species": speciesTextField.text!, "rarity": selectedRarity, "rarityNumber": selectedRarityNumber, "notes": notesTextField.text!, "created": Int(Date().timeIntervalSince1970), "id": id, "uid": uid!, "dname": dname!, "uploaded": false, "uploading": false, "pictureUrl": "\(id).jpeg", "soundUrl": soundU, "videoUrl": videoU, "lat": lat!, "long": long!])
-        
-        do {
-            try managedContext.save()
-        }
-        catch let error as NSError {
-            print("Error occurred: \(error)")
-            self.present(self.notice.generalAlert, animated: true, completion: nil)
-            cancelButton.isUserInteractionEnabled = true
-            addSoundButton.isUserInteractionEnabled = true
-            addVideoButton.isUserInteractionEnabled = true
-            deleteSoundButton?.isUserInteractionEnabled = true
-            deleteVideoButton?.isUserInteractionEnabled = true
-            return
-        }
-        hideLoader()
-        navigationController?.popViewController(animated: true)
-    }
-    
-    
-    
-    
-
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return categoryPickerList.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return NSLocalizedString(categoryPickerList[row], comment: "")
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedRarity = categoryPickerList[row]
-        selectedRarityNumber = row
-        rarityTextField.text = NSLocalizedString(categoryPickerList[row], comment: "")
-        controlOkButtonState()
-        
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        lat = locations.last?.coordinate.latitude
-     
-        long = locations.last?.coordinate.longitude
-        
-    }
     
 }
